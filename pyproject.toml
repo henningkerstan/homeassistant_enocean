@@ -1,0 +1,37 @@
+[project]
+name = "home_assistant_enocean"
+version = "0.0.1"
+authors = [
+  { name="Henning Kerstan", email="mail@henningkerstan.de" },
+]
+description = "A wrapper class to integrate EnOcean into Home Assistant"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "Apache-2.0"
+license-files = ["LICENSE*"]
+dependencies = [
+  "enocean==0.60.1"
+]
+
+[project.urls]
+Homepage = "https://github.com/henningkerstan/home_assistant_enocean"
+Issues = "https://github.com/henningkerstan/home_assistant_enocean/issues"
+
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = { attr = "home_assistant_enocean.__version__" }
+readme = { file = [ "README.md" ], content-type = "text/markdown" }
+
+[tool.setuptools.packages.find]
+where = [ "." ]
+include = [ "home_assistant_enocean*" ]
+
+[tool.setuptools.package-data]
+"*" = [ "*.xml", ]
