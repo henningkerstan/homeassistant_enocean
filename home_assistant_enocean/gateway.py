@@ -1,15 +1,15 @@
 """Representation of an EnOcean gateway."""
-
-from collections.abc import Callable
-
 import logging
 from typing import TypedDict
 
 from enocean.communicators import SerialCommunicator
 from enocean.protocol.packet import Packet, RadioPacket
 from enocean.utils import to_hex_string
+from home_assistant_enocean.eep import EEP
+from home_assistant_enocean.eep_f6_02_handler import EEP_F6_02_Handler
+from home_assistant_enocean.eep_handler import EEPHandler
 from .cover_state import EnOceanCoverState
-from .device_state import EnOceanDeviceState
+from .device import EnOceanDeviceState
 from .id import EnOceanID
 
 _LOGGER = logging.getLogger(__name__)
@@ -40,6 +40,10 @@ class EnOceanHomeAssistantGateway:
 
         self.__devices: dict[EnOceanID, EnOceanDeviceState] = {}
 
+        self.__eep_handlers: dict[EEP, EEPHandler] = {
+            EEP(0xF6, 0x02, 0x01): EEP_F6_02_Handler(),
+            EEP(0xF6, 0x02, 0x02): EEP_F6_02_Handler(),
+        }
 
     async def start(self) -> None:
         """Finish the setup of the gateway and supported platforms."""
@@ -59,7 +63,7 @@ class EnOceanHomeAssistantGateway:
 
         # callback needs to be set after initialization
         # in order for chip_id and base_id to be available
-        self.__communicator.callback = self.__packet_received_callback
+        self.__communicator.callback = self.__handle_packet
 
     def unload(self) -> None:
         """Disconnect callbacks established at init time."""
@@ -128,21 +132,26 @@ class EnOceanHomeAssistantGateway:
         """Send a command through the EnOcean gateway."""
         self.__communicator.send(command)
 
-    def __packet_received_callback(self, packet: Packet) -> None:
-        """Handle EnOcean device's callback.
+    def __handle_packet(self, packet: Packet) -> None:
+        """Handle incoming EnOcean packet.
 
         This is the callback function called by python-enocean whenever there
         is an incoming packet.
         """
-        if isinstance(packet, RadioPacket):
-            _LOGGER.debug("Received radio packet: %s", packet)
-            #dispatcher_send(self.__hass, SIGNAL_RECEIVE_MESSAGE, packet)
+        if not isinstance(packet, RadioPacket):
+            return
+        
+        device_state = self.__devices.get(packet.sender_id)
+        if not device_state:
+            return
+        
+        eep = device_state.device_type.eep
 
-            # find the device and dispatch the message to it
-            device = self.__devices.get(packet.sender_id)
-            if device:
-                device.handle_packet(packet)
+        handler = self.__eep_handlers.get(eep)
+        if not handler:
+            return
 
+        handler.handle_packet(packet.sender_id, packet, device_state)
 
     # Binary sensor entities
     @property
