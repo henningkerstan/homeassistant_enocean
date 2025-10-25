@@ -1,0 +1,1 @@
+type EntityName = str | None
