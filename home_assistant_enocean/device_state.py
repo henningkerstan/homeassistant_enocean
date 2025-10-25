@@ -1,9 +1,9 @@
-from home_assistant_enocean.binary_sensor import BinarySensor
-from home_assistant_enocean.cover_state import Cover, EnOceanCoverState
-from home_assistant_enocean.device_type import DeviceType
-from home_assistant_enocean.entity_name import EntityName
-from home_assistant_enocean.enocean_id import EnOceanID
-from home_assistant_enocean.switch import Switch
+"""Representation of an EnOcean device state."""
+from .cover_state import EnOceanCoverState
+from .device_type import DeviceType
+from .entity_name import EntityName
+from .id import EnOceanID
+from .light_state import EnOceanLightState
 
 
 class EnOceanDeviceState:
@@ -12,8 +12,7 @@ class EnOceanDeviceState:
     binary_sensor_is_on: dict[EntityName, bool] = {}
     switch_is_on: dict[EntityName, bool] = {}
     cover_state: dict[EntityName, EnOceanCoverState] = {}
-    sensors: dict[EntityName, object] = {}
-    events: dict[EntityName, object] = {}
+    light_state: dict[EntityName, EnOceanLightState] = {}
     
     def __init__(self, enocean_id: EnOceanID, device_type: DeviceType):
         """Construct an EnOcean device."""

@@ -143,12 +143,15 @@ class EnOceanHomeAssistantGateway:
             if device:
                 device.handle_packet(packet)
 
+
     # Binary sensor entities
     @property
     def binary_sensor_is_on(self, enocean_id: EnOceanID, name: str) -> bool | None:
         """Return whether a binary sensor device is on or off."""
-        return self.__binary_sensor_is_on.get(enocean_id, {}).get(name)
-
+        if enocean_id in self.__devices:
+            device_state = self.__devices[enocean_id]
+            return device_state.binary_sensor_is_on.get(name)
+        
 
     # Cover entities
     @property
@@ -211,16 +214,31 @@ class EnOceanHomeAssistantGateway:
     @property   
     def light_is_on(self, enocean_id: EnOceanID, name: str) -> bool | None:
         """Return whether a light device is on or off."""
-        pass
+        if enocean_id in self.__devices:
+            device_state = self.__devices[enocean_id]
+            light_state = device_state.light_state.get(name)
+            if light_state:
+                return light_state.is_on
+        return None
 
     @property
     def light_brightness(self, enocean_id: EnOceanID, name: str) -> int | None:
         """Return the brightness of a light device between 1..255."""
+        if enocean_id in self.__devices:
+            device_state = self.__devices[enocean_id]
+            light_state = device_state.light_state.get(name)
+            if light_state:
+                return light_state.brightness
         return None
     
     @property
     def light_color_temp_kelvin(self, enocean_id: EnOceanID, name: str) -> int | None:
         """Return the CT color value in K for a light device."""
+        if enocean_id in self.__devices:
+            device_state = self.__devices[enocean_id]
+            light_state = device_state.light_state.get(name)
+            if light_state:
+                return light_state.color_temp_kelvin
         return None
     
     def light_turn_on(self, enocean_id: EnOceanID, name: str, brightness: int | None = None, color_temp_kelvin: int | None = None) -> None:
