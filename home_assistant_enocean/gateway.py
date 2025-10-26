@@ -144,7 +144,7 @@ class EnOceanHomeAssistantGateway:
         except TypeError:
             rorg_hex = None
         print(f"Received packet from {packet.sender_hex} with RORG {rorg_hex}")
-        print(self.__devices.keys())
+     
 
         device_state = self.__devices.get(EnOceanID(packet.sender_hex))
         if not device_state:
@@ -162,7 +162,9 @@ class EnOceanHomeAssistantGateway:
         
 
         print(f"Handling packet with EEP handler for {eep}.")
-        handler.handle_packet(packet, device_state)
+        entities = handler.handle_packet(packet, device_state)
+        for entity in entities:
+            print(f"Entity updated: {entity.__str__()}")
 
     # Binary sensor entities
     @property
@@ -171,7 +173,7 @@ class EnOceanHomeAssistantGateway:
         entities = []
         for enocean_id in self.__devices:
             device_state = self.__devices[enocean_id]
-            eep = device_state.device_type.eep
+            eep = EEP.from_string(device_state.device_type.eep)
             handler = self.__eep_handlers.get(eep)
             if not handler:
                 continue

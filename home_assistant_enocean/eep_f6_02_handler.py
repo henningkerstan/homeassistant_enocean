@@ -13,8 +13,6 @@ class EEP_F6_02_Handler(EEPHandler):
         """Handle an incoming EnOcean packet."""
         action = packet.data[1]
 
-        print(f"Handling F6-02 packet with action: 0x{action:02X}")
-
         match action:
             case 0x70:
                 device_state.binary_sensor_is_on["A0"] = True
@@ -50,7 +48,6 @@ class EEP_F6_02_Handler(EEPHandler):
 
         
             case 0x00:
-                if device_state.binary_sensor_is_on.get("A0"):
-                    device_state.binary_sensor_is_on["A0"] = False
+                return [EnOceanEntity(device_state.enocean_id, name) for name in self.binary_sensor_entities()]
 
        

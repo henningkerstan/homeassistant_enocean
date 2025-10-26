@@ -10,7 +10,9 @@ class EEPHandler(ABC):
     def handle_packet(self, packet: RadioPacket, device_state: EnOceanDeviceProperties) -> list[EnOceanEntity]:
         """Handle an incoming EnOcean packet and return the entities affected."""
         if packet.sender_int == device_state.enocean_id.to_number():
-            self.handle_packet_matching(packet, device_state)
+            return self.handle_packet_matching(packet, device_state)
+        
+        return []
 
 
     @abstractmethod

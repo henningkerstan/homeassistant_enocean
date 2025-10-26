@@ -10,3 +10,8 @@ class EnOceanEntity:
         self.name = name
         self.enocean_id = enocean_id
         self.device_class = device_class
+
+
+    def __str__(self) -> str:
+        """Return a string representation of the entity."""
+        return f"EnOceanEntity(name={self.name}, enocean_id={self.enocean_id}, device_class={self.device_class})"

@@ -35,3 +35,8 @@ include = [ "home_assistant_enocean*" ]
 
 [tool.setuptools.package-data]
 "*" = [ "*.xml", ]
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
