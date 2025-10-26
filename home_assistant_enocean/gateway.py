@@ -74,6 +74,7 @@ class EnOceanHomeAssistantGateway:
         """Add a device to the gateway."""
         if enocean_id not in self.__devices:
             self.__devices[enocean_id] = EnOceanDeviceProperties(enocean_id, device_type)
+            print(f"Added device {enocean_id.to_string()} of type {device_type.eep}")
 
     @property
     def base_id(self) -> EnOceanID:
@@ -85,6 +86,7 @@ class EnOceanHomeAssistantGateway:
         """Returns the gateway's chip id."""
         return self.__chip_id
 
+    @property
     def valid_sender_ids(self) -> list[ValueLabelDict]:
         """Returns a list of valid sender ids."""
 
@@ -137,17 +139,30 @@ class EnOceanHomeAssistantGateway:
         if not isinstance(packet, RadioPacket):
             return
 
-        device_state = self.__devices.get(EnOceanID(to_hex_string(packet.sender_id)))
+        try:
+            rorg_hex = hex(packet.rorg)
+        except TypeError:
+            rorg_hex = None
+        print(f"Received packet from {packet.sender_hex} with RORG {rorg_hex}")
+        print(self.__devices.keys())
+
+        device_state = self.__devices.get(EnOceanID(packet.sender_hex))
         if not device_state:
+            print(f"Unknown device {packet.sender_hex}, ignoring packet.")
             return
         
-        eep = device_state.device_type.eep
+
+
+        eep = EEP.from_string(device_state.device_type.eep)
 
         handler = self.__eep_handlers.get(eep)
         if not handler:
+            print(f"No handler for EEP {eep} found.")
             return
+        
 
-        handler.handle_packet(EnOceanID(to_hex_string(packet.sender_id)), packet, device_state)
+        print(f"Handling packet with EEP handler for {eep}.")
+        handler.handle_packet(packet, device_state)
 
     # Binary sensor entities
     @property

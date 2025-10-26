@@ -13,6 +13,8 @@ class EEP_F6_02_Handler(EEPHandler):
         """Handle an incoming EnOcean packet."""
         action = packet.data[1]
 
+        print(f"Handling F6-02 packet with action: 0x{action:02X}")
+
         match action:
             case 0x70:
                 device_state.binary_sensor_is_on["A0"] = True

@@ -114,3 +114,9 @@ class EnOceanID:
     def __str__(self) -> str:
         """Return the EnOcean ID as string."""
         return self.to_string()
+
+    def __hash__(self):
+        return hash(self.__id)
+
+    def __eq__(self, other):
+        return self.__id == other.__id
