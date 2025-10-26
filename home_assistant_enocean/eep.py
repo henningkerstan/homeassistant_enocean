@@ -6,3 +6,10 @@ class EEP:
         self.rorg = rorg
         self.func = func
         self.type = type_
+
+
+    @classmethod
+    def supported_eeps(cls) -> list["EEP"]:
+        return {
+            EEP(0xF6, 0x00, 0x01), 
+        }

@@ -6,13 +6,15 @@ from .id import EnOceanID
 from .light_state import EnOceanLightState
 
 
-class EnOceanDeviceState:
+class EnOceanDeviceProperties:
     """Representation of an EnOcean device."""
 
     binary_sensor_is_on: dict[EntityName, bool] = {}
     switch_is_on: dict[EntityName, bool] = {}
     cover_state: dict[EntityName, EnOceanCoverState] = {}
     light_state: dict[EntityName, EnOceanLightState] = {}
+
+    device_name: str | None = None
     
     def __init__(self, enocean_id: EnOceanID, device_type: EnOceanDeviceType):
         """Construct an EnOcean device."""

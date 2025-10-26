@@ -1,4 +1,4 @@
-from home_assistant_enocean.device import EnOceanDeviceState
+from home_assistant_enocean.device_properties import EnOceanDeviceProperties
 from home_assistant_enocean.entity import EnOceanEntity
 from .eep_handler import EEPHandler
 from enocean.protocol.packet import RadioPacket
@@ -6,7 +6,10 @@ from enocean.protocol.packet import RadioPacket
 class EEP_F6_02_Handler(EEPHandler):
     """Handler for EnOcean Equipment Profiles F6-02-01/02"""
 
-    def __handle_packet(self, packet: RadioPacket, device_state: EnOceanDeviceState) -> list[EnOceanEntity]:
+    def binary_sensor_entities(self):
+        return ["A0", "A1", "B0", "B1", "AB0", "AB1", "A0B1", "A1B0"]
+
+    def handle_packet_matching(self, packet: RadioPacket, device_state: EnOceanDeviceProperties) -> list[EnOceanEntity]:
         """Handle an incoming EnOcean packet."""
         action = packet.data[1]
 
