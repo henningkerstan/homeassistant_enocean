@@ -1,8 +1,8 @@
 """Representation of an EnOcean device state."""
 from .cover_state import EnOceanCoverState
 from .device_type import EnOceanDeviceType
-from .entity_name import EntityName
-from .id import EnOceanID
+from .types import EntityName
+from .address import EnOceanAddress
 from .light_state import EnOceanLightState
 
 
@@ -16,13 +16,13 @@ class EnOceanDeviceProperties:
 
     device_name: str | None = None
     
-    def __init__(self, enocean_id: EnOceanID, device_type: EnOceanDeviceType):
+    def __init__(self, enocean_id: EnOceanAddress, device_type: EnOceanDeviceType):
         """Construct an EnOcean device."""
         self.__enocean_id = enocean_id
         self.__device_type = device_type
 
     @property
-    def enocean_id(self) -> EnOceanID:
+    def enocean_id(self) -> EnOceanAddress:
         """Return the device ID."""
         return self.__enocean_id
 

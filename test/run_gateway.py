@@ -3,7 +3,7 @@ from home_assistant_enocean.gateway import EnOceanHomeAssistantGateway
 
 from  home_assistant_enocean.device_type import EnOceanDeviceType
 from devices import devices
-from home_assistant_enocean.id import EnOceanID
+from home_assistant_enocean.address import EnOceanAddress
 
 
 
@@ -23,8 +23,8 @@ async def main_loop():
         if not device_type:
             print(f"Device type {device['device_type']} not supported.")
             continue
-            
-        gateway.add_device(enocean_id=EnOceanID(device["enocean_id"]), device_type=device_type)
+
+        gateway.add_device(enocean_id=EnOceanAddress(device["enocean_id"]), device_type=device_type)
 
     while True:
         try:
