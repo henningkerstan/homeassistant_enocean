@@ -48,6 +48,11 @@ class EEP_F6_02_Handler(EEPHandler):
 
         
             case 0x00:
-                return [EnOceanEntity(device_state.enocean_id, name) for name in self.binary_sensor_entities()]
+                entities_affected = []
+                for name in self.binary_sensor_entities():
+                    if device_state.binary_sensor_is_on.get(name, False):
+                        device_state.binary_sensor_is_on[name] = False
+                        entities_affected.append(EnOceanEntity(device_state.enocean_id, name))
+                return entities_affected
 
        

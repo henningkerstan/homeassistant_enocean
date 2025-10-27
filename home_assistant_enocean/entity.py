@@ -14,4 +14,11 @@ class EnOceanEntity:
 
     def __str__(self) -> str:
         """Return a string representation of the entity."""
-        return f"EnOceanEntity(name={self.name}, enocean_id={self.enocean_id}, device_class={self.device_class})"
+        return f"EnOceanEntity(enocean_id={self.enocean_id}, name={self.name}, device_class={self.device_class})"
+    
+
+    def __hash__(self):
+        return hash((self.enocean_id, self.name, self.device_class))
+    
+    def __eq__(self, other):
+        return (self.enocean_id, self.name, self.device_class) == (other.enocean_id, other.name, other.device_class)

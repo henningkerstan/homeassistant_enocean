@@ -1,6 +1,6 @@
 """Representation of an EnOcean gateway."""
 import logging
-from typing import TypedDict
+from typing import Callable, TypedDict
 
 from enocean.communicators import SerialCommunicator
 from enocean.protocol.packet import Packet, RadioPacket
@@ -9,6 +9,7 @@ from home_assistant_enocean.device_type import EnOceanDeviceType
 from home_assistant_enocean.eep import EEP
 from home_assistant_enocean.eep_f6_02_handler import EEP_F6_02_Handler
 from home_assistant_enocean.eep_handler import EEPHandler
+from home_assistant_enocean.entity import EnOceanEntity
 from home_assistant_enocean.entity_name import EntityName
 from .cover_state import EnOceanCoverState
 from .device_properties import EnOceanDeviceProperties
@@ -37,12 +38,14 @@ class EnOceanHomeAssistantGateway:
         self.__chip_version: int = 0
         self.__sw_version: str = "n/a"
 
-        self.__devices: dict[EnOceanID, EnOceanDeviceProperties] = {}
+        self.__devices: dict[str, EnOceanDeviceProperties] = {}
 
         self.__eep_handlers: dict[EEP, EEPHandler] = {
             EEP(0xF6, 0x02, 0x01): EEP_F6_02_Handler(),
             EEP(0xF6, 0x02, 0x02): EEP_F6_02_Handler(),
         }
+
+        self.__entity_callbacks: dict[tuple[str, str], Callable[[None], None]] = {}
 
     async def start(self) -> None:
         """Start the EnOcean gateway."""
@@ -72,9 +75,13 @@ class EnOceanHomeAssistantGateway:
 
     def add_device(self, enocean_id: EnOceanID, device_type: EnOceanDeviceType) -> None:
         """Add a device to the gateway."""
-        if enocean_id not in self.__devices:
-            self.__devices[enocean_id] = EnOceanDeviceProperties(enocean_id, device_type)
-            print(f"Added device {enocean_id.to_string()} of type {device_type.eep}")
+        if enocean_id.to_string() not in self.__devices:
+            self.__devices[enocean_id.to_string()] = EnOceanDeviceProperties(enocean_id, device_type)
+            print(f"Added device {enocean_id.to_string()} ({device_type.manufacturer} {device_type.model} EEP {device_type.eep})")
+
+    def register_entity_callback(self, entity: EnOceanEntity, callback: Callable[[None], None]) -> None:
+        """Register a callback for an entity."""
+        self.__entity_callbacks[(entity.enocean_id.to_string(), entity.name)] = callback
 
     @property
     def base_id(self) -> EnOceanID:
@@ -146,9 +153,12 @@ class EnOceanHomeAssistantGateway:
         print(f"Received packet from {packet.sender_hex} with RORG {rorg_hex}")
      
 
-        device_state = self.__devices.get(EnOceanID(packet.sender_hex))
+        device_state = self.__devices.get(EnOceanID(packet.sender_hex).to_string())
+
         if not device_state:
-            print(f"Unknown device {packet.sender_hex}, ignoring packet.")
+            print(f"Unknown device {EnOceanID(packet.sender_hex).to_string()}, ignoring packet.")
+            devices = self.__devices.keys()
+            #print(f"Known devices: {[device.to_string() for device in devices]}")
             return
         
 
@@ -162,17 +172,21 @@ class EnOceanHomeAssistantGateway:
         
 
         print(f"Handling packet with EEP handler for {eep}.")
-        entities = handler.handle_packet(packet, device_state)
-        for entity in entities:
+        updated_entities = handler.handle_packet(packet, device_state)
+        for entity in updated_entities:
+            callback = self.__entity_callbacks.get((entity.enocean_id.to_string(), entity.name))
+            if callback:
+                callback()
             print(f"Entity updated: {entity.__str__()}")
+
 
     # Binary sensor entities
     @property
     def binary_sensor_entities(self) -> list[tuple[EnOceanID, EntityName]]:
         """Return the list of binary sensor entities."""
         entities = []
-        for enocean_id in self.__devices:
-            device_state = self.__devices[enocean_id]
+        for enocean_id_string in self.__devices:
+            device_state = self.__devices[enocean_id_string]
             eep = EEP.from_string(device_state.device_type.eep)
             handler = self.__eep_handlers.get(eep)
             if not handler:
@@ -180,30 +194,30 @@ class EnOceanHomeAssistantGateway:
 
             names = handler.binary_sensor_entities()
             for name in names:
-                entities.append((enocean_id, name))
+                entities.append((EnOceanID(enocean_id_string), name))
         return entities
                 
     
     def binary_sensor_is_on(self, enocean_id: EnOceanID, name: str) -> bool | None:
         """Return whether a binary sensor device is on or off."""
-        if enocean_id in self.__devices:
-            device_state = self.__devices[enocean_id]
+        if enocean_id.to_string() in self.__devices:
+            device_state = self.__devices[enocean_id.to_string()]
             return device_state.binary_sensor_is_on.get(name)
         
 
     # Cover entities
     def cover_current_cover_position(self, enocean_id: EnOceanID, name: str) -> int | None:
         """Return the current position of a cover device (0 = closed, 100 = open)."""
-        if enocean_id in self.__devices:
-            device_state = self.__devices[enocean_id]
+        if enocean_id.to_string() in self.__devices:
+            device_state = self.__devices[enocean_id.to_string()]
             cover_state: EnOceanCoverState | None = device_state.cover_state.get(name)
             if cover_state:
                 return cover_state.position
 
     def cover_is_closed(self, enocean_id: EnOceanID, name: str) -> bool | None:
         """Return whether a cover device is closed or not."""
-        if enocean_id in self.__devices:
-            device_state = self.__devices[enocean_id]
+        if enocean_id.to_string() in self.__devices:
+            device_state = self.__devices[enocean_id.to_string()]
             cover_state: EnOceanCoverState | None = device_state.cover_state.get(name)
             if cover_state:
                 return cover_state.is_closed
@@ -211,8 +225,8 @@ class EnOceanHomeAssistantGateway:
 
     def cover_is_closing(self, enocean_id: EnOceanID, name: str) -> bool | None:
         """Return whether a cover device is closing or not."""
-        if enocean_id in self.__devices:
-            device_state = self.__devices[enocean_id]
+        if enocean_id.to_string() in self.__devices:
+            device_state = self.__devices[enocean_id.to_string()]
             cover_state: EnOceanCoverState | None = device_state.cover_state.get(name)
             if cover_state:
                 return cover_state.is_closing
@@ -220,8 +234,8 @@ class EnOceanHomeAssistantGateway:
 
     def cover_is_opening(self, enocean_id: EnOceanID, name: str) -> bool | None:
         """Return whether a cover device is opening or not."""
-        if enocean_id in self.__devices:
-            device_state = self.__devices[enocean_id]
+        if enocean_id.to_string() in self.__devices:
+            device_state = self.__devices[enocean_id.to_string()]
             cover_state: EnOceanCoverState | None = device_state.cover_state.get(name)
             if cover_state:
                 return cover_state.is_opening
@@ -247,8 +261,8 @@ class EnOceanHomeAssistantGateway:
     # Light entities   
     def light_is_on(self, enocean_id: EnOceanID, name: str) -> bool | None:
         """Return whether a light device is on or off."""
-        if enocean_id in self.__devices:
-            device_state = self.__devices[enocean_id]
+        if enocean_id.to_string() in self.__devices:
+            device_state = self.__devices[enocean_id.to_string()]
             light_state = device_state.light_state.get(name)
             if light_state:
                 return light_state.is_on
@@ -256,8 +270,8 @@ class EnOceanHomeAssistantGateway:
 
     def light_brightness(self, enocean_id: EnOceanID, name: str) -> int | None:
         """Return the brightness of a light device between 1..255."""
-        if enocean_id in self.__devices:
-            device_state = self.__devices[enocean_id]
+        if enocean_id.to_string() in self.__devices:
+            device_state = self.__devices[enocean_id.to_string()]
             light_state = device_state.light_state.get(name)
             if light_state:
                 return light_state.brightness
@@ -265,8 +279,8 @@ class EnOceanHomeAssistantGateway:
     
     def light_color_temp_kelvin(self, enocean_id: EnOceanID, name: str) -> int | None:
         """Return the CT color value in K for a light device."""
-        if enocean_id in self.__devices:
-            device_state = self.__devices[enocean_id]
+        if enocean_id.to_string() in self.__devices:
+            device_state = self.__devices[enocean_id.to_string()]
             light_state = device_state.light_state.get(name)
             if light_state:
                 return light_state.color_temp_kelvin
@@ -285,8 +299,8 @@ class EnOceanHomeAssistantGateway:
     # Switch entities
     def switch_is_on(self, enocean_id: EnOceanID, name: str) -> bool | None:
         """Return whether a switch device is on or off."""
-        if enocean_id in self.__devices:
-            device_state = self.__devices[enocean_id]
+        if enocean_id.to_string() in self.__devices:
+            device_state = self.__devices[enocean_id.to_string()]
             return device_state.switch_is_on.get(name)
         return None
 

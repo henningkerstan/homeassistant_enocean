@@ -116,7 +116,7 @@ class EnOceanID:
         return self.to_string()
 
     def __hash__(self):
-        return hash(self.__id)
+        return self.__id
 
     def __eq__(self, other):
         return self.__id == other.__id
