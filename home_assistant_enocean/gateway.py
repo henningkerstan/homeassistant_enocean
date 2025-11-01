@@ -74,11 +74,11 @@ class EnOceanHomeAssistantGateway:
             if self.__communicator.is_alive():
                 self.__communicator.stop()
 
-    def add_device(self, enocean_id: EnOceanAddress, device_type: EnOceanDeviceType) -> None:
+    def add_device(self, enocean_id: EnOceanAddress, device_type: EnOceanDeviceType, device_name: str | None = None) -> None:
         """Add a device to the gateway."""
         if enocean_id.to_string() not in self.__devices:
-            self.__devices[enocean_id.to_string()] = EnOceanDeviceProperties(enocean_id, device_type)
-            print(f"Added device {enocean_id.to_string()} ({device_type.manufacturer} {device_type.model} EEP {device_type.eep})")
+            self.__devices[enocean_id.to_string()] = EnOceanDeviceProperties(enocean_id, device_type, device_name)
+            print(f"Added device \"{device_name}\" ({enocean_id.to_string()} ({device_type.manufacturer} {device_type.model} EEP {device_type.eep})")
 
     def register_entity_callback(self, entity_id: EnOceanEntityID, callback: Callable[[None], None]) -> None:
         """Register a callback for an entity."""

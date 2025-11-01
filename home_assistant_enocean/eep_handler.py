@@ -24,3 +24,7 @@ class EEPHandler(ABC):
     def binary_sensor_entities(self) -> dict[str, bool | None]:
         """Return the list of binary sensor entities handled by this EEP handler along with their default states."""
         return {}
+    
+    def cover_entities(self) -> dict[str, None]:
+        """Return the list of cover entities handled by this EEP handler """
+        return {"cover": None}

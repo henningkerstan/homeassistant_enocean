@@ -16,10 +16,11 @@ class EnOceanDeviceProperties:
 
     device_name: str | None = None
     
-    def __init__(self, enocean_id: EnOceanAddress, device_type: EnOceanDeviceType):
+    def __init__(self, enocean_id: EnOceanAddress, device_type: EnOceanDeviceType, device_name: str | None = None) -> None:
         """Construct an EnOcean device."""
         self.__enocean_id = enocean_id
         self.__device_type = device_type
+        self.device_name = device_name
 
     @property
     def enocean_id(self) -> EnOceanAddress:

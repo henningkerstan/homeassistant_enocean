@@ -7,7 +7,7 @@ class EEP_F6_02_Handler(EEPHandler):
     """Handler for EnOcean Equipment Profiles F6-02-01/02"""
 
     def binary_sensor_entities(self):
-        return {"A0": False, "A1": False, "B0": False, "B1": False, "AB0": False, "AB1": False, "A0B1": False, "A1B0": False}
+        return {"a0": False, "a1": False, "b0": False, "b1": False, "ab0": False, "ab1": False, "a0b1": False, "a1b0": False}
 
     def handle_packet_matching(self, packet: RadioPacket, device_state: EnOceanDeviceProperties) -> list[EnOceanEntityID]:
         """Handle an incoming EnOcean packet."""
@@ -15,36 +15,36 @@ class EEP_F6_02_Handler(EEPHandler):
 
         match action:
             case 0x70:
-                device_state.binary_sensor_is_on["A0"] = True
-                return [EnOceanEntityID(device_state.enocean_id, "A0")]
+                device_state.binary_sensor_is_on["a0"] = True
+                return [EnOceanEntityID(device_state.enocean_id, "a0")]
 
             case 0x50:
-                device_state.binary_sensor_is_on["A1"] = True
-                return [EnOceanEntityID(device_state.enocean_id, "A1")]
+                device_state.binary_sensor_is_on["a1"] = True
+                return [EnOceanEntityID(device_state.enocean_id, "a1")]
 
             case 0x30:
-                device_state.binary_sensor_is_on["B0"] = True
-                return [EnOceanEntityID(device_state.enocean_id, "B0")]
+                device_state.binary_sensor_is_on["b0"] = True
+                return [EnOceanEntityID(device_state.enocean_id, "b0")]
 
             case 0x10:
-                device_state.binary_sensor_is_on["B1"] = True
-                return [EnOceanEntityID(device_state.enocean_id, "B1")]
+                device_state.binary_sensor_is_on["b1"] = True
+                return [EnOceanEntityID(device_state.enocean_id, "b1")]
 
             case 0x37:
-                device_state.binary_sensor_is_on["AB0"] = True
-                return [EnOceanEntityID(device_state.enocean_id, "AB0")]
+                device_state.binary_sensor_is_on["ab0"] = True
+                return [EnOceanEntityID(device_state.enocean_id, "ab0")]
 
             case 0x15:
-                device_state.binary_sensor_is_on["AB1"] = True
-                return [EnOceanEntityID(device_state.enocean_id, "AB1")]
+                device_state.binary_sensor_is_on["ab1"] = True
+                return [EnOceanEntityID(device_state.enocean_id, "ab1")]
 
             case 0x17:
-                device_state.binary_sensor_is_on["A0B1"] = True
-                return [EnOceanEntityID(device_state.enocean_id, "A0B1")]
+                device_state.binary_sensor_is_on["a0b1"] = True
+                return [EnOceanEntityID(device_state.enocean_id, "a0b1")]
 
             case 0x35:
-                device_state.binary_sensor_is_on["A1B0"] = True
-                return [EnOceanEntityID(device_state.enocean_id, "A1B0")]
+                device_state.binary_sensor_is_on["a1b0"] = True
+                return [EnOceanEntityID(device_state.enocean_id, "a1b0")]
 
         
             case 0x00:
