@@ -71,9 +71,8 @@ class EnOceanHomeAssistantGateway:
             if not device.sender_id:
                 device.sender_id = self.__base_id
             
-            # intialize device through EEP handler
-            eep = EEP.from_string(device.device_type.eep)
-            eep_handler = self.__eep_handlers.get(eep)
+            # intialize device through EEP handler  
+            eep_handler = self.__eep_handlers.get(device.device_type.eep)
             if eep_handler:
                 eep_handler.initialize_device(device)
 
@@ -178,15 +177,12 @@ class EnOceanHomeAssistantGateway:
         
 
 
-        eep = EEP.from_string(device.device_type.eep)
-
-        handler = self.__eep_handlers.get(eep)
+        handler = self.__eep_handlers.get(device.device_type.eep)
         if not handler:
-            print(f"No handler for EEP {eep} found.")
+            print(f"No handler for EEP {device.device_type.eep} found.")
             return
-        
 
-        print(f"Handling packet with EEP handler for {eep}.")
+        print(f"Handling packet with EEP handler for {device.device_type.eep}.")
         updated_entities = handler.handle_packet(packet, device)
         if not updated_entities:
             return
@@ -209,8 +205,7 @@ class EnOceanHomeAssistantGateway:
 
         # iterate over all devices and get their binary sensor entities
         for device in self.__devices.values():
-            eep = EEP.from_string(device.device_type.eep)
-            eep_handler = self.__eep_handlers.get(eep)
+            eep_handler = self.__eep_handlers.get(device.device_type.eep)
             if not eep_handler:
                 continue
 

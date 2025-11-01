@@ -31,6 +31,9 @@ class EEP:
     def __eq__(self, other):
         return (self.rorg, self.func, self.type) == (other.rorg, other.func, other.type)
     
+    def to_string(self) -> str:
+        """Return the EEP as a dash-separated string."""
+        return f"{self.rorg:02X}-{self.func:02X}-{self.type:02X}"
 
     def __str__(self):
-        return f"{self.rorg:02X}-{self.func:02X}-{self.type:02X}"
+        return self.to_string()
