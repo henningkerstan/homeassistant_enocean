@@ -7,10 +7,11 @@ from enocean.protocol.packet import Packet, RadioPacket
 from enocean.utils import to_hex_string
 from home_assistant_enocean.device_type import EnOceanDeviceType
 from home_assistant_enocean.eep import EEP
-from home_assistant_enocean.eep_f6_02_handler import EEP_F6_02_Handler
-from home_assistant_enocean.eep_handler import EEPHandler
+from home_assistant_enocean.eep_handlers.eep_d2_05_00_handler import EEP_D2_05_00_Handler
+from home_assistant_enocean.eep_handlers.eep_f6_02_handler import EEP_F6_02_Handler
+from home_assistant_enocean.eep_handlers.eep_handler import EEPHandler
 from home_assistant_enocean.entity_id import EnOceanEntityID
-from home_assistant_enocean.types import EnOceanIDString, EntityName
+from home_assistant_enocean.types import EnOceanIDString
 from .cover_state import EnOceanCoverState
 from .device_properties import EnOceanDeviceProperties
 from .address import EnOceanAddress
@@ -43,6 +44,7 @@ class EnOceanHomeAssistantGateway:
         self.__eep_handlers: dict[EEP, EEPHandler] = {
             EEP(0xF6, 0x02, 0x01): EEP_F6_02_Handler(),
             EEP(0xF6, 0x02, 0x02): EEP_F6_02_Handler(),
+            EEP(0xD2, 0x05, 0x00): EEP_D2_05_00_Handler(),
         }
 
         # Map of entity UID to callback functions
@@ -180,6 +182,8 @@ class EnOceanHomeAssistantGateway:
 
         print(f"Handling packet with EEP handler for {eep}.")
         updated_entities = handler.handle_packet(packet, device_state)
+        if not updated_entities:
+            return
         for entity_id in updated_entities:
             print(f"Entity updated: {entity_id.to_string()}")
             callback = self.__entity_callbacks.get(entity_id.to_string())

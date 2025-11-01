@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from home_assistant_enocean.cover_properties import EnOceanCoverProperties
 from home_assistant_enocean.device_properties import EnOceanDeviceProperties
 from enocean.protocol.packet import RadioPacket
 from home_assistant_enocean.entity_id import EnOceanEntityID
@@ -25,6 +26,6 @@ class EEPHandler(ABC):
         """Return the list of binary sensor entities handled by this EEP handler along with their default states."""
         return {}
     
-    def cover_entities(self) -> dict[str, None]:
-        """Return the list of cover entities handled by this EEP handler """
-        return {"cover": None}
+    def cover_entities(self) -> list[EnOceanCoverProperties]:
+        """Return the list of cover entities handled by this EEP handler."""
+        return []

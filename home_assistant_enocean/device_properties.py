@@ -1,7 +1,7 @@
 """Representation of an EnOcean device state."""
 from .cover_state import EnOceanCoverState
 from .device_type import EnOceanDeviceType
-from .types import EntityName
+from .types import EnOceanEntityUID
 from .address import EnOceanAddress
 from .light_state import EnOceanLightState
 
@@ -9,10 +9,10 @@ from .light_state import EnOceanLightState
 class EnOceanDeviceProperties:
     """Representation of an EnOcean device."""
 
-    binary_sensor_is_on: dict[EntityName, bool] = {}
-    switch_is_on: dict[EntityName, bool] = {}
-    cover_state: dict[EntityName, EnOceanCoverState] = {}
-    light_state: dict[EntityName, EnOceanLightState] = {}
+    binary_sensor_is_on: dict[EnOceanEntityUID, bool] = {}
+    switch_is_on: dict[EnOceanEntityUID, bool] = {}
+    cover_state: dict[EnOceanEntityUID, EnOceanCoverState] = {}
+    light_state: dict[EnOceanEntityUID, EnOceanLightState] = {}
 
     device_name: str | None = None
     
