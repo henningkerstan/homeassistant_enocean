@@ -8,13 +8,10 @@ from home_assistant_enocean.address import EnOceanAddress
 
 
 async def main_loop():
+    print("Initializing EnOcean Gateway...")
     gateway = EnOceanHomeAssistantGateway(
         serial_path="/dev/tty.usbserial-EO8FD3C6",
     )
-
-    await gateway.start()
-
-    print("EnOcean Gateway started. Listening for packets...")
 
 
     for device in devices:
@@ -25,6 +22,10 @@ async def main_loop():
             continue
 
         gateway.add_device(enocean_id=EnOceanAddress(device["enocean_id"]), device_type=device_type)
+
+    print("Starting EnOcean Gateway...")
+    await gateway.start()
+    print("EnOcean Gateway started. Listening for packets...")
 
     while True:
         try:

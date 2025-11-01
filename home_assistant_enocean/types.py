@@ -1,5 +1,5 @@
 type EnOceanEntityUID = str | None
 """An entity name which can be a string or None"""
 
-type EnOceanIDString = str
+type EnOceanDeviceIDString = str
 """An EnOcean device ID as string"""

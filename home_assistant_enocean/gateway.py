@@ -11,9 +11,9 @@ from home_assistant_enocean.eep_handlers.eep_d2_05_00_handler import EEP_D2_05_0
 from home_assistant_enocean.eep_handlers.eep_f6_02_handler import EEP_F6_02_Handler
 from home_assistant_enocean.eep_handlers.eep_handler import EEPHandler
 from home_assistant_enocean.entity_id import EnOceanEntityID
-from home_assistant_enocean.types import EnOceanIDString
+from home_assistant_enocean.types import EnOceanDeviceIDString
 from .cover_state import EnOceanCoverState
-from .device_properties import EnOceanDeviceProperties
+from .device_state import EnOceanDeviceState
 from .address import EnOceanAddress
 
 _LOGGER = logging.getLogger(__name__)
@@ -28,8 +28,7 @@ class ValueLabelDict(TypedDict):
 
 
 class EnOceanHomeAssistantGateway:
-    """Representation of an EnOcean gateway for Home Assistant.
-    """
+    """Representation of an EnOcean gateway for Home Assistant."""
 
     def __init__(self, serial_path: str) -> None:
         """Initialize the EnOcean gateway."""
@@ -38,20 +37,17 @@ class EnOceanHomeAssistantGateway:
         self.__chip_id: EnOceanAddress = EnOceanAddress(0)
         self.__chip_version: int = 0
         self.__sw_version: str = "n/a"
-
-        self.__devices: dict[EnOceanIDString, EnOceanDeviceProperties] = {}
-
-        self.__eep_handlers: dict[EEP, EEPHandler] = {
-            EEP(0xF6, 0x02, 0x01): EEP_F6_02_Handler(),
-            EEP(0xF6, 0x02, 0x02): EEP_F6_02_Handler(),
-            EEP(0xD2, 0x05, 0x00): EEP_D2_05_00_Handler(),
-        }
-
-        # Map of entity UID to callback functions
-        self.__entity_callbacks: dict[str, Callable[[None], None]] = {}
+        self.__devices: dict[EnOceanDeviceIDString, EnOceanDeviceState] = {}
+        self.__entity_update_callbacks: dict[str, Callable[[None], None]] = {}
 
     async def start(self) -> None:
         """Start the EnOcean gateway."""
+        self.__eep_handlers: dict[EEP, EEPHandler] = {
+            EEP(0xF6, 0x02, 0x01): EEP_F6_02_Handler(self.__communicator.send),
+            EEP(0xF6, 0x02, 0x02): EEP_F6_02_Handler(self.__communicator.send),
+            EEP(0xD2, 0x05, 0x00): EEP_D2_05_00_Handler(self.__communicator.send),
+        }
+
         self.__communicator.start()
         self.__chip_id = EnOceanAddress(to_hex_string(self.__communicator.chip_id))
         self.__base_id = EnOceanAddress(to_hex_string(self.__communicator.base_id))
@@ -70,22 +66,34 @@ class EnOceanHomeAssistantGateway:
         self.__communicator.callback = self.__handle_packet
 
 
+        for device in self.__devices.values():
+            # set device's sender id to base id if not set
+            if not device.sender_id:
+                device.sender_id = self.__base_id
+            
+            # intialize device through EEP handler
+            eep = EEP.from_string(device.device_type.eep)
+            eep_handler = self.__eep_handlers.get(eep)
+            if eep_handler:
+                eep_handler.initialize_device(device)
+
+
     def stop(self) -> None:
         """Stop the EnOcean gateway."""
         if self.__communicator:
             if self.__communicator.is_alive():
                 self.__communicator.stop()
 
-    def add_device(self, enocean_id: EnOceanAddress, device_type: EnOceanDeviceType, device_name: str | None = None) -> None:
+    def add_device(self, enocean_id: EnOceanAddress, device_type: EnOceanDeviceType, device_name: str | None = None, sender_id: EnOceanAddress | None = None) -> None:
         """Add a device to the gateway."""
         if enocean_id.to_string() not in self.__devices:
-            self.__devices[enocean_id.to_string()] = EnOceanDeviceProperties(enocean_id, device_type, device_name)
-            print(f"Added device \"{device_name}\" ({enocean_id.to_string()} ({device_type.manufacturer} {device_type.model} EEP {device_type.eep})")
+            self.__devices[enocean_id.to_string()] = EnOceanDeviceState(enocean_id, device_type, device_name, sender_id)
+            print(f"Added device \"{device_name}\" ({enocean_id.to_string()} ({device_type.manufacturer} {device_type.model} EEP {device_type.eep}), sender ID: {sender_id.to_string() if sender_id else 'n/a'}) to gateway.")
 
     def register_entity_callback(self, entity_id: EnOceanEntityID, callback: Callable[[None], None]) -> None:
         """Register a callback for an entity."""
         print(f"Registering callback for entity {entity_id.to_string()}")
-        self.__entity_callbacks[entity_id.to_string()] = callback
+        self.__entity_update_callbacks[entity_id.to_string()] = callback
 
     @property
     def base_id(self) -> EnOceanAddress:
@@ -142,7 +150,7 @@ class EnOceanHomeAssistantGateway:
         return self.__sw_version
     
 
-    def get_device_properties(self, enocean_id: EnOceanAddress) -> EnOceanDeviceProperties | None:
+    def get_device_properties(self, enocean_id: EnOceanAddress) -> EnOceanDeviceState | None:
         """Return the device properties for a given EnOcean ID."""
         return self.__devices.get(enocean_id.to_string())
 
@@ -162,17 +170,15 @@ class EnOceanHomeAssistantGateway:
         print(f"Received packet from {packet.sender_hex} with RORG {rorg_hex}")
      
 
-        device_state = self.__devices.get(EnOceanAddress(packet.sender_hex).to_string())
+        device = self.__devices.get(EnOceanAddress(packet.sender_hex).to_string())
 
-        if not device_state:
+        if not device:
             print(f"Unknown device {EnOceanAddress(packet.sender_hex).to_string()}, ignoring packet.")
-            devices = self.__devices.keys()
-            #print(f"Known devices: {[device.to_string() for device in devices]}")
             return
         
 
 
-        eep = EEP.from_string(device_state.device_type.eep)
+        eep = EEP.from_string(device.device_type.eep)
 
         handler = self.__eep_handlers.get(eep)
         if not handler:
@@ -181,12 +187,12 @@ class EnOceanHomeAssistantGateway:
         
 
         print(f"Handling packet with EEP handler for {eep}.")
-        updated_entities = handler.handle_packet(packet, device_state)
+        updated_entities = handler.handle_packet(packet, device)
         if not updated_entities:
             return
         for entity_id in updated_entities:
             print(f"Entity updated: {entity_id.to_string()}")
-            callback = self.__entity_callbacks.get(entity_id.to_string())
+            callback = self.__entity_update_callbacks.get(entity_id.to_string())
             if callback:
                 print(f"Invoking callback for entity {entity_id.to_string()}")
                 callback()
@@ -200,16 +206,17 @@ class EnOceanHomeAssistantGateway:
     def binary_sensor_entities(self) -> list[EnOceanEntityID]:
         """Return the list of binary sensor entities."""
         entities = []
-        for enocean_id_string in self.__devices:
-            device_state = self.__devices[enocean_id_string]
-            eep = EEP.from_string(device_state.device_type.eep)
-            handler = self.__eep_handlers.get(eep)
-            if not handler:
+
+        # iterate over all devices and get their binary sensor entities
+        for device in self.__devices.values():
+            eep = EEP.from_string(device.device_type.eep)
+            eep_handler = self.__eep_handlers.get(eep)
+            if not eep_handler:
                 continue
 
-            names = handler.binary_sensor_entities()
+            names = eep_handler.binary_sensor_entities()
             for name in names:
-                entities.append(EnOceanEntityID(device_state.enocean_id, name))
+                entities.append(EnOceanEntityID(device.enocean_id, name))
         return entities
                 
     
@@ -217,8 +224,8 @@ class EnOceanHomeAssistantGateway:
         """Return whether a binary sensor device is on or off."""
         device_address_string = entity_id.device_address.to_string()
         if device_address_string in self.__devices:
-            device_state = self.__devices[device_address_string]
-            return device_state.binary_sensor_is_on.get(entity_id.name)
+            device = self.__devices[device_address_string]
+            return device.binary_sensor_is_on.get(entity_id.name)
         
 
     # Cover entities
