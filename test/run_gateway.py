@@ -1,9 +1,9 @@
 from asyncio import sleep
-from home_assistant_enocean.gateway import EnOceanHomeAssistantGateway
+from homeassistant_enocean.gateway import EnOceanHomeAssistantGateway
 
-from  home_assistant_enocean.device_type import EnOceanDeviceType
+from  homeassistant_enocean.device_type import EnOceanDeviceType
 from devices import devices
-from home_assistant_enocean.address import EnOceanAddress
+from homeassistant_enocean.address import EnOceanAddress
 
 
 

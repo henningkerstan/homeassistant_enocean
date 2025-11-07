@@ -1,6 +1,6 @@
 """Module containing a representation of a supported EnOcean device type."""
 
-from home_assistant_enocean.eep import EEP
+from homeassistant_enocean.eep import EEP
 
 
 class EnOceanDeviceType:

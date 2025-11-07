@@ -1,5 +1,5 @@
-from home_assistant_enocean.device_state import EnOceanDeviceState
-from home_assistant_enocean.entity_id import EnOceanEntityID
+from homeassistant_enocean.device_state import EnOceanDeviceState
+from homeassistant_enocean.entity_id import EnOceanEntityID
 from .eep_handler import EEPHandler
 from enocean.protocol.packet import RadioPacket
 

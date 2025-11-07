@@ -1,6 +1,6 @@
 from enum import IntFlag
 
-from home_assistant_enocean.entity_properties import EnOceanEntityProperties
+from homeassistant_enocean.entity_properties import EnOceanEntityProperties
 
 
 class EnOceanCoverProperties(EnOceanEntityProperties):

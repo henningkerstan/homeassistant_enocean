@@ -5,13 +5,13 @@ from typing import Callable, TypedDict
 from enocean.communicators import SerialCommunicator
 from enocean.protocol.packet import Packet, RadioPacket
 from enocean.utils import to_hex_string
-from home_assistant_enocean.device_type import EnOceanDeviceType
-from home_assistant_enocean.eep import EEP
-from home_assistant_enocean.eep_handlers.eep_d2_05_00_handler import EEP_D2_05_00_Handler
-from home_assistant_enocean.eep_handlers.eep_f6_02_handler import EEP_F6_02_Handler
-from home_assistant_enocean.eep_handlers.eep_handler import EEPHandler
-from home_assistant_enocean.entity_id import EnOceanEntityID
-from home_assistant_enocean.types import EnOceanDeviceIDString
+from homeassistant_enocean.device_type import EnOceanDeviceType
+from homeassistant_enocean.eep import EEP
+from homeassistant_enocean.eep_handlers.eep_d2_05_00_handler import EEP_D2_05_00_Handler
+from homeassistant_enocean.eep_handlers.eep_f6_02_handler import EEP_F6_02_Handler
+from homeassistant_enocean.eep_handlers.eep_handler import EEPHandler
+from homeassistant_enocean.entity_id import EnOceanEntityID
+from homeassistant_enocean.types import EnOceanDeviceIDString
 from .cover_state import EnOceanCoverState
 from .device_state import EnOceanDeviceState
 from .address import EnOceanAddress

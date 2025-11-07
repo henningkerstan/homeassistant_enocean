@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import Callable
 
-from home_assistant_enocean.address import EnOceanAddress
-from home_assistant_enocean.cover_properties import EnOceanCoverProperties
-from home_assistant_enocean.device_state import EnOceanDeviceState
+from homeassistant_enocean.address import EnOceanAddress
+from homeassistant_enocean.cover_properties import EnOceanCoverProperties
+from homeassistant_enocean.device_state import EnOceanDeviceState
 from enocean.protocol.packet import RadioPacket
-from home_assistant_enocean.entity_id import EnOceanEntityID
+from homeassistant_enocean.entity_id import EnOceanEntityID
 
 
 class EEPHandler(ABC):

@@ -1,4 +1,4 @@
-from home_assistant_enocean.address import EnOceanDeviceAddress
+from homeassistant_enocean.address import EnOceanDeviceAddress
 
 class EnOceanEntityID:
     """An EnOcean Entity is uniquely identified by its device's ID and a name."""

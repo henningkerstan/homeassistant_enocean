@@ -1,11 +1,11 @@
 import asyncio
 from enum import Enum, IntFlag
-from home_assistant_enocean.address import EnOceanAddress
-from home_assistant_enocean.cover_properties import EnOceanCoverProperties
-from home_assistant_enocean.cover_state import EnOceanCoverState
-from home_assistant_enocean.device_state import EnOceanDeviceState
-from home_assistant_enocean.eep_handlers.eep_handler import EEPHandler
-from home_assistant_enocean.entity_id import EnOceanEntityID
+from homeassistant_enocean.address import EnOceanAddress
+from homeassistant_enocean.cover_properties import EnOceanCoverProperties
+from homeassistant_enocean.cover_state import EnOceanCoverState
+from homeassistant_enocean.device_state import EnOceanDeviceState
+from homeassistant_enocean.eep_handlers.eep_handler import EEPHandler
+from homeassistant_enocean.entity_id import EnOceanEntityID
 from enocean.protocol.packet import RadioPacket
 from enocean.protocol.constants import RORG
 
