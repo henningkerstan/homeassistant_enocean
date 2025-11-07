@@ -3,7 +3,7 @@ from enum import Enum, IntFlag
 from home_assistant_enocean.address import EnOceanAddress
 from home_assistant_enocean.cover_properties import EnOceanCoverProperties
 from home_assistant_enocean.cover_state import EnOceanCoverState
-from home_assistant_enocean.device_properties import EnOceanDeviceState
+from home_assistant_enocean.device_state import EnOceanDeviceState
 from home_assistant_enocean.eep_handlers.eep_handler import EEPHandler
 from home_assistant_enocean.entity_id import EnOceanEntityID
 from enocean.protocol.packet import RadioPacket

@@ -3,7 +3,7 @@ from typing import Callable
 
 from home_assistant_enocean.address import EnOceanAddress
 from home_assistant_enocean.cover_properties import EnOceanCoverProperties
-from home_assistant_enocean.device_properties import EnOceanDeviceState
+from home_assistant_enocean.device_state import EnOceanDeviceState
 from enocean.protocol.packet import RadioPacket
 from home_assistant_enocean.entity_id import EnOceanEntityID
 
