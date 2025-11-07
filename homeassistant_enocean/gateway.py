@@ -224,6 +224,22 @@ class EnOceanHomeAssistantGateway:
         
 
     # Cover entities
+    @property
+    def cover_entities(self) -> list[EnOceanEntityID]:
+        """Return the list of cover entities."""
+        entities = []
+
+        # iterate over all devices and get their cover entities
+        for device in self.__devices.values():
+            eep_handler = self.__eep_handlers.get(device.device_type.eep)
+            if not eep_handler:
+                continue
+
+            names = eep_handler.cover_entities()
+            for name in names:
+                entities.append(EnOceanEntityID(device.enocean_id, name))
+        return entities
+
     def cover_current_cover_position(self, enocean_id: EnOceanAddress, name: str) -> int | None:
         """Return the current position of a cover device (0 = closed, 100 = open)."""
         if enocean_id.to_string() in self.__devices:
