@@ -9,13 +9,15 @@ class EEP_F6_02_Handler(EEPHandler):
     def binary_sensor_entities(self):
         return {"a0": False, "a1": False, "b0": False, "b1": False, "ab0": False, "ab1": False, "a0b1": False, "a1b0": False}
     
-    def initialize_device(self, device_state: EnOceanDeviceState) -> None:
+    def initialize_device_state(self, device_state: EnOceanDeviceState) -> None:
         """Initialize the device state for this EEP handler."""
         device_state.binary_sensor_is_on = self.binary_sensor_entities()
 
     def handle_packet_matching(self, packet: RadioPacket, device_state: EnOceanDeviceState) -> list[EnOceanEntityID]:
         """Handle an incoming EnOcean packet."""
         action = packet.data[1]
+
+        print(f"EEP_F6_02_Handler: Handling packet with action {action:#04x} for device ID {device_state.enocean_id.to_string()}")
 
         match action:
             case 0x70:

@@ -6,11 +6,6 @@ from homeassistant_enocean.eep import EEP
 class EnOceanDeviceType:
     """Representation of a supported EnOcean device type."""
 
-    __unique_id: str
-    __eep: EEP
-    __manufacturer: str
-    __model: str
-
     def __init__(
         self,
         eep: EEP,
@@ -22,10 +17,10 @@ class EnOceanDeviceType:
         
         if unique_id is None:
             unique_id = eep.to_string()
-        self.__unique_id = unique_id
-        self.__eep = eep
-        self.__model = model
-        self.__manufacturer = manufacturer
+        self.__unique_id: str = unique_id
+        self.__eep : EEP = eep
+        self.__model: str = model
+        self.__manufacturer: str = manufacturer
 
     @property
     def unique_id(self) -> str:

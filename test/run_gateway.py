@@ -21,7 +21,7 @@ async def main_loop():
             print(f"Device type {device['device_type']} not supported.")
             continue
 
-        gateway.add_device(enocean_id=EnOceanAddress(device["enocean_id"]), device_type=device_type)
+        gateway.add_device(enocean_id=EnOceanAddress(device["enocean_id"]), device_type=device_type, device_name=device.get("name"), sender_id=EnOceanAddress(device["sender_id"]) if device.get("sender_id") else None  )
 
     print("Starting EnOcean Gateway...")
     await gateway.start()

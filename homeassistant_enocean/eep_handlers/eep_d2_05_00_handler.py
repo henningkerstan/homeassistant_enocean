@@ -25,14 +25,14 @@ class EEP_D2_05_00_Handler(EEPHandler):
     """Handler for EnOcean Equipment Profile D2-05-00"""
 
     def cover_entities(self) -> list[EnOceanCoverProperties]:
-        return [EnOceanCoverProperties(supported_features=IntFlag(1|2|4|8))]  # open, close, stop, set position
+        return [EnOceanCoverProperties(supported_features=1|2|4|8)]  # open, close, stop, set position
     
 
-    def initialize_device(self, device_state: EnOceanDeviceState) -> None:
+    def initialize_device_state(self, state: EnOceanDeviceState) -> None:
         """Initialize the device state."""
-        print("Initializing EnOcean cover device with ID:", device_state.enocean_id.to_string())
-        device_state.cover_state[None] = EnOceanCoverState()
-        self.__send_cover_command(command=EnOceanCoverCommand.QUERY_POSITION, destination=device_state.enocean_id, sender=device_state.sender_id )
+        print("Initializing EnOcean cover device with ID:", state.enocean_id.to_string())
+        state.cover_state[None] = EnOceanCoverState()
+        self.__send_cover_command(command=EnOceanCoverCommand.QUERY_POSITION, destination=state.enocean_id, sender=state.sender_id )
 
 
     def handle_packet_matching(self, packet: RadioPacket, device_state: EnOceanDeviceState) -> list[EnOceanEntityID]:
