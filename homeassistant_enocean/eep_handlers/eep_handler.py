@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Callable
 
-from homeassistant_enocean.address import EnOceanAddress
+from homeassistant_enocean.address import EnOceanAddress, EnOceanDeviceAddress
 from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 from homeassistant_enocean.device_state import EnOceanDeviceState
 from enocean.protocol.packet import RadioPacket
@@ -14,9 +14,15 @@ from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCove
 class EEPHandler(ABC):
     """Abstract base class for EnOcean Equipment Profile (EEP) handlers."""
 
-    def __init__(self, send_packet: Callable[[RadioPacket], None] | None = None) -> None:
+    def __init__(self, send_packet: Callable[[RadioPacket], None] | None = None, enocean_id: EnOceanDeviceAddress | None = None, sender_id: EnOceanAddress | None = None) -> None:
         """Construct EEP handler."""
         self.__send_packet = send_packet
+
+        # callbacks
+        self._binary_sensor_callbacks: dict[EnOceanEntityUID, EnOceanBinarySensorCallback] = {}
+        self._cover_callbacks: dict[EnOceanEntityUID, EnOceanCoverCallback] = {}
+        self._light_callbacks: dict[EnOceanEntityUID, EnOceanLightCallback] = {}
+        self._switch_callbacks: dict[EnOceanEntityUID, EnOceanSwitchCallback] = {}
 
         # entities
         self._binary_sensor_entities: list[HomeAssistantEntityProperties] = []
@@ -25,14 +31,6 @@ class EEPHandler(ABC):
         self._switch_entities: list[HomeAssistantEntityProperties] = []
         self.initialize_entities()
 
-        # callbacks
-        self._binary_sensor_callbacks: dict[EnOceanEntityUID, EnOceanBinarySensorCallback] = {}
-        self._cover_callbacks: dict[EnOceanEntityUID, EnOceanCoverCallback] = {}
-        self._light_callbacks: dict[EnOceanEntityUID, EnOceanLightCallback] = {}
-        self._switch_callbacks: dict[EnOceanEntityUID, EnOceanSwitchCallback] = {}
-
-
-
 
     @property
     def send_packet(self) -> Callable[[RadioPacket], None] | None:
@@ -40,11 +38,11 @@ class EEPHandler(ABC):
         return self.__send_packet
 
 
-    def handle_packet(self, packet: RadioPacket, device_state: EnOceanDeviceState) -> None:
+    def handle_packet(self, packet: RadioPacket, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
         """Handle an incoming EnOcean packet."""
-        print(f"EEPHandler.handle_packet: Checking packet from sender {EnOceanAddress.from_number(packet.sender_int)} against device ID {device_state.enocean_id.to_string()}")
-        if packet.sender_int == device_state.enocean_id.to_number():
-            self.handle_matching_packet(packet, device_state)
+        print(f"EEPHandler.handle_packet: Checking packet from sender {EnOceanAddress.from_number(packet.sender_int)} against device ID {enocean_id.to_string()}")
+        if packet.sender_int == enocean_id.to_number():
+            self.handle_matching_packet(packet, enocean_id, sender_id)
 
     @abstractmethod
     def initialize_entities(self) -> None:
@@ -52,7 +50,7 @@ class EEPHandler(ABC):
         pass
 
     @abstractmethod
-    def handle_matching_packet(self, packet: RadioPacket, device_state: EnOceanDeviceState) -> None:
+    def handle_matching_packet(self, packet: RadioPacket, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
         """Handle an incoming EnOcean packet."""
         pass
 

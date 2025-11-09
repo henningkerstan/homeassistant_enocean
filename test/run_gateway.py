@@ -7,9 +7,13 @@ from devices import devices
 from homeassistant_enocean.address import EnOceanAddress
 
 def binary_sensor_callback(entity_id: EnOceanEntityID, is_on: bool):
-    print(f"Binary sensor {entity_id.to_string()} changed state to {'ON' if is_on else 'OFF'}")
+    print(f"Binary sensor {entity_id.to_string()} has state {'ON' if is_on else 'OFF'}")
 
 
+def cover_callback(entity_id: EnOceanEntityID, position: int):
+    print(f"Cover {entity_id.to_string()} has position {position}")
+
+    
 async def main_loop():
     print("Initializing EnOcean Gateway...")
     gateway = EnOceanHomeAssistantGateway(
@@ -33,6 +37,7 @@ async def main_loop():
 
     for cover in gateway.cover_entities:
         print(f"Registered cover entity: {cover.to_string()} with properties: {gateway.cover_entities[cover]}")
+        gateway.register_cover_callback(cover, lambda position, entity_id=cover: cover_callback(entity_id, position))
 
     print("Starting EnOcean Gateway...")
     await gateway.start()

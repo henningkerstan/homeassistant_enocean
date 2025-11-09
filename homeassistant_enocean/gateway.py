@@ -13,7 +13,6 @@ from homeassistant_enocean.eep_handlers.eep_f6_02_handler import EEP_F6_02_Handl
 from homeassistant_enocean.eep_handlers.eep_handler import EEPHandler
 from homeassistant_enocean.entity_id import EnOceanEntityID
 from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanDeviceIDString, EnOceanEventCallback, EnOceanLightCallback, EnOceanSwitchCallback
-from .cover_state import EnOceanCoverState
 from .device import EnOceanDevice
 from .address import EnOceanAddress
 
@@ -112,7 +111,7 @@ class EnOceanHomeAssistantGateway:
     def register_cover_callback(self, entity_id: EnOceanEntityID, callback: EnOceanCoverCallback) -> None:
         """Register a callback for a cover entity."""
         print(f"Registering cover callback for entity {entity_id.to_string()}")
-        self.__cover_callbacks[entity_id.to_string()] = callback
+        self.__devices[entity_id.device_address.to_string()].handler._cover_callbacks[entity_id] = callback 
 
 
     def register_event_callback(self, event_type: str, callback: EnOceanEventCallback) -> None:
@@ -200,29 +199,23 @@ class EnOceanHomeAssistantGateway:
         """Handle incoming EnOcean packet."""
         if not isinstance(packet, RadioPacket):
             return
-     
-        device = self.__devices.get(EnOceanAddress(packet.sender_hex).to_string())
 
+        # find the device corresponding to the sender address
+        device = self.__devices.get(EnOceanAddress(packet.sender_hex).to_string())
         if not device:
-            print(f"Unknown device {EnOceanAddress(packet.sender_hex).to_string()}, ignoring packet.")
+            print(f"Ignoring received packet from unknown device {EnOceanAddress(packet.sender_hex).to_string()}.")
             return
         
         print(f"Received packet from '{device.device_name}' ({packet.sender_hex}) with EEP {device.device_type.eep.to_string()}")
 
+        # pass the packet to the device's EEP handler
         handler = device.handler
-        print(f"Using EEP handler {handler.__class__.__name__} for device {device.device_name} ({device.enocean_id.to_string()})")
-        updated_entities = handler.handle_packet(packet, device.state)
-        if not updated_entities:
+        if not handler:
             return
-        for entity_id in updated_entities:
-            print(f"Entity updated: {entity_id.to_string()}")
-            callback = self.__entity_update_callbacks.get(entity_id.to_string())
-            if callback:
-                print(f"Invoking callback for entity {entity_id.to_string()}")
-                callback()
-            else:
-                print(f"No callback registered for entity {entity_id.to_string()}")
-            
+        
+        print(f"Using EEP handler {handler.__class__.__name__} for device {device.device_name} ({device.enocean_id.to_string()}) to handle received packet.")
+        handler.handle_packet(packet, device.enocean_id, device.sender_id)
+        
 
 
     # Entity listings

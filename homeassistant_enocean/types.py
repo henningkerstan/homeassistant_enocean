@@ -14,8 +14,8 @@ type EnOceanDeviceIDString = str
 type EnOceanBinarySensorCallback = Callable[[bool], None]
 """Callback type for binary sensor state changes, with a boolean parameter indicating the new is_on state."""
 
-type EnOceanCoverCallback = Callable[[int, int], None]
-"""Callback type for cover state changes, with new position (closed = 0, fully open = 100) and tilt values."""
+type EnOceanCoverCallback = Callable[[int], None]
+"""Callback type for cover state changes, with new position (closed = 0, fully open = 100)."""
 
 type EnOceanEventCallback = Callable[[str, dict], None]
 """Callback type for event notifications, with event type as string and additional data as dictionary."""
