@@ -48,9 +48,26 @@ class EnOceanDevice:
     @property
     def binary_sensor_entities(self) -> list[HomeAssistantEntityProperties]:
         """Return the binary sensor entities."""
-        return self.__handler.binary_sensor_entities()
+        return self.__handler.binary_sensor_entities
 
     @property
     def cover_entities(self) -> list[HomeAssistantEntityProperties]:
         """Return the cover entities."""
-        return self.__handler.cover_entities()
+        return self.__handler.cover_entities    
+    
+    @property
+    def event_entities(self) -> list[HomeAssistantEntityProperties]:
+        """Return the event entities."""
+        return []
+
+    @property
+    def light_entities(self) -> list[HomeAssistantEntityProperties]:
+        """Return the light entities."""
+        return self.__handler.light_entities
+
+    @property
+    def switch_entities(self) -> list[HomeAssistantEntityProperties]:
+        """Return the switch entities."""
+        return self.__handler.switch_entities
+
+    

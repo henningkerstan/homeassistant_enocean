@@ -12,7 +12,7 @@ from homeassistant_enocean.eep_handlers.eep_d2_05_00_handler import EEP_D2_05_00
 from homeassistant_enocean.eep_handlers.eep_f6_02_handler import EEP_F6_02_Handler
 from homeassistant_enocean.eep_handlers.eep_handler import EEPHandler
 from homeassistant_enocean.entity_id import EnOceanEntityID
-from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanDeviceIDString, EnOceanLightCallback, EnOceanSwitchCallback
+from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanDeviceIDString, EnOceanEventCallback, EnOceanLightCallback, EnOceanSwitchCallback
 from .cover_state import EnOceanCoverState
 from .device import EnOceanDevice
 from .address import EnOceanAddress
@@ -74,11 +74,6 @@ class EnOceanHomeAssistantGateway:
             # set device's sender id to base id if not set
             if not device.sender_id:
                 device.sender_id = self.__base_id
-            
-            # intialize device through EEP handler  
-            eep_handler = self.__eep_handlers.get(device.device_type.eep)
-            if eep_handler:
-                eep_handler.initialize_device_state(device.state)
 
 
     def stop(self) -> None:
@@ -112,8 +107,18 @@ class EnOceanHomeAssistantGateway:
     def register_binary_sensor_callback(self, entity_id: EnOceanEntityID, callback: EnOceanBinarySensorCallback) -> None:
         """Register a callback for a binary sensor entity."""
         print(f"Registering binary sensor callback for entity {entity_id.to_string()}")
-        self.__binary_sensor_callbacks[entity_id.to_string()] = callback
+        self.__devices[entity_id.device_address.to_string()].handler._binary_sensor_callbacks[entity_id.unique_id] = callback
 
+    def register_cover_callback(self, entity_id: EnOceanEntityID, callback: EnOceanCoverCallback) -> None:
+        """Register a callback for a cover entity."""
+        print(f"Registering cover callback for entity {entity_id.to_string()}")
+        self.__cover_callbacks[entity_id.to_string()] = callback
+
+
+    def register_event_callback(self, event_type: str, callback: EnOceanEventCallback) -> None:
+        """Register a callback for an event."""
+        print(f"Registering event callback for event type {event_type}")
+        self.__event_callbacks[event_type] = callback
 
     def register_switch_callback(self, entity_id: EnOceanEntityID, callback: EnOceanSwitchCallback) -> None:
         """Register a callback for a switch entity."""
@@ -125,10 +130,6 @@ class EnOceanHomeAssistantGateway:
         print(f"Registering light callback for entity {entity_id.to_string()}")
         self.__light_callbacks[entity_id.to_string()] = callback
 
-    def register_entity_callback(self, entity_id: EnOceanEntityID, callback: Callable[[None], None]) -> None:
-        """Register a callback for an entity."""
-        print(f"Registering callback for entity {entity_id.to_string()}")
-        self.__entity_update_callbacks[entity_id.to_string()] = callback
 
     
 
@@ -240,6 +241,7 @@ class EnOceanHomeAssistantGateway:
                 )
                 entities[entity_id] = entity
 
+        print(f"Binary sensor entities: {[str(e) for e in entities.keys()]}")
         return entities
 
     @property
@@ -290,54 +292,16 @@ class EnOceanHomeAssistantGateway:
 
         return entities
 
-    def cover_current_cover_position(self, enocean_id: EnOceanAddress, name: str) -> int | None:
-        """Return the current position of a cover device (0 = closed, 100 = open)."""
-        if enocean_id.to_string() in self.__devices:
-            device_state = self.__devices[enocean_id.to_string()]
-            cover_state: EnOceanCoverState | None = device_state.cover_state.get(name)
-            if cover_state:
-                return cover_state.position
-
-    def cover_is_closed(self, enocean_id: EnOceanAddress, name: str) -> bool | None:
-        """Return whether a cover device is closed or not."""
-        if enocean_id.to_string() in self.__devices:
-            device_state = self.__devices[enocean_id.to_string()]
-            cover_state: EnOceanCoverState | None = device_state.cover_state.get(name)
-            if cover_state:
-                return cover_state.is_closed
-        return None
-
-    def cover_is_closing(self, enocean_id: EnOceanAddress, name: str) -> bool | None:
-        """Return whether a cover device is closing or not."""
-        if enocean_id.to_string() in self.__devices:
-            device_state = self.__devices[enocean_id.to_string()]
-            cover_state: EnOceanCoverState | None = device_state.cover_state.get(name)
-            if cover_state:
-                return cover_state.is_closing
-        return None
-
-    def cover_is_opening(self, enocean_id: EnOceanAddress, name: str) -> bool | None:
-        """Return whether a cover device is opening or not."""
-        if enocean_id.to_string() in self.__devices:
-            device_state = self.__devices[enocean_id.to_string()]
-            cover_state: EnOceanCoverState | None = device_state.cover_state.get(name)
-            if cover_state:
-                return cover_state.is_opening
-        return None
     
-    def cover_open_cover(self, enocean_id: EnOceanAddress, name: str) -> None:
-        """Open a cover device."""
-        pass
-
-    def cover_close_cover(self, enocean_id: EnOceanAddress, name: str) -> None:
-        """Close a cover device."""
-        pass
-
-    def cover_set_cover_position(self, enocean_id: EnOceanAddress, name: str, position: int) -> None:
+    def set_cover_position(self, enocean_entity_id: EnOceanEntityID, position: int) -> None:
         """Set the position of a cover device (0 = closed, 100 = open)."""
         pass
 
-    def cover_stop_cover(self, enocean_id: EnOceanAddress, name: str) -> None:
+    def query_cover_position(self, enocean_entity_id: EnOceanEntityID) -> None:
+        """Query the position of a cover device."""
+        pass
+
+    def stop_cover(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Stop a cover device."""
         pass
 

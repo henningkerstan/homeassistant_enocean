@@ -24,8 +24,9 @@ class EnOceanCoverCommand(Enum):
 class EEP_D2_05_00_Handler(EEPHandler):
     """Handler for EnOcean Equipment Profile D2-05-00"""
 
-    def cover_entities(self) -> list[HomeAssistantEntityProperties]:
-        return [HomeAssistantEntityProperties(supported_features=1|2|4|8)]  # open, close, stop, set position
+    def  initialize_entities(self) -> None:
+        """Initialize the entities handled by this EEP handler."""
+        self._cover_entities = [HomeAssistantEntityProperties(supported_features=1|2|4|8)]  # open, close, stop, set position
     
 
     def initialize_device_state(self, state: EnOceanDeviceState) -> None:
@@ -35,7 +36,7 @@ class EEP_D2_05_00_Handler(EEPHandler):
         self.__send_cover_command(command=EnOceanCoverCommand.QUERY_POSITION, destination=state.enocean_id, sender=state.sender_id )
 
 
-    def handle_packet_matching(self, packet: RadioPacket, device_state: EnOceanDeviceState) -> list[EnOceanEntityID]:
+    def handle_matching_packet(self, packet: RadioPacket, device_state: EnOceanDeviceState) -> list[EnOceanEntityID]:
         """Handle an incoming EnOcean packet."""
 
         # position is inversed in Home Assistant and in EnOcean:

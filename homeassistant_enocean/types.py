@@ -17,6 +17,9 @@ type EnOceanBinarySensorCallback = Callable[[bool], None]
 type EnOceanCoverCallback = Callable[[int, int], None]
 """Callback type for cover state changes, with new position (closed = 0, fully open = 100) and tilt values."""
 
+type EnOceanEventCallback = Callable[[str, dict], None]
+"""Callback type for event notifications, with event type as string and additional data as dictionary."""
+
 type EnOceanLightCallback = Callable[[bool, int, int], None]
 """Callback type for light state changes, with is_on state, brightness (1..255) and color temperature (in Kelvin) as parameters."""
 
