@@ -12,7 +12,7 @@ from homeassistant_enocean.eep_handlers.eep_d2_05_00_handler import EEP_D2_05_00
 from homeassistant_enocean.eep_handlers.eep_f6_02_handler import EEP_F6_02_Handler
 from homeassistant_enocean.eep_handlers.eep_handler import EEPHandler
 from homeassistant_enocean.entity_id import EnOceanEntityID
-from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanDeviceIDString, EnOceanSwitchCallback
+from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanDeviceIDString, EnOceanLightCallback, EnOceanSwitchCallback
 from .cover_state import EnOceanCoverState
 from .device import EnOceanDevice
 from .address import EnOceanAddress
@@ -120,6 +120,10 @@ class EnOceanHomeAssistantGateway:
         print(f"Registering switch callback for entity {entity_id.to_string()}")
         self.__switch_callbacks[entity_id.to_string()] = callback
 
+    def register_light_callback(self, entity_id: EnOceanEntityID, callback: EnOceanLightCallback) -> None:
+        """Register a callback for a light entity."""
+        print(f"Registering light callback for entity {entity_id.to_string()}")
+        self.__light_callbacks[entity_id.to_string()] = callback
 
     def register_entity_callback(self, entity_id: EnOceanEntityID, callback: Callable[[None], None]) -> None:
         """Register a callback for an entity."""
@@ -220,7 +224,8 @@ class EnOceanHomeAssistantGateway:
             
 
 
-    # Binary sensor entities
+    # Entity listings
+
     @property
     def binary_sensor_entities(self) -> dict[EnOceanEntityID, HomeAssistantEntityProperties]:
         """Return the list of binary sensor entities."""
@@ -237,16 +242,6 @@ class EnOceanHomeAssistantGateway:
 
         return entities
 
-  
-    def binary_sensor_is_on(self, entity_id: EnOceanEntityID) -> bool | None:
-        """Return whether a binary sensor device is on or off."""
-        device_address_string = entity_id.device_address.to_string()
-        if device_address_string in self.__devices:
-            device = self.__devices[device_address_string]
-            return device.binary_sensor_is_on.get(entity_id.unique_id)
-        
-
-    # Cover entities
     @property
     def cover_entities(self) -> dict[EnOceanEntityID, HomeAssistantEntityProperties]:
         """Return the list of cover entities."""
@@ -255,6 +250,38 @@ class EnOceanHomeAssistantGateway:
         # iterate over all devices and get their cover entities
         for device in self.__devices.values():
             for entity in device.cover_entities:
+                entity_id = EnOceanEntityID(
+                    device_address=device.enocean_id,
+                    unique_id=entity.unique_id,
+                )
+                entities[entity_id] = entity
+
+        return entities
+    
+    @property
+    def switch_entities(self) -> dict[EnOceanEntityID, HomeAssistantEntityProperties]:
+        """Return the list of switch entities."""
+        entities = {}
+
+        # iterate over all devices and get their switch entities
+        for device in self.__devices.values():
+            for entity in device.switch_entities:
+                entity_id = EnOceanEntityID(
+                    device_address=device.enocean_id,
+                    unique_id=entity.unique_id,
+                )
+                entities[entity_id] = entity
+
+        return entities
+    
+    @property
+    def light_entities(self) -> dict[EnOceanEntityID, HomeAssistantEntityProperties]:
+        """Return the list of light entities."""
+        entities = {}
+
+        # iterate over all devices and get their light entities
+        for device in self.__devices.values():
+            for entity in device.light_entities:
                 entity_id = EnOceanEntityID(
                     device_address=device.enocean_id,
                     unique_id=entity.unique_id,
@@ -315,42 +342,17 @@ class EnOceanHomeAssistantGateway:
         pass
 
 
-    # Light entities   
-    def light_is_on(self, enocean_id: EnOceanAddress, name: str) -> bool | None:
-        """Return whether a light device is on or off."""
-        if enocean_id.to_string() in self.__devices:
-            device_state = self.__devices[enocean_id.to_string()]
-            light_state = device_state.light_state.get(name)
-            if light_state:
-                return light_state.is_on
-        return None
+    # methods for sending commands to devices
+    # note that no such methods exist for sensors, as they do not accept commands
 
-    def light_brightness(self, enocean_id: EnOceanAddress, name: str) -> int | None:
-        """Return the brightness of a light device between 1..255."""
-        if enocean_id.to_string() in self.__devices:
-            device_state = self.__devices[enocean_id.to_string()]
-            light_state = device_state.light_state.get(name)
-            if light_state:
-                return light_state.brightness
-        return None
-    
-    def light_color_temp_kelvin(self, enocean_id: EnOceanAddress, name: str) -> int | None:
-        """Return the CT color value in K for a light device."""
-        if enocean_id.to_string() in self.__devices:
-            device_state = self.__devices[enocean_id.to_string()]
-            light_state = device_state.light_state.get(name)
-            if light_state:
-                return light_state.color_temp_kelvin
-        return None
-    
-    def light_turn_on(self, enocean_id: EnOceanAddress, name: str, brightness: int | None = None, color_temp_kelvin: int | None = None) -> None:
+    # Light entities   
+    def light_turn_on(self, enocean_entity_id: EnOceanEntityID, brightness: int | None = None, color_temp_kelvin: int | None = None) -> None:
         """Turn on a light device."""
         pass
 
-    def light_turn_off(self, enocean_id: EnOceanAddress, name: str) -> None:
+    def light_turn_off(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Turn off a light device."""
         pass
-
 
 
     # Switch entities
@@ -358,7 +360,6 @@ class EnOceanHomeAssistantGateway:
         """Turn on a switch device."""
         pass
 
-
     def switch_turn_off(self, enocean_entity_id: EnOceanEntityID) -> None:
-        """Turn on a switch device."""
+        """Turn off a switch device."""
         pass

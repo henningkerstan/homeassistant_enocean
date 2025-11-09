@@ -6,7 +6,7 @@ from homeassistant_enocean.entity_properties import HomeAssistantEntityPropertie
 from homeassistant_enocean.device_state import EnOceanDeviceState
 from enocean.protocol.packet import RadioPacket
 from homeassistant_enocean.entity_id import EnOceanEntityID
-from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanLightCallback
+from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanEntityUID, EnOceanLightCallback, EnOceanSwitchCallback
 
 
 
@@ -17,9 +17,10 @@ class EEPHandler(ABC):
     def __init__(self, send_packet: Callable[[RadioPacket], None] | None = None) -> None:
         """Construct EEP handler."""
         self.__send_packet = send_packet
-        self.__binary_sensor_callbacks: dict[str, EnOceanBinarySensorCallback] = {}
-        self.__cover_callbacks: dict[str, EnOceanCoverCallback] = {}
-        self.__light_callbacks: dict[str, EnOceanLightCallback] = {}
+        self.__binary_sensor_callbacks: dict[EnOceanEntityUID, EnOceanBinarySensorCallback] = {}
+        self.__cover_callbacks: dict[EnOceanEntityUID, EnOceanCoverCallback] = {}
+        self.__light_callbacks: dict[EnOceanEntityUID, EnOceanLightCallback] = {}
+        self.__switch_callbacks: dict[EnOceanEntityUID, EnOceanSwitchCallback] = {}
 
 
     def initialize_device_state(self, state: EnOceanDeviceState) -> None:

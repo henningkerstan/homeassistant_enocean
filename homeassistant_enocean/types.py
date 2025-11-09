@@ -2,20 +2,23 @@ from typing import Callable
 
 
 type EnOceanEntityUID = str | None
-"""An entity name which can be a string or None"""
+"""A string identifiying the entity uniquely within the context of an EnOcean device's platform.
+
+Uniqueness is only per device and platform, thus, the same UID can be used for a binary sensor and a light entity of the same device.
+"""
 
 type EnOceanDeviceIDString = str
 """An EnOcean device ID as string"""
 
-
-type EnOceanCoverCallback = Callable[[int, int], None]
-"""Callback type for cover state changes, with new position and tilt values."""
-
+# Callbacks for state updates
 type EnOceanBinarySensorCallback = Callable[[bool], None]
 """Callback type for binary sensor state changes, with a boolean parameter indicating the new is_on state."""
 
-type EnOceanLightCallback = Callable[[int, int], None]
-"""Callback type for light state changes, with brightness and color temperature level as parameters."""
+type EnOceanCoverCallback = Callable[[int, int], None]
+"""Callback type for cover state changes, with new position (closed = 0, fully open = 100) and tilt values."""
+
+type EnOceanLightCallback = Callable[[bool, int, int], None]
+"""Callback type for light state changes, with is_on state, brightness (1..255) and color temperature (in Kelvin) as parameters."""
 
 type EnOceanSwitchCallback = Callable[[bool], None]
 """Callback type for switch state changes, with a boolean parameter indicating the new is_on state."""
