@@ -87,3 +87,17 @@ class EEPHandler(ABC):
     def cover_attach_callback(self, unique_id: str, callback: EnOceanCoverCallback) -> None:
         """Attach a callback for cover state changes."""
         self._cover_callbacks[unique_id] = callback
+
+
+
+    def set_cover_position(self, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress, position: int) -> None:
+        """Set the position of a cover device (0 = closed, 100 = open)."""
+        pass
+
+    def query_cover_position(self, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
+        """Query the position of a cover device."""
+        pass
+
+    def stop_cover(self, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
+        """Stop the movement of a cover device."""
+        pass

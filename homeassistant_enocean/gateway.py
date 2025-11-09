@@ -14,7 +14,7 @@ from homeassistant_enocean.eep_handlers.eep_handler import EEPHandler
 from homeassistant_enocean.entity_id import EnOceanEntityID
 from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanDeviceIDString, EnOceanEventCallback, EnOceanLightCallback, EnOceanSwitchCallback
 from .device import EnOceanDevice
-from .address import EnOceanAddress
+from .address import EnOceanAddress, EnOceanDeviceAddress
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -82,7 +82,7 @@ class EnOceanHomeAssistantGateway:
                 self.__communicator.stop()
 
 
-    def add_device(self, enocean_id: EnOceanAddress, device_type: EnOceanDeviceType, device_name: str | None = None, sender_id: EnOceanAddress | None = None) -> None:
+    def add_device(self, enocean_id: EnOceanDeviceAddress, device_type: EnOceanDeviceType, device_name: str | None = None, sender_id: EnOceanAddress | None = None) -> None:
         """Add a device to the gateway."""
         if enocean_id.to_string() not in self.__devices:
             eep_handler = self.__eep_handlers.get(device_type.eep)
@@ -288,16 +288,37 @@ class EnOceanHomeAssistantGateway:
     
     def set_cover_position(self, enocean_entity_id: EnOceanEntityID, position: int) -> None:
         """Set the position of a cover device (0 = closed, 100 = open)."""
-        pass
+        device = self.__devices.get(enocean_entity_id.device_address.to_string())
+        if not device:
+            return
+        
+        device.handler.set_cover_position(
+            enocean_id=enocean_entity_id.device_address,
+            sender_id=device.sender_id,
+            position=position,)
+        
+
 
     def query_cover_position(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Query the position of a cover device."""
-        pass
+        device = self.__devices.get(enocean_entity_id.device_address.to_string())
+        if not device:
+            return
+        
+        device.handler.query_cover_position(
+            enocean_id=enocean_entity_id.device_address,
+            sender_id=device.sender_id,)
+
 
     def stop_cover(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Stop a cover device."""
-        pass
-
+        device = self.__devices.get(enocean_entity_id.device_address.to_string())
+        if not device:
+            return
+        
+        device.handler.stop_cover(
+            enocean_id=enocean_entity_id.device_address,
+            sender_id=device.sender_id,)
 
     # methods for sending commands to devices
     # note that no such methods exist for sensors, as they do not accept commands

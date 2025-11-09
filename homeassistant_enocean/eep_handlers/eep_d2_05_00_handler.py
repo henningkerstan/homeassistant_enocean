@@ -58,4 +58,15 @@ class EEP_D2_05_00_Handler(EEPHandler):
         print(f"Sending EnOcean cover command {command.name} with position {position} ")
         self.send_packet(packet)
 
-    
+    def set_cover_position(self, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress, position: int) -> None:
+        """Set the position of a cover device (0 = closed, 100 = open)."""
+        enocean_position = 100 - position  # invert position for EnOcean
+        self.__send_cover_command(command=EnOceanCoverCommand.SET_POSITION, destination=enocean_id, sender=sender_id, position=enocean_position)
+
+    def query_cover_position(self, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
+        """Query the position of a cover device."""
+        self.__send_cover_command(command=EnOceanCoverCommand.QUERY_POSITION, destination=enocean_id, sender=sender_id)
+        
+    def stop_cover(self, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
+        """Stop the movement of a cover device."""
+        self.__send_cover_command(command=EnOceanCoverCommand.STOP, destination=enocean_id, sender=sender_id)

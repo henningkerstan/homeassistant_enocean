@@ -11,7 +11,7 @@ class EnOceanDevice:
     """Representation of an EnOcean device."""
     
 
-    def __init__(self, enocean_id: EnOceanDeviceAddress, device_type: EnOceanDeviceType, handler: EEPHandler, device_name: str | None = None, sender_id: EnOceanDeviceAddress | None = None) -> None:
+    def __init__(self, enocean_id: EnOceanDeviceAddress, device_type: EnOceanDeviceType, handler: EEPHandler, device_name: str | None = None, sender_id: EnOceanAddress | None = None) -> None:
         """Construct an EnOcean device."""
         self.state: EnOceanDeviceState = EnOceanDeviceState()
         self.state.enocean_id = enocean_id

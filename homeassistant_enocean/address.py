@@ -141,7 +141,7 @@ class EnOceanDeviceAddress(EnOceanAddress):
                 "Address must be an integer or a hex string that can be converted to an integer."
             )
         if not (0x00000000 <= numeric_address <= 0xFF7FFFFF):
-            raise ValueError("Device address must be in the range 00:00:00:00 to FF:7F:FF:FF.")
+            raise ValueError(f"Device address must be in the range 00:00:00:00 to FF:7F:FF:FF, but is {numeric_address:08X}.")
         super().__init__(numeric_address)
 
 
