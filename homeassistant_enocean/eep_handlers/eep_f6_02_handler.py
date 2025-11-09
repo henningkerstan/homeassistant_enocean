@@ -1,3 +1,4 @@
+from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 from homeassistant_enocean.device_state import EnOceanDeviceState
 from homeassistant_enocean.entity_id import EnOceanEntityID
 from .eep_handler import EEPHandler
@@ -6,12 +7,29 @@ from enocean.protocol.packet import RadioPacket
 class EEP_F6_02_Handler(EEPHandler):
     """Handler for EnOcean Equipment Profiles F6-02-01/02"""
 
-    def binary_sensor_entities(self):
-        return {"a0": False, "a1": False, "b0": False, "b1": False, "ab0": False, "ab1": False, "a0b1": False, "a1b0": False}
-    
+    def binary_sensor_entities(self) -> list[HomeAssistantEntityProperties]:
+        return [
+            HomeAssistantEntityProperties(unique_id="a0", ),
+            HomeAssistantEntityProperties(unique_id="a1"),
+            HomeAssistantEntityProperties(unique_id="b0"),
+            HomeAssistantEntityProperties(unique_id="b1"),
+            HomeAssistantEntityProperties(unique_id="ab0"),
+            HomeAssistantEntityProperties(unique_id="ab1"),
+            HomeAssistantEntityProperties(unique_id="a0b1"),
+            HomeAssistantEntityProperties(unique_id="a1b0"),
+        ]
+
     def initialize_device_state(self, device_state: EnOceanDeviceState) -> None:
         """Initialize the device state for this EEP handler."""
-        device_state.binary_sensor_is_on = self.binary_sensor_entities()
+        device_state.binary_sensor_is_on = {
+            "a0": False,
+            "a1": False,
+            "b0": False,
+            "b1": False,
+            "ab0": False,
+            "ab1": False,
+            "a0b1": False,
+            "a1b0": False,}
 
     def handle_packet_matching(self, packet: RadioPacket, device_state: EnOceanDeviceState) -> list[EnOceanEntityID]:
         """Handle an incoming EnOcean packet."""
@@ -22,6 +40,10 @@ class EEP_F6_02_Handler(EEPHandler):
         match action:
             case 0x70:
                 device_state.binary_sensor_is_on["a0"] = True
+                callback = self.__binary_sensor_callbacks.get("a0")
+                if callback:
+                    callback(True)
+                    print("EEP_F6_02_Handler: Triggered callback for entity a0")
                 return [EnOceanEntityID(device_state.enocean_id, "a0")]
 
             case 0x50:

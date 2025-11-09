@@ -1,7 +1,7 @@
 import asyncio
-from enum import Enum, IntFlag
+from enum import Enum
 from homeassistant_enocean.address import EnOceanAddress
-from homeassistant_enocean.cover_properties import EnOceanCoverProperties
+from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 from homeassistant_enocean.cover_state import EnOceanCoverState
 from homeassistant_enocean.device_state import EnOceanDeviceState
 from homeassistant_enocean.eep_handlers.eep_handler import EEPHandler
@@ -24,8 +24,8 @@ class EnOceanCoverCommand(Enum):
 class EEP_D2_05_00_Handler(EEPHandler):
     """Handler for EnOcean Equipment Profile D2-05-00"""
 
-    def cover_entities(self) -> list[EnOceanCoverProperties]:
-        return [EnOceanCoverProperties(supported_features=1|2|4|8)]  # open, close, stop, set position
+    def cover_entities(self) -> list[HomeAssistantEntityProperties]:
+        return [HomeAssistantEntityProperties(supported_features=1|2|4|8)]  # open, close, stop, set position
     
 
     def initialize_device_state(self, state: EnOceanDeviceState) -> None:

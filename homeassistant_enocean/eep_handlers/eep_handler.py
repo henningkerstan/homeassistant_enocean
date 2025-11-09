@@ -2,11 +2,13 @@ from abc import ABC, abstractmethod
 from typing import Callable
 
 from homeassistant_enocean.address import EnOceanAddress
-from homeassistant_enocean.entity_properties import EnOceanEntityProperties
-from homeassistant_enocean.cover_properties import EnOceanCoverProperties
+from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 from homeassistant_enocean.device_state import EnOceanDeviceState
 from enocean.protocol.packet import RadioPacket
 from homeassistant_enocean.entity_id import EnOceanEntityID
+from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanLightCallback
+
+
 
 
 class EEPHandler(ABC):
@@ -15,6 +17,9 @@ class EEPHandler(ABC):
     def __init__(self, send_packet: Callable[[RadioPacket], None] | None = None) -> None:
         """Construct EEP handler."""
         self.__send_packet = send_packet
+        self.__binary_sensor_callbacks: dict[str, EnOceanBinarySensorCallback] = {}
+        self.__cover_callbacks: dict[str, EnOceanCoverCallback] = {}
+        self.__light_callbacks: dict[str, EnOceanLightCallback] = {}
 
 
     def initialize_device_state(self, state: EnOceanDeviceState) -> None:
@@ -41,11 +46,22 @@ class EEPHandler(ABC):
         """Handle an incoming EnOcean packet."""
         pass
 
-
-    def binary_sensor_entities(self) -> list[EnOceanEntityProperties]:
+    # binary sensors
+    def binary_sensor_entities(self) -> list[HomeAssistantEntityProperties]:
         """Return the list of binary sensor entities handled by this EEP handler."""
         return []
 
-    def cover_entities(self) -> list[EnOceanCoverProperties]:
+    def binary_sensor_attach_callback(self, unique_id: str, callback: EnOceanBinarySensorCallback) -> None:
+        """Attach a callback for binary sensor state changes."""
+        self.__binary_sensor_callbacks[unique_id] = callback
+
+
+    # covers
+    def cover_entities(self) -> list[HomeAssistantEntityProperties]:
         """Return the list of cover entities handled by this EEP handler."""
         return []
+    
+
+    def cover_attach_callback(self, unique_id: str, callback: EnOceanCoverCallback) -> None:
+        """Attach a callback for cover state changes."""
+        self.__cover_callbacks[unique_id] = callback

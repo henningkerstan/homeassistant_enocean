@@ -5,13 +5,14 @@ from typing import Callable, TypedDict
 from enocean.communicators import SerialCommunicator
 from enocean.protocol.packet import Packet, RadioPacket
 from enocean.utils import to_hex_string
+from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 from homeassistant_enocean.device_type import EnOceanDeviceType
 from homeassistant_enocean.eep import EEP
 from homeassistant_enocean.eep_handlers.eep_d2_05_00_handler import EEP_D2_05_00_Handler
 from homeassistant_enocean.eep_handlers.eep_f6_02_handler import EEP_F6_02_Handler
 from homeassistant_enocean.eep_handlers.eep_handler import EEPHandler
 from homeassistant_enocean.entity_id import EnOceanEntityID
-from homeassistant_enocean.types import EnOceanDeviceIDString
+from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanDeviceIDString, EnOceanSwitchCallback
 from .cover_state import EnOceanCoverState
 from .device import EnOceanDevice
 from .address import EnOceanAddress
@@ -27,6 +28,7 @@ class ValueLabelDict(TypedDict):
         self.label = label
 
 
+
 class EnOceanHomeAssistantGateway:
     """Representation of an EnOcean gateway for Home Assistant."""
 
@@ -39,6 +41,8 @@ class EnOceanHomeAssistantGateway:
         self.__sw_version: str = "n/a"
         self.__devices: dict[EnOceanDeviceIDString, EnOceanDevice] = {}
         self.__entity_update_callbacks: dict[str, Callable[[None], None]] = {}
+
+        self.__binary_sensor_callbacks: dict[str, Callable[[bool], None]] = {}
 
         self.__eep_handlers: dict[EEP, EEPHandler] = {
             EEP(0xF6, 0x02, 0x01): EEP_F6_02_Handler(),
@@ -105,10 +109,24 @@ class EnOceanHomeAssistantGateway:
                 print(f" - Device: \"{d.device_name}\" ({d.enocean_id.to_string()})")
 
 
+    def register_binary_sensor_callback(self, entity_id: EnOceanEntityID, callback: EnOceanBinarySensorCallback) -> None:
+        """Register a callback for a binary sensor entity."""
+        print(f"Registering binary sensor callback for entity {entity_id.to_string()}")
+        self.__binary_sensor_callbacks[entity_id.to_string()] = callback
+
+
+    def register_switch_callback(self, entity_id: EnOceanEntityID, callback: EnOceanSwitchCallback) -> None:
+        """Register a callback for a switch entity."""
+        print(f"Registering switch callback for entity {entity_id.to_string()}")
+        self.__switch_callbacks[entity_id.to_string()] = callback
+
+
     def register_entity_callback(self, entity_id: EnOceanEntityID, callback: Callable[[None], None]) -> None:
         """Register a callback for an entity."""
         print(f"Registering callback for entity {entity_id.to_string()}")
         self.__entity_update_callbacks[entity_id.to_string()] = callback
+
+    
 
     @property
     def base_id(self) -> EnOceanAddress:
@@ -204,37 +222,45 @@ class EnOceanHomeAssistantGateway:
 
     # Binary sensor entities
     @property
-    def binary_sensor_entities(self) -> list[EnOceanEntityID]:
+    def binary_sensor_entities(self) -> dict[EnOceanEntityID, HomeAssistantEntityProperties]:
         """Return the list of binary sensor entities."""
-        entities = []
+        entities = {}
 
         # iterate over all devices and get their binary sensor entities
         for device in self.__devices.values():
-            names = device.binary_sensor_entities
-            for name in names:
-                entities.append(EnOceanEntityID(device.enocean_id, name))
+            for entity in device.binary_sensor_entities:
+                entity_id = EnOceanEntityID(
+                    device_address=device.enocean_id,
+                    unique_id=entity.unique_id,
+                )
+                entities[entity_id] = entity
+
         return entities
-                
-    
+
+  
     def binary_sensor_is_on(self, entity_id: EnOceanEntityID) -> bool | None:
         """Return whether a binary sensor device is on or off."""
         device_address_string = entity_id.device_address.to_string()
         if device_address_string in self.__devices:
             device = self.__devices[device_address_string]
-            return device.binary_sensor_is_on.get(entity_id.name)
+            return device.binary_sensor_is_on.get(entity_id.unique_id)
         
 
     # Cover entities
     @property
-    def cover_entities(self) -> list[EnOceanEntityID]:
+    def cover_entities(self) -> dict[EnOceanEntityID, HomeAssistantEntityProperties]:
         """Return the list of cover entities."""
-        entities = []
+        entities = {}
 
         # iterate over all devices and get their cover entities
         for device in self.__devices.values():
-            names = device.cover_entities()
-            for name in names:
-                entities.append(EnOceanEntityID(device.enocean_id, name))
+            for entity in device.cover_entities:
+                entity_id = EnOceanEntityID(
+                    device_address=device.enocean_id,
+                    unique_id=entity.unique_id,
+                )
+                entities[entity_id] = entity
+
         return entities
 
     def cover_current_cover_position(self, enocean_id: EnOceanAddress, name: str) -> int | None:
@@ -328,13 +354,11 @@ class EnOceanHomeAssistantGateway:
 
 
     # Switch entities
-    def switch_is_on(self, enocean_id: EnOceanAddress, name: str) -> bool | None:
-        """Return whether a switch device is on or off."""
-        if enocean_id.to_string() in self.__devices:
-            device_state = self.__devices[enocean_id.to_string()]
-            return device_state.switch_is_on.get(name)
-        return None
+    def switch_turn_on(self, enocean_entity_id: EnOceanEntityID) -> None:
+        """Turn on a switch device."""
+        pass
 
-    def switch_turn_on(self, enocean_id: EnOceanAddress, name: str) -> None:
+
+    def switch_turn_off(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Turn on a switch device."""
         pass
