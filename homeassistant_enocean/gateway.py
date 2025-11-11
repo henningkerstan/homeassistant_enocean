@@ -12,7 +12,7 @@ from homeassistant_enocean.eep_handlers.eep_d2_05_00_handler import EEP_D2_05_00
 from homeassistant_enocean.eep_handlers.eep_f6_02_handler import EEP_F6_02_Handler
 from homeassistant_enocean.eep_handlers.eep_handler import EEPHandler
 from homeassistant_enocean.entity_id import EnOceanEntityID
-from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanDeviceIDString, EnOceanEventCallback, EnOceanLightCallback, EnOceanSwitchCallback
+from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanDeviceIDString, EnOceanEventCallback, EnOceanLightCallback, EnOceanSensorCallback, EnOceanSwitchCallback
 from .device import EnOceanDevice
 from .address import EnOceanAddress, EnOceanDeviceAddress
 
@@ -118,6 +118,11 @@ class EnOceanHomeAssistantGateway:
         """Register a callback for an event."""
         print(f"Registering event callback for event type {event_type}")
         self.__event_callbacks[event_type] = callback
+
+    def register_sensor_callback(self, entity_id: EnOceanEntityID, callback: EnOceanSensorCallback) -> None:
+        """Register a callback for a sensor entity."""
+        print(f"Registering sensor callback for entity {entity_id.to_string()}")
+        self.__sensor_callbacks[entity_id.to_string()] = callback
 
     def register_switch_callback(self, entity_id: EnOceanEntityID, callback: EnOceanSwitchCallback) -> None:
         """Register a callback for a switch entity."""
@@ -253,6 +258,22 @@ class EnOceanHomeAssistantGateway:
 
         return entities
     
+
+    @property
+    def sensor_entities(self) -> dict[EnOceanEntityID, HomeAssistantEntityProperties]:
+        """Return the list of sensor entities."""
+        entities = {}
+        # iterate over all devices and get their sensor entities
+        for device in self.__devices.values():
+            for entity in device.sensor_entities:
+                entity_id = EnOceanEntityID(
+                    device_address=device.enocean_id,
+                    unique_id=entity.unique_id,
+                )
+                entities[entity_id] = entity
+
+        return entities
+
     @property
     def switch_entities(self) -> dict[EnOceanEntityID, HomeAssistantEntityProperties]:
         """Return the list of switch entities."""

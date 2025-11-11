@@ -1,6 +1,5 @@
 """Representation of an EnOcean device state."""
 from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
-from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 from homeassistant_enocean.device_state import EnOceanDeviceState
 from homeassistant_enocean.eep_handlers.eep_handler import EEPHandler
 from .device_type import EnOceanDeviceType

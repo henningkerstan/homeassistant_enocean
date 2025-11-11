@@ -3,12 +3,8 @@ from typing import Callable
 
 from homeassistant_enocean.address import EnOceanAddress, EnOceanDeviceAddress
 from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
-from homeassistant_enocean.device_state import EnOceanDeviceState
 from enocean.protocol.packet import RadioPacket
-from homeassistant_enocean.entity_id import EnOceanEntityID
 from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanEntityUID, EnOceanLightCallback, EnOceanSwitchCallback
-
-
 
 
 class EEPHandler(ABC):

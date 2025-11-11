@@ -23,5 +23,8 @@ type EnOceanEventCallback = Callable[[str, dict], None]
 type EnOceanLightCallback = Callable[[bool, int, int], None]
 """Callback type for light state changes, with is_on state, brightness (1..255) and color temperature (in Kelvin) as parameters."""
 
+type EnOceanSensorCallback = Callable[[int | float], None]
+"""Callback type for binary sensor state changes, with a numeric parameter indicating the new state."""
+
 type EnOceanSwitchCallback = Callable[[bool], None]
 """Callback type for switch state changes, with a boolean parameter indicating the new is_on state."""
