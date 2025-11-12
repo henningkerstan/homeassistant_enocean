@@ -63,6 +63,12 @@ class EnOceanDevice:
     def light_entities(self) -> list[HomeAssistantEntityProperties]:
         """Return the light entities."""
         return self.__handler.light_entities
+    
+
+    @property
+    def sensor_entities(self) -> list[HomeAssistantEntityProperties]:
+        """Return the sensor entities."""
+        return self.__handler.sensor_entities
 
     @property
     def switch_entities(self) -> list[HomeAssistantEntityProperties]:

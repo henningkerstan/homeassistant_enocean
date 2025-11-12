@@ -4,7 +4,7 @@ from typing import Callable
 from homeassistant_enocean.address import EnOceanAddress, EnOceanDeviceAddress
 from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 from enocean.protocol.packet import RadioPacket
-from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanEntityUID, EnOceanLightCallback, EnOceanSwitchCallback
+from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanEntityUID, EnOceanLightCallback, EnOceanSensorCallback, EnOceanSwitchCallback
 
 
 class EEPHandler(ABC):
@@ -18,12 +18,17 @@ class EEPHandler(ABC):
         self._binary_sensor_callbacks: dict[EnOceanEntityUID, EnOceanBinarySensorCallback] = {}
         self._cover_callbacks: dict[EnOceanEntityUID, EnOceanCoverCallback] = {}
         self._light_callbacks: dict[EnOceanEntityUID, EnOceanLightCallback] = {}
+        self._sensor_callbacks: dict[EnOceanEntityUID, EnOceanSensorCallback] = {}
         self._switch_callbacks: dict[EnOceanEntityUID, EnOceanSwitchCallback] = {}
 
         # entities
         self._binary_sensor_entities: list[HomeAssistantEntityProperties] = []
         self._cover_entities: list[HomeAssistantEntityProperties] = []
         self._light_entities: list[HomeAssistantEntityProperties] = []
+        self._internal_sensor_entities: list[HomeAssistantEntityProperties] = [
+            HomeAssistantEntityProperties(unique_id="rssi", native_unit_of_measurement="dBm", device_class="signal_strength"),
+        ]
+        self._sensor_entitites: list[HomeAssistantEntityProperties] = []
         self._switch_entities: list[HomeAssistantEntityProperties] = []
         self.initialize_entities()
 
@@ -38,6 +43,11 @@ class EEPHandler(ABC):
         """Handle an incoming EnOcean packet."""
         print(f"EEPHandler.handle_packet: Checking packet from sender {EnOceanAddress.from_number(packet.sender_int)} against device ID {enocean_id.to_string()}")
         if packet.sender_int == enocean_id.to_number():
+            rssi_callback = self._sensor_callbacks.get("rssi")
+            if rssi_callback:
+                rssi_callback(packet.dBm)
+            else:
+                print("No RSSI callback registered")
             self.handle_matching_packet(packet, enocean_id, sender_id)
 
     @abstractmethod
@@ -66,25 +76,17 @@ class EEPHandler(ABC):
         """Return the list of light entities handled by this EEP handler."""
         return self._light_entities
     
+
+    @property
+    def sensor_entities(self) -> list[HomeAssistantEntityProperties]:
+        """Return the list of sensor entities handled by this EEP handler."""
+        return self._internal_sensor_entities + self._sensor_entitites
+
     @property
     def switch_entities(self) -> list[HomeAssistantEntityProperties]:
         """Return the list of switch entities handled by this EEP handler."""
         return self._switch_entities
     
-
-    def binary_sensor_attach_callback(self, unique_id: str, callback: EnOceanBinarySensorCallback) -> None:
-        """Attach a callback for binary sensor state changes."""
-        self._binary_sensor_callbacks[unique_id] = callback
-
-
-    
-    
-
-    def cover_attach_callback(self, unique_id: str, callback: EnOceanCoverCallback) -> None:
-        """Attach a callback for cover state changes."""
-        self._cover_callbacks[unique_id] = callback
-
-
 
     def set_cover_position(self, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress, position: int) -> None:
         """Set the position of a cover device (0 = closed, 100 = open)."""

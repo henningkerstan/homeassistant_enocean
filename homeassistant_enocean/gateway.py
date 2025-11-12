@@ -39,9 +39,7 @@ class EnOceanHomeAssistantGateway:
         self.__chip_version: int = 0
         self.__sw_version: str = "n/a"
         self.__devices: dict[EnOceanDeviceIDString, EnOceanDevice] = {}
-        self.__entity_update_callbacks: dict[str, Callable[[None], None]] = {}
-
-        self.__binary_sensor_callbacks: dict[str, Callable[[bool], None]] = {}
+       
 
         self.__eep_handlers: dict[EEP, EEPHandler] = {
             EEP(0xF6, 0x02, 0x01): EEP_F6_02_Handler(),
@@ -122,17 +120,17 @@ class EnOceanHomeAssistantGateway:
     def register_sensor_callback(self, entity_id: EnOceanEntityID, callback: EnOceanSensorCallback) -> None:
         """Register a callback for a sensor entity."""
         print(f"Registering sensor callback for entity {entity_id.to_string()}")
-        self.__sensor_callbacks[entity_id.to_string()] = callback
+        self.__devices[entity_id.device_address.to_string()].handler._sensor_callbacks[entity_id.unique_id] = callback
 
     def register_switch_callback(self, entity_id: EnOceanEntityID, callback: EnOceanSwitchCallback) -> None:
         """Register a callback for a switch entity."""
         print(f"Registering switch callback for entity {entity_id.to_string()}")
-        self.__switch_callbacks[entity_id.to_string()] = callback
+        self.__devices[entity_id.device_address.to_string()].handler._switch_callbacks[entity_id.unique_id] = callback
 
     def register_light_callback(self, entity_id: EnOceanEntityID, callback: EnOceanLightCallback) -> None:
         """Register a callback for a light entity."""
         print(f"Registering light callback for entity {entity_id.to_string()}")
-        self.__light_callbacks[entity_id.to_string()] = callback
+        self.__devices[entity_id.device_address.to_string()].handler._light_callbacks[entity_id.unique_id] = callback
 
 
     
@@ -226,7 +224,7 @@ class EnOceanHomeAssistantGateway:
     # Entity listings
 
     @property
-    def binary_sensor_entities(self) -> dict[EnOceanEntityID, HomeAssistantEntityProperties]:
+    def binary_sensor_entities(self) -> list[EnOceanEntityID, HomeAssistantEntityProperties]:
         """Return the list of binary sensor entities."""
         entities = {}
 
@@ -243,7 +241,7 @@ class EnOceanHomeAssistantGateway:
         return entities
 
     @property
-    def cover_entities(self) -> dict[EnOceanEntityID, HomeAssistantEntityProperties]:
+    def cover_entities(self) -> list[EnOceanEntityID, HomeAssistantEntityProperties]:
         """Return the list of cover entities."""
         entities = {}
 
@@ -260,7 +258,7 @@ class EnOceanHomeAssistantGateway:
     
 
     @property
-    def sensor_entities(self) -> dict[EnOceanEntityID, HomeAssistantEntityProperties]:
+    def sensor_entities(self) -> list[EnOceanEntityID, HomeAssistantEntityProperties]:
         """Return the list of sensor entities."""
         entities = {}
         # iterate over all devices and get their sensor entities
@@ -275,7 +273,7 @@ class EnOceanHomeAssistantGateway:
         return entities
 
     @property
-    def switch_entities(self) -> dict[EnOceanEntityID, HomeAssistantEntityProperties]:
+    def switch_entities(self) -> list[EnOceanEntityID, HomeAssistantEntityProperties]:
         """Return the list of switch entities."""
         entities = {}
 
@@ -291,7 +289,7 @@ class EnOceanHomeAssistantGateway:
         return entities
     
     @property
-    def light_entities(self) -> dict[EnOceanEntityID, HomeAssistantEntityProperties]:
+    def light_entities(self) -> list[EnOceanEntityID, HomeAssistantEntityProperties]:
         """Return the list of light entities."""
         entities = {}
 
