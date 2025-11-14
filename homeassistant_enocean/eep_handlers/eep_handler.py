@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import datetime
 from typing import Callable
 
 from homeassistant_enocean.address import EnOceanAddress, EnOceanDeviceAddress
@@ -13,6 +14,8 @@ class EEPHandler(ABC):
     def __init__(self, send_packet: Callable[[RadioPacket], None] | None = None, enocean_id: EnOceanDeviceAddress | None = None, sender_id: EnOceanAddress | None = None) -> None:
         """Construct EEP handler."""
         self.__send_packet = send_packet
+        self.__telegrams_received = 0
+        self.__telegrams_sent = 0
 
         # callbacks
         self._binary_sensor_callbacks: dict[EnOceanEntityUID, EnOceanBinarySensorCallback] = {}
@@ -27,6 +30,8 @@ class EEPHandler(ABC):
         self._light_entities: list[HomeAssistantEntityProperties] = []
         self._internal_sensor_entities: list[HomeAssistantEntityProperties] = [
             HomeAssistantEntityProperties(unique_id="rssi", native_unit_of_measurement="dBm", device_class="signal_strength"),
+            HomeAssistantEntityProperties(unique_id="telegrams_received", native_unit_of_measurement="count", device_class="counter", last_reset=datetime.datetime.now()),
+            HomeAssistantEntityProperties(unique_id="telegrams_sent", native_unit_of_measurement="count", device_class="counter", last_reset=datetime.datetime.now()),
         ]
         self._sensor_entitites: list[HomeAssistantEntityProperties] = []
         self._switch_entities: list[HomeAssistantEntityProperties] = []
@@ -46,8 +51,12 @@ class EEPHandler(ABC):
             rssi_callback = self._sensor_callbacks.get("rssi")
             if rssi_callback:
                 rssi_callback(packet.dBm)
-            else:
-                print("No RSSI callback registered")
+          
+            self.__telegrams_received += 1
+            telegram_received_callback = self._sensor_callbacks.get("telegrams_received")
+            if telegram_received_callback:
+                telegram_received_callback(self.__telegrams_received)
+
             self.handle_matching_packet(packet, enocean_id, sender_id)
 
     @abstractmethod
