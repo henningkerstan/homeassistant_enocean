@@ -28,7 +28,7 @@ class EnOceanEntityID:
 
     def __hash__(self) -> int:
         """Return the hash of the entity ID."""
-        return hash((self.__device_address, self.unique_id))
+        return hash((self.__device_address.to_number(), self.unique_id))
 
     def __eq__(self, other) -> bool:
         """Check equality with another entity ID."""
