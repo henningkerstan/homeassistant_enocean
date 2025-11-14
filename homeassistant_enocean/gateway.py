@@ -5,6 +5,7 @@ from typing import Callable, TypedDict
 from enocean.communicators import SerialCommunicator
 from enocean.protocol.packet import Packet, RadioPacket
 from enocean.utils import to_hex_string
+from homeassistant_enocean.eep_handlers.eep_d2_01 import EEP_D2_01_Handler
 from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 from homeassistant_enocean.device_type import EnOceanDeviceType
 from homeassistant_enocean.eep import EEP
@@ -45,6 +46,27 @@ class EnOceanHomeAssistantGateway:
             EEP(0xF6, 0x02, 0x01): EEP_F6_02_Handler(),
             EEP(0xF6, 0x02, 0x02): EEP_F6_02_Handler(),
             EEP(0xD2, 0x05, 0x00): EEP_D2_05_00_Handler(self.__communicator.send),
+            EEP(0xD2, 0x01, 0x00): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x01): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x02): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x03): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x04): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x05): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x06): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x07): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x08): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x09): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x0A): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x0B): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x0C): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x0D): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x0E): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x0F): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x10): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x11): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x12): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x13): EEP_D2_01_Handler(),
+            EEP(0xD2, 0x01, 0x14): EEP_D2_01_Handler(),
         }
 
     async def start(self) -> None:

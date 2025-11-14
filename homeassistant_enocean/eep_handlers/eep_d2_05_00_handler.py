@@ -37,7 +37,7 @@ class EEP_D2_05_00_Handler(EEPHandler):
         new_position = 100 - packet.data[1]
 
 
-        print(f"Received EnOcean cover position: {new_position} for device {enocean_id.to_string()}")
+        #print(f"Received EnOcean cover position: {new_position} for device {enocean_id.to_string()}")
         callback = self._cover_callbacks.get(EnOceanEntityID(enocean_id, None))
         if callback:
             callback(new_position)
