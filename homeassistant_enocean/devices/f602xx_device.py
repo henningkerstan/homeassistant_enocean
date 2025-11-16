@@ -31,7 +31,6 @@ class EnOceanF602XXDevice(EnOceanDevice):
     def handle_matching_packet(self, packet: RadioPacket, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
         """Handle an incoming EnOcean packet."""
         action = packet.data[1]
-        # print(f"EEP_F602XX: Handling packet with action {action:#04x} for device ID {enocean_id.to_string()}")
 
         # handle button release (all buttons)
         if action == 0x00:
