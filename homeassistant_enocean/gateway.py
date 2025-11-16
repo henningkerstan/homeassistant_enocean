@@ -297,7 +297,12 @@ class EnOceanHomeAssistantGateway:
         if not device:
             return
         
-        device.handler.set_cover_position(
+        set_cover_position = device.set_cover_position
+
+        if not set_cover_position:
+            return
+        
+        set_cover_position(
             enocean_id=enocean_entity_id.device_address,
             sender_id=device.sender_id,
             position=position,)

@@ -1,10 +1,12 @@
-from enum import Enum
-from homeassistant_enocean.address import EnOceanAddress, EnOceanDeviceAddress
-from homeassistant_enocean.devices.device import EnOceanDevice
-from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
-from homeassistant_enocean.entity_id import EnOceanEntityID
+
+from .device import EnOceanDevice
+
+from ..address import EnOceanAddress, EnOceanDeviceAddress
+from ..entity_properties import HomeAssistantEntityProperties
+
 from enocean.protocol.packet import RadioPacket
 from enocean.protocol.constants import RORG
+from enum import Enum
 
 WATCHDOG_TIMEOUT = 1
 WATCHDOG_INTERVAL = 0.2
@@ -36,9 +38,11 @@ class EnOceanD20500Device(EnOceanDevice):
         new_position = 100 - packet.data[1]
 
         #print(f"Received EnOcean cover position: {new_position} for device {enocean_id.to_string()}")
-        callback = self._cover_callbacks.get(EnOceanEntityID(enocean_id, None))
-        if callback:
-            callback(new_position)
+        callback = self._cover_callbacks.get(None)
+        if not callback:
+            return
+        
+        callback(new_position)
   
 
     def __send_cover_command(self, command: EnOceanCoverCommand, destination: EnOceanAddress, sender: EnOceanAddress, position: int = 0) -> None:
