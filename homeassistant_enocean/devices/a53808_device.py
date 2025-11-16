@@ -1,3 +1,41 @@
+import math
+from .device import EnOceanDevice
+from ..entity_properties import HomeAssistantEntityProperties
+
+class EnOceanA53808Device(EnOceanDevice):
+    """Handler for EnOcean Equipment Profile A5-38-08 (Gateway)"""
+
+    def initialize_entities(self) -> None:
+        """Initialize the entities handled by this EEP handler."""
+        self._light_entities = [
+            HomeAssistantEntityProperties(unique_id=None, device_class="light"),
+        ]
+
+    def handle_matching_packet(self, packet) -> None:
+        """Handle an incoming EnOcean packet."""
+        if packet.rorg != 0xA5:
+            return
+        
+        if packet.data[1] != 0x02:
+            return
+        
+        # packet.parse_eep(0x38, 0x08)
+        # brightness = packet.parsed["EDIM"]["raw_value"]
+        # command = packet.parsed["CMD"]["raw_value"]
+        # rmp = packet.parsed["RMP"]["raw_value"]
+        # edimr = packet.parsed["EDIMR"]["raw_value"]
+        # str = packet.parsed["STR"]["raw_value"]
+        # sw = packet.parsed["SW"]["raw_value"]
+
+        # print(f"EnOcean A5-38-08 light brightness {brightness}, command {command}, rmp {rmp}, edimr {edimr}, str {str}, sw {sw}")
+
+        brightness_percentage = packet.data[2]
+        brightness = math.floor(brightness_percentage / 100.0 * 256.0)
+
+        light_callback = self._light_callbacks.get(None)
+        if light_callback:
+            light_callback(brightness>0, brightness, 0)
+
 # class EnOceanLight(EnOceanEntity, LightEntity):
 #     """Representation of an EnOcean light source."""
 

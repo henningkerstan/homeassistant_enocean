@@ -249,6 +249,12 @@ class EnOceanDeviceType:
                 eep=EEP(0xA5, 0x20, 0x01),
                 model="HVAC Components - Battery Powered Actuator BI-DIR",
             ),
+
+            # A5-38-08 Gateway
+            "A5-38-08": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x38, 0x08),
+                model="Gateway",
+            ),
             # D2-01 Electronic Switches and Dimmers with Energy Measurement and Local Control
             "D2-01-00": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x00),

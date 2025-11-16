@@ -6,6 +6,8 @@ from enocean.communicators import SerialCommunicator
 from enocean.protocol.packet import Packet, RadioPacket
 from enocean.utils import to_hex_string
 
+from homeassistant_enocean.device_factories.a53808_factory import EnOceanA53808DeviceFactory
+
 from .device_factories.a50703_factory import EnOceanA50703DeviceFactory
 from .device_factories.d201xx_factory import EnOceanD201XXDeviceFactory
 from .device_factories.d20500_factory import EnOceanD20500DeviceFactory
@@ -46,6 +48,7 @@ class EnOceanHomeAssistantGateway:
 
         self.__device_factories: dict[EEP, EnOceanDeviceFactory] = {
             EEP(0xA5, 0x07, 0x03): EnOceanA50703DeviceFactory(),
+            EEP(0xA5, 0x38, 0x08): EnOceanA53808DeviceFactory(),
             EEP(0xF6, 0x02, 0x01): EnOceanF602XXDeviceFactory(),
             EEP(0xF6, 0x02, 0x02): EnOceanF602XXDeviceFactory(),
             EEP(0xD2, 0x01, 0x01): EnOceanD201XXDeviceFactory(),
