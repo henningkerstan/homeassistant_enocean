@@ -42,7 +42,7 @@ class EnOceanHomeAssistantGateway:
         self.__chip_id: EnOceanAddress = EnOceanAddress(0)
         self.__chip_version: int = 0
         self.__sw_version: str = "n/a"
-        self.__devices: dict[EnOceanDeviceIDString, EnOceanDevice] = {}
+        self.__devices: dict[EnOceanDeviceAddress, EnOceanDevice] = {}
 
         self.__device_factories: dict[EEP, EnOceanDeviceFactory] = {
             EEP(0xA5, 0x07, 0x03): EnOceanA50703DeviceFactory(),
@@ -106,36 +106,36 @@ class EnOceanHomeAssistantGateway:
 
     def add_device(self, enocean_id: EnOceanDeviceAddress, device_type: EnOceanDeviceType, device_name: str | None = None, sender_id: EnOceanAddress | None = None) -> None:
         """Add a device to the gateway."""
-        if enocean_id.to_string() not in self.__devices:
+        if enocean_id not in self.__devices:
             if device_type.eep not in self.__device_factories:
                 print(f"No EEP handler for EEP {device_type.eep} found, cannot add device \"{device_name}\" ({enocean_id.to_string()}).")
                 return
 
             factory = self.__device_factories[device_type.eep]   
             device: EnOceanDevice = factory.create_device(enocean_id=enocean_id, device_type=device_type, send_packet=self._send_packet, device_name=device_name, sender_id=sender_id)
-            self.__devices[enocean_id.to_string()] = device
+            self.__devices[enocean_id] = device
             
             
 
     def register_binary_sensor_callback(self, entity_id: EnOceanEntityID, callback: EnOceanBinarySensorCallback) -> None:
         """Register a callback for a binary sensor entity."""
-        self.__devices[entity_id.device_address.to_string()]._binary_sensor_callbacks[entity_id.unique_id] = callback
+        self.__devices[entity_id.device_address]._binary_sensor_callbacks[entity_id.unique_id] = callback
 
     def register_cover_callback(self, entity_id: EnOceanEntityID, callback: EnOceanCoverCallback) -> None:
         """Register a callback for a cover entity."""
-        self.__devices[entity_id.device_address.to_string()]._cover_callbacks[entity_id.unique_id] = callback 
+        self.__devices[entity_id.device_address]._cover_callbacks[entity_id.unique_id] = callback 
 
     def register_sensor_callback(self, entity_id: EnOceanEntityID, callback: EnOceanSensorCallback) -> None:
         """Register a callback for a sensor entity."""
-        self.__devices[entity_id.device_address.to_string()]._sensor_callbacks[entity_id.unique_id] = callback
+        self.__devices[entity_id.device_address]._sensor_callbacks[entity_id.unique_id] = callback
 
     def register_switch_callback(self, entity_id: EnOceanEntityID, callback: EnOceanSwitchCallback) -> None:
         """Register a callback for a switch entity."""
-        self.__devices[entity_id.device_address.to_string()]._switch_callbacks[entity_id.unique_id] = callback  
+        self.__devices[entity_id.device_address]._switch_callbacks[entity_id.unique_id] = callback  
 
     def register_light_callback(self, entity_id: EnOceanEntityID, callback: EnOceanLightCallback) -> None:
         """Register a callback for a light entity."""
-        self.__devices[entity_id.device_address.to_string()]._light_callbacks[entity_id.unique_id] = callback
+        self.__devices[entity_id.device_address]._light_callbacks[entity_id.unique_id] = callback
 
 
     
@@ -197,7 +197,7 @@ class EnOceanHomeAssistantGateway:
 
     def get_device_properties(self, enocean_id: EnOceanAddress) -> EnOceanDevice | None:
         """Return the device properties for a given EnOcean ID."""
-        return self.__devices.get(enocean_id.to_string())
+        return self.__devices.get(enocean_id)
 
     def _send_packet(self, packet: Packet) -> None:
         """Send a packet through the EnOcean gateway."""
@@ -209,7 +209,7 @@ class EnOceanHomeAssistantGateway:
             return
 
         # find the device corresponding to the sender address
-        device = self.__devices.get(EnOceanAddress(packet.sender_hex).to_string())
+        device = self.__devices.get(EnOceanAddress(packet.sender_hex))
         if not device:
             print(f"Ignoring received packet from unknown device {EnOceanAddress(packet.sender_hex).to_string()}.")
             return
@@ -305,7 +305,7 @@ class EnOceanHomeAssistantGateway:
     
     def set_cover_position(self, enocean_entity_id: EnOceanEntityID, position: int) -> None:
         """Set the position of a cover device (0 = closed, 100 = open)."""
-        device = self.__devices.get(enocean_entity_id.device_address.to_string())
+        device = self.__devices.get(enocean_entity_id.device_address)
         if not device:
             return
         
@@ -323,7 +323,7 @@ class EnOceanHomeAssistantGateway:
 
     def query_cover_position(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Query the position of a cover device."""
-        device = self.__devices.get(enocean_entity_id.device_address.to_string())
+        device = self.__devices.get(enocean_entity_id.device_address)
         if not device:
             return
         
@@ -334,7 +334,7 @@ class EnOceanHomeAssistantGateway:
 
     def stop_cover(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Stop a cover device."""
-        device = self.__devices.get(enocean_entity_id.device_address.to_string())
+        device = self.__devices.get(enocean_entity_id.device_address)
         if not device:
             return
         
