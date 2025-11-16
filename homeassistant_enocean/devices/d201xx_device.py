@@ -3,66 +3,68 @@
 
 
 
-from homeassistant_enocean.eep_handlers.eep_handler import EEPHandler
+from homeassistant_enocean.devices.device import EnOceanDevice
 from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 
 
-class EEP_D2_01_Handler(EEPHandler):
+class EnOceanD201XXDevice(EnOceanDevice):
     """Handler for EnOcean Equipment Profiles D2-01-00 - D2-01-14"""
 
     def  initialize_entities(self) -> None:
         """Initialize the entities handled by this EEP handler."""
-        # todo: support multiple channels,
-        # for now, we assume only 2 channels per device
         # D2-01-00 to D2-01-0F have 1 channel, D2-01-10 to D2-01-12 have 2 channels, D2-01-13 has 4 channels, D2-01-14 has 8 channels
-        self._switch_entities = [
-            HomeAssistantEntityProperties(unique_id="channel_1"),
-            HomeAssistantEntityProperties(unique_id="channel_2"),
-        ]
+      
+        if self.device_type.eep.type in range(0x00, 0x0F):
+            self._switch_entities = [
+                HomeAssistantEntityProperties(unique_id=None),
+            ]
+
+        elif self.device_type.eep.type in range(0x10, 0x12):
+            self._switch_entities = [
+                HomeAssistantEntityProperties(unique_id="channel_1"),
+                HomeAssistantEntityProperties(unique_id="channel_2"),
+            ]
+
+        elif self.device_type.eep.type == 0x13:
+            self._switch_entities = [
+                HomeAssistantEntityProperties(unique_id="channel_1"),
+                HomeAssistantEntityProperties(unique_id="channel_2"),
+                HomeAssistantEntityProperties(unique_id="channel_3"),
+                HomeAssistantEntityProperties(unique_id="channel_4"),
+            ]
+        elif self.device_type.eep.type == 0x14:
+            self._switch_entities = [
+                HomeAssistantEntityProperties(unique_id="channel_1"),
+                HomeAssistantEntityProperties(unique_id="channel_2"),
+                HomeAssistantEntityProperties(unique_id="channel_3"),
+                HomeAssistantEntityProperties(unique_id="channel_4"),
+                HomeAssistantEntityProperties(unique_id="channel_5"),
+                HomeAssistantEntityProperties(unique_id="channel_6"),
+                HomeAssistantEntityProperties(unique_id="channel_7"),
+                HomeAssistantEntityProperties(unique_id="channel_8"),
+            ]
 
     def handle_matching_packet(self, packet, enocean_id, sender_id) -> None:
         """Handle an incoming EnOcean packet."""
-
-      
-        
-        # actuator status telegram
         packet.parse_eep(0x01, 0x01)
         if packet.parsed["CMD"]["raw_value"] != 4:
             return
         
         channel = packet.parsed["IO"]["raw_value"]
-        output = packet.parsed["OV"]["raw_value"]    
+        output = packet.parsed["OV"]["raw_value"]   
 
-        callback = self._switch_callbacks.get(f"channel_{channel+1}")
+        callback = None 
+        if self.device_type.eep.type in range(0x00, 0x0F):
+            callback = self._switch_callbacks.get(None)
+        else:
+            callback = self._switch_callbacks.get(f"channel_{channel+1}")
+
         if callback:
             callback(output > 0)
 
 ### OUTDATED CODE BELOW ###
 
 
-# class EnOceanSwitchOLD(EnOceanEntity, SwitchEntity):
-#     """Representation of an EnOcean switch device."""
-
-#     def __init__(
-#         self,
-#         enocean_entity_id: EnOceanEntityID,
-#         gateway: EnOceanHomeAssistantGateway,
-#         channel: int,
-#         dev_type: EnOceanDeviceType,
-#         name: str | None = None,
-#     ) -> None:
-#         """Initialize the EnOcean switch device."""
-#         super().__init__(
-#             enocean_entity_id=enocean_entity_id,
-#             gateway=gateway,
-#         )
-#         self._light = None
-#         self.channel = channel
-
-#     @property
-#     def is_on(self) -> bool | None:
-#         """Return whether the switch is on or off."""
-#         return self._attr_is_on
 
 #     def turn_on(self, **kwargs: Any) -> None:
 #         """Turn on the switch."""

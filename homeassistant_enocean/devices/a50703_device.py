@@ -2,10 +2,8 @@ from .device import EnOceanDevice
 from ..address import EnOceanAddress, EnOceanDeviceAddress
 from ..entity_properties import HomeAssistantEntityProperties
 
-
-
 class EnOceanA50703Device(EnOceanDevice):
-    """Handler for EnOcean Equipment Profile A5-07-03 (PIR NODON)"""
+    """Handler for EnOcean Equipment Profile A5-07-03 (Occupancy with Supply voltage monitor and 10-bit illumination measurement)"""
 
     def initialize_entities(self) -> None:
         """Initialize the entities handled by this EEP handler."""
@@ -14,7 +12,7 @@ class EnOceanA50703Device(EnOceanDevice):
         ]
 
         self._sensor_entitites = [
-            HomeAssistantEntityProperties(unique_id="supply_voltage", device_class="voltage", entity_category="diagnostic"),
+            HomeAssistantEntityProperties(unique_id="supply_voltage", device_class="voltage", native_unit_of_measurement="V", entity_category="diagnostic"),
             HomeAssistantEntityProperties(unique_id="illumination", native_unit_of_measurement="lx", device_class="illuminance"),
         ]
 

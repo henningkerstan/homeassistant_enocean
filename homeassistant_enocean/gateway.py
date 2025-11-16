@@ -6,8 +6,8 @@ from enocean.communicators import SerialCommunicator
 from enocean.protocol.packet import Packet, RadioPacket
 from enocean.utils import to_hex_string
 
-from homeassistant_enocean.device_factories.a50703_factory import EnOceanA50703DeviceFactory
-
+from .device_factories.a50703_factory import EnOceanA50703DeviceFactory
+from .device_factories.d201xx_factory import EnOceanD201XXDeviceFactory
 from .device_factories.d20500_factory import EnOceanD20500DeviceFactory
 from .device_factories.device_factory import EnOceanDeviceFactory
 from .device_factories.f602xx_factory import EnOceanF602XXDeviceFactory
@@ -48,6 +48,26 @@ class EnOceanHomeAssistantGateway:
             EEP(0xA5, 0x07, 0x03): EnOceanA50703DeviceFactory(),
             EEP(0xF6, 0x02, 0x01): EnOceanF602XXDeviceFactory(),
             EEP(0xF6, 0x02, 0x02): EnOceanF602XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x01): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x02): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x03): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x04): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x05): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x06): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x07): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x08): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x09): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x0A): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x0B): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x0C): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x0D): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x0E): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x0F): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x10): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x11): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x12): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x13): EnOceanD201XXDeviceFactory(),
+            EEP(0xD2, 0x01, 0x14): EnOceanD201XXDeviceFactory(),
             EEP(0xD2, 0x05, 0x00): EnOceanD20500DeviceFactory(),
         }
 
@@ -92,40 +112,29 @@ class EnOceanHomeAssistantGateway:
                 return
 
             factory = self.__device_factories[device_type.eep]   
-
-            print(f"Creating device handler for device \"{device_name}\" ({enocean_id.to_string()}) with EEP {device_type.eep} using factory {factory.__class__.__name__}.")  
             device: EnOceanDevice = factory.create_device(enocean_id=enocean_id, device_type=device_type, send_packet=self._send_packet, device_name=device_name, sender_id=sender_id)
-            
             self.__devices[enocean_id.to_string()] = device
-            print(f"Added device \"{device_name}\" ({enocean_id.to_string()} ({device_type.manufacturer} {device_type.model} EEP {device_type.eep}), sender ID: {sender_id.to_string() if sender_id else 'n/a'}) to gateway.")
             
-            for d in self.__devices.values():
-                print(f" - Device: \"{d.device_name}\" ({d.enocean_id.to_string()})")
-
+            
 
     def register_binary_sensor_callback(self, entity_id: EnOceanEntityID, callback: EnOceanBinarySensorCallback) -> None:
         """Register a callback for a binary sensor entity."""
-        print(f"Registering binary sensor callback for entity {entity_id.to_string()}")
         self.__devices[entity_id.device_address.to_string()]._binary_sensor_callbacks[entity_id.unique_id] = callback
 
     def register_cover_callback(self, entity_id: EnOceanEntityID, callback: EnOceanCoverCallback) -> None:
         """Register a callback for a cover entity."""
-        print(f"Registering cover callback for entity {entity_id.to_string()}")
         self.__devices[entity_id.device_address.to_string()]._cover_callbacks[entity_id.unique_id] = callback 
 
     def register_sensor_callback(self, entity_id: EnOceanEntityID, callback: EnOceanSensorCallback) -> None:
         """Register a callback for a sensor entity."""
-        print(f"Registering sensor callback for entity {entity_id.to_string()}")
         self.__devices[entity_id.device_address.to_string()]._sensor_callbacks[entity_id.unique_id] = callback
 
     def register_switch_callback(self, entity_id: EnOceanEntityID, callback: EnOceanSwitchCallback) -> None:
         """Register a callback for a switch entity."""
-        print(f"Registering switch callback for entity {entity_id.to_string()}")
-        self.__devices[entity_id.device_address.to_string()]._switch_callbacks[entity_id.unique_id] = callback
+        self.__devices[entity_id.device_address.to_string()]._switch_callbacks[entity_id.unique_id] = callback  
 
     def register_light_callback(self, entity_id: EnOceanEntityID, callback: EnOceanLightCallback) -> None:
         """Register a callback for a light entity."""
-        print(f"Registering light callback for entity {entity_id.to_string()}")
         self.__devices[entity_id.device_address.to_string()]._light_callbacks[entity_id.unique_id] = callback
 
 

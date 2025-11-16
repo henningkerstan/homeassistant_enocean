@@ -9,12 +9,14 @@ from homeassistant_enocean.address import EnOceanAddress
 def binary_sensor_callback(entity_id: EnOceanEntityID, is_on: bool):
     print(f"Binary sensor {entity_id.to_string()} has state {'ON' if is_on else 'OFF'}")
 
-
 def cover_callback(entity_id: EnOceanEntityID, position: int):
     print(f"Cover {entity_id.to_string()} has position {position}")
 
 def sensor_callback(entity_id: EnOceanEntityID, value: float):
     print(f"Sensor {entity_id.to_string()} has value {value}")
+
+def switch_callback(entity_id: EnOceanEntityID, is_on: bool):
+    print(f"Switch {entity_id.to_string()} has state {'ON' if is_on else 'OFF'}")
 
     
 async def main_loop():
@@ -45,6 +47,10 @@ async def main_loop():
     for sensor in gateway.sensor_entities:
         print(f"Registered sensor entity: {sensor.to_string()} with properties: {gateway.sensor_entities[sensor]}")
         gateway.register_sensor_callback(sensor, lambda value, entity_id=sensor: sensor_callback(entity_id, value))
+
+    for switch in gateway.switch_entities:
+        print(f"Registered switch entity: {switch.to_string()} with properties: {gateway.switch_entities[switch]}")
+        gateway.register_switch_callback(switch, lambda is_on, entity_id=switch: switch_callback(entity_id, is_on))
 
     print("Starting EnOcean Gateway...")
     await gateway.start()
