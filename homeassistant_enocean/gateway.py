@@ -16,7 +16,7 @@ from homeassistant_enocean.eep import EEP
 from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 from homeassistant_enocean.device_type import EnOceanDeviceType
 from homeassistant_enocean.entity_id import EnOceanEntityID
-from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanDeviceIDString, EnOceanEventCallback, EnOceanLightCallback, EnOceanSensorCallback, EnOceanSwitchCallback
+from homeassistant_enocean.types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanEventCallback, EnOceanLightCallback, EnOceanSensorCallback, EnOceanSwitchCallback
 from .devices.device import EnOceanDevice
 from .address import EnOceanAddress, EnOceanDeviceAddress
 
@@ -214,7 +214,7 @@ class EnOceanHomeAssistantGateway:
             print(f"Ignoring received packet from unknown device {EnOceanAddress(packet.sender_hex).to_string()}.")
             return
         
-        print(f"Received packet from '{device.device_name}' ({packet.sender_hex}) with EEP {device.device_type.eep.to_string()}")
+        # print(f"Received packet from '{device.device_name}' ({packet.sender_hex}) with EEP {device.device_type.eep.to_string()}")
         device.handle_packet(packet, device.enocean_id, device.sender_id)
         
 

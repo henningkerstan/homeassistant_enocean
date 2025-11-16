@@ -97,7 +97,7 @@ class EnOceanDevice(ABC):
     
     def handle_packet(self, packet: RadioPacket, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
         """Handle an incoming EnOcean packet."""
-        print(f"EEPHandler.handle_packet: Checking packet from sender {EnOceanAddress.from_number(packet.sender_int)} against device ID {enocean_id.to_string()}")
+        #print(f"EEPHandler.handle_packet: Checking packet from sender {EnOceanAddress.from_number(packet.sender_int)} against device ID {enocean_id.to_string()}")
         if packet.sender_int == enocean_id.to_number():
             rssi_callback = self._sensor_callbacks.get("rssi")
             if rssi_callback:
@@ -113,6 +113,11 @@ class EnOceanDevice(ABC):
                 last_seen_callback(datetime.datetime.now().astimezone())
 
             self.handle_matching_packet(packet, enocean_id, sender_id)
+
+    def send_packet(self, packet: RadioPacket) -> None:
+        """Send an EnOcean packet."""
+        if self.__send_packet:
+            self.__send_packet(packet)
 
     @abstractmethod
     def initialize_entities(self) -> None:

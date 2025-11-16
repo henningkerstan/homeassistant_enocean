@@ -4,51 +4,44 @@ from homeassistant_enocean.entity_properties import HomeAssistantEntityPropertie
 from homeassistant_enocean.types import EnOceanBinarySensorCallback
 from enocean.protocol.packet import RadioPacket
 
+BUTTON_ACTION_UID_MAP = {
+    0x70: "a0",
+    0x50: "a1",
+    0x30: "b0",
+    0x10: "b1",
+    0x37: "ab0",
+    0x15: "ab1",
+    0x17: "a0b1",
+    0x35: "a1b0",
+}
+"""Mapping of button action codes to unique IDs for EnOcean F6-02-XX devices."""
+
+
 class EnOceanF602XXDevice(EnOceanDevice):
     """Handler for EnOcean Equipment Profiles F6-02-01/02"""
     
     def initialize_entities(self) -> None:
         """Initialize the entities handled by this EEP handler."""
         self._binary_sensor_entities = [
-            HomeAssistantEntityProperties(unique_id="a0",),
-            HomeAssistantEntityProperties(unique_id="a1"),
-            HomeAssistantEntityProperties(unique_id="b0"),
-            HomeAssistantEntityProperties(unique_id="b1"),
-            HomeAssistantEntityProperties(unique_id="ab0"),
-            HomeAssistantEntityProperties(unique_id="ab1"),
-            HomeAssistantEntityProperties(unique_id="a0b1"),
-            HomeAssistantEntityProperties(unique_id="a1b0"),
+            HomeAssistantEntityProperties(unique_id=name,)
+            for name in BUTTON_ACTION_UID_MAP.values()
         ]
-    
+
 
     def handle_matching_packet(self, packet: RadioPacket, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
         """Handle an incoming EnOcean packet."""
         action = packet.data[1]
-        print(f"EEP_F602XX: Handling packet with action {action:#04x} for device ID {enocean_id.to_string()}")
+        # print(f"EEP_F602XX: Handling packet with action {action:#04x} for device ID {enocean_id.to_string()}")
 
+        # handle button release (all buttons)
         if action == 0x00:
             for callback in self._binary_sensor_callbacks.values():
                 callback(False)
-
+            return
+        
+        # handle button press      
         callback : EnOceanBinarySensorCallback | None = None
-
-        match action:
-            case 0x70:
-                callback = self._binary_sensor_callbacks.get("a0")
-            case 0x50:
-                callback = self._binary_sensor_callbacks.get("a1")
-            case 0x30:
-                callback = self._binary_sensor_callbacks.get("b0")
-            case 0x10:
-                callback = self._binary_sensor_callbacks.get("b1") 
-            case 0x37:
-                callback = self._binary_sensor_callbacks.get("ab0")
-            case 0x15:
-                callback = self._binary_sensor_callbacks.get("ab1")
-            case 0x17:
-                callback = self._binary_sensor_callbacks.get("a0b1")
-            case 0x35:
-                callback = self._binary_sensor_callbacks.get("a1b0")
-
+        callback = self._binary_sensor_callbacks.get(BUTTON_ACTION_UID_MAP.get(action))
+      
         if callback:
             callback(True)
