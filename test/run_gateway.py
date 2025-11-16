@@ -13,6 +13,9 @@ def binary_sensor_callback(entity_id: EnOceanEntityID, is_on: bool):
 def cover_callback(entity_id: EnOceanEntityID, position: int):
     print(f"Cover {entity_id.to_string()} has position {position}")
 
+def sensor_callback(entity_id: EnOceanEntityID, value: float):
+    print(f"Sensor {entity_id.to_string()} has value {value}")
+
     
 async def main_loop():
     print("Initializing EnOcean Gateway...")
@@ -38,6 +41,10 @@ async def main_loop():
     for cover in gateway.cover_entities:
         print(f"Registered cover entity: {cover.to_string()} with properties: {gateway.cover_entities[cover]}")
         gateway.register_cover_callback(cover, lambda position, entity_id=cover: cover_callback(entity_id, position))
+
+    for sensor in gateway.sensor_entities:
+        print(f"Registered sensor entity: {sensor.to_string()} with properties: {gateway.sensor_entities[sensor]}")
+        gateway.register_sensor_callback(sensor, lambda value, entity_id=sensor: sensor_callback(entity_id, value))
 
     print("Starting EnOcean Gateway...")
     await gateway.start()

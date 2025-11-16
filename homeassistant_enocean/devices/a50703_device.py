@@ -1,10 +1,10 @@
-# PIR NODON
+from .device import EnOceanDevice
+from ..address import EnOceanAddress, EnOceanDeviceAddress
+from ..entity_properties import HomeAssistantEntityProperties
 
-from homeassistant_enocean.eep_handlers.eep_handler import EEPHandler
-from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 
 
-class EEP_A5_07_03_Handler(EEPHandler):
+class EnOceanA50703Device(EnOceanDevice):
     """Handler for EnOcean Equipment Profile A5-07-03 (PIR NODON)"""
 
     def initialize_entities(self) -> None:
@@ -18,10 +18,10 @@ class EEP_A5_07_03_Handler(EEPHandler):
             HomeAssistantEntityProperties(unique_id="illumination", native_unit_of_measurement="lx", device_class="illuminance"),
         ]
 
-    def handle_matching_packet(self, packet, enocean_id, sender_id) -> None:
+    def handle_matching_packet(self, packet, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
         """Handle an incoming EnOcean packet."""
         packet.parse_eep(0x07, 0x03)
-        motion = packet.parsed["PIRS"]["raw_value"]
+        motion = packet.parsed["PIR"]["raw_value"]
         illumination = packet.parsed["ILL"]["raw_value"]
         supply_voltage = 5.0 * (packet.parsed["SVC"]["raw_value"]/250.0)  # convert to volts from range 0..250 representing 0..5V
 

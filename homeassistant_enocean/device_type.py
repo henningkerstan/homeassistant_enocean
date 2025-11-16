@@ -160,6 +160,12 @@ class EnOceanDeviceType:
                 eep=EEP(0xA5, 0x04, 0x02),
                 model="Temperature and Humidity Sensor, Range -20 °C to +60 °C and 0% to 100%",
             ),
+            # A5-07 Occupancy Sensors
+            "A5-07-03": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x07, 0x03),
+                model="PIR NODON",
+            ),
+
             # A5-10 Room Operating Panels
             "A5-10-01": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x10, 0x01),
