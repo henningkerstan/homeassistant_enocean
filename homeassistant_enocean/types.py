@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Callable
+from enocean.protocol.packet import RadioPacket
 
 
 type EnOceanEntityUID = str | None
@@ -10,6 +11,8 @@ Uniqueness is only per device and platform, thus, the same UID can be used for a
 
 type EnOceanDeviceIDString = str
 """An EnOcean device ID as string"""
+
+type EnOceanSendRadioPacket = Callable[[RadioPacket], None]
 
 # Callbacks for state updates
 type EnOceanBinarySensorCallback = Callable[[bool], None]

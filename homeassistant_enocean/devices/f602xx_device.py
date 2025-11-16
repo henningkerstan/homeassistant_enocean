@@ -1,10 +1,10 @@
 from homeassistant_enocean.address import EnOceanAddress, EnOceanDeviceAddress
+from homeassistant_enocean.devices.device import EnOceanDevice
 from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 from homeassistant_enocean.types import EnOceanBinarySensorCallback
-from .eep_handler import EEPHandler
 from enocean.protocol.packet import RadioPacket
 
-class EEP_F6_02_Handler(EEPHandler):
+class EnOceanF602XXDevice(EnOceanDevice):
     """Handler for EnOcean Equipment Profiles F6-02-01/02"""
     
     def initialize_entities(self) -> None:
@@ -24,7 +24,7 @@ class EEP_F6_02_Handler(EEPHandler):
     def handle_matching_packet(self, packet: RadioPacket, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
         """Handle an incoming EnOcean packet."""
         action = packet.data[1]
-        print(f"EEP_F6_02_Handler: Handling packet with action {action:#04x} for device ID {enocean_id.to_string()}")
+        print(f"EEP_F602XX: Handling packet with action {action:#04x} for device ID {enocean_id.to_string()}")
 
         if action == 0x00:
             for callback in self._binary_sensor_callbacks.values():

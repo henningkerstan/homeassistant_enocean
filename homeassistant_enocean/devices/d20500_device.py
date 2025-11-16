@@ -1,8 +1,7 @@
-import asyncio
 from enum import Enum
 from homeassistant_enocean.address import EnOceanAddress, EnOceanDeviceAddress
+from homeassistant_enocean.devices.device import EnOceanDevice
 from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
-from homeassistant_enocean.eep_handlers.eep_handler import EEPHandler
 from homeassistant_enocean.entity_id import EnOceanEntityID
 from enocean.protocol.packet import RadioPacket
 from enocean.protocol.constants import RORG
@@ -19,7 +18,7 @@ class EnOceanCoverCommand(Enum):
     QUERY_POSITION = 3
 
 
-class EEP_D2_05_00_Handler(EEPHandler):
+class EnOceanD20500Device(EnOceanDevice):
     """Handler for EnOcean Equipment Profile D2-05-00"""
 
     def  initialize_entities(self) -> None:
@@ -35,7 +34,6 @@ class EEP_D2_05_00_Handler(EEPHandler):
         # 0 means 'closed' in Home Assistant and 'open' in EnOcean
         # 100 means 'open' in Home Assistant and 'closed' in EnOcean
         new_position = 100 - packet.data[1]
-
 
         #print(f"Received EnOcean cover position: {new_position} for device {enocean_id.to_string()}")
         callback = self._cover_callbacks.get(EnOceanEntityID(enocean_id, None))
