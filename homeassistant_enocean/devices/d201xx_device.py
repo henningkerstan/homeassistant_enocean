@@ -10,54 +10,57 @@ from homeassistant_enocean.entity_properties import HomeAssistantEntityPropertie
 class EnOceanD201XXDevice(EnOceanDevice):
     """Handler for EnOcean Equipment Profiles D2-01-00 - D2-01-14"""
 
-    def  initialize_entities(self) -> None:
+    def initialize_entities(self) -> None:
         """Initialize the entities handled by this EEP handler."""
         # D2-01-00 to D2-01-0F have 1 channel, D2-01-10 to D2-01-12 have 2 channels, D2-01-13 has 4 channels, D2-01-14 has 8 channels
-      
-        if self.device_type.eep.type in range(0x00, 0x0F):
-            self._switch_entities = [
-                HomeAssistantEntityProperties(unique_id=None),
-            ]
 
-        elif self.device_type.eep.type in range(0x10, 0x12):
+        if self.device_type.eep.type in (0x10, 0x11, 0x12):
             self._switch_entities = [
-                HomeAssistantEntityProperties(unique_id="channel_1"),
-                HomeAssistantEntityProperties(unique_id="channel_2"),
+                HomeAssistantEntityProperties(unique_id="switch_1"),
+                HomeAssistantEntityProperties(unique_id="switch_2"),
             ]
 
         elif self.device_type.eep.type == 0x13:
             self._switch_entities = [
-                HomeAssistantEntityProperties(unique_id="channel_1"),
-                HomeAssistantEntityProperties(unique_id="channel_2"),
-                HomeAssistantEntityProperties(unique_id="channel_3"),
-                HomeAssistantEntityProperties(unique_id="channel_4"),
+                HomeAssistantEntityProperties(unique_id="switch_1"),
+                HomeAssistantEntityProperties(unique_id="switch_2"),
+                HomeAssistantEntityProperties(unique_id="switch_3"),
+                HomeAssistantEntityProperties(unique_id="switch_4"),
             ]
         elif self.device_type.eep.type == 0x14:
             self._switch_entities = [
-                HomeAssistantEntityProperties(unique_id="channel_1"),
-                HomeAssistantEntityProperties(unique_id="channel_2"),
-                HomeAssistantEntityProperties(unique_id="channel_3"),
-                HomeAssistantEntityProperties(unique_id="channel_4"),
-                HomeAssistantEntityProperties(unique_id="channel_5"),
-                HomeAssistantEntityProperties(unique_id="channel_6"),
-                HomeAssistantEntityProperties(unique_id="channel_7"),
-                HomeAssistantEntityProperties(unique_id="channel_8"),
+                HomeAssistantEntityProperties(unique_id="switch_1"),
+                HomeAssistantEntityProperties(unique_id="switch_2"),
+                HomeAssistantEntityProperties(unique_id="switch_3"),
+                HomeAssistantEntityProperties(unique_id="switch_4"),
+                HomeAssistantEntityProperties(unique_id="switch_5"),
+                HomeAssistantEntityProperties(unique_id="switch_6"),
+                HomeAssistantEntityProperties(unique_id="switch_7"),
+                HomeAssistantEntityProperties(unique_id="switch_8"),
+            ]
+        
+        else:
+            self._switch_entities = [
+                HomeAssistantEntityProperties(unique_id=None),
             ]
 
-    def handle_matching_packet(self, packet, enocean_id, sender_id) -> None:
+    def handle_matching_packet(self, packet) -> None:
         """Handle an incoming EnOcean packet."""
-        packet.parse_eep(0x01, 0x01)
+        packet.parse_eep(0x01, self.device_type.eep.type)
         if packet.parsed["CMD"]["raw_value"] != 4:
             return
         
         channel = packet.parsed["IO"]["raw_value"]
         output = packet.parsed["OV"]["raw_value"]   
 
+        print(f"EnOcean D2-01-{self.device_type.eep.type:02X} switch channel {channel} output {output}")
+
         callback = None 
-        if self.device_type.eep.type in range(0x00, 0x0F):
-            callback = self._switch_callbacks.get(None)
+        if self.device_type.eep.type in (0x10, 0x11, 0x12, 0x13, 0x14):
+            callback = self._switch_callbacks.get(f"switch_{channel+1}")
         else:
-            callback = self._switch_callbacks.get(f"channel_{channel+1}")
+            callback = self._switch_callbacks.get(None)
+
 
         if callback:
             callback(output > 0)

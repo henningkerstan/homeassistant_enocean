@@ -125,6 +125,10 @@ class EnOceanHomeAssistantGateway:
         """Register a callback for a cover entity."""
         self.__devices[entity_id.device_address]._cover_callbacks[entity_id.unique_id] = callback 
 
+    def register_event_callback(self, entity_id: EnOceanEntityID, callback: EnOceanEventCallback) -> None:
+        """Register a callback for an event entity."""
+        self.__devices[entity_id.device_address]._event_callbacks[entity_id.unique_id] = callback
+
     def register_sensor_callback(self, entity_id: EnOceanEntityID, callback: EnOceanSensorCallback) -> None:
         """Register a callback for a sensor entity."""
         self.__devices[entity_id.device_address]._sensor_callbacks[entity_id.unique_id] = callback
@@ -215,7 +219,7 @@ class EnOceanHomeAssistantGateway:
             return
         
         # print(f"Received packet from '{device.device_name}' ({packet.sender_hex}) with EEP {device.device_type.eep.to_string()}")
-        device.handle_packet(packet, device.enocean_id, device.sender_id)
+        device.handle_packet(packet)
         
 
 
@@ -302,64 +306,48 @@ class EnOceanHomeAssistantGateway:
 
         return entities
 
+
+
     
+    # cover commands
     def set_cover_position(self, enocean_entity_id: EnOceanEntityID, position: int) -> None:
         """Set the position of a cover device (0 = closed, 100 = open)."""
-        device = self.__devices.get(enocean_entity_id.device_address)
-        if not device:
-            return
-        
-        set_cover_position = device.set_cover_position
-
-        if not set_cover_position:
-            return
-        
-        set_cover_position(
-            enocean_id=enocean_entity_id.device_address,
-            sender_id=device.sender_id,
-            position=position,)
+        if device := self.__devices.get(enocean_entity_id.device_address):
+            device.set_cover_position(entity_uid=enocean_entity_id.unique_id, position=position)
         
 
 
     def query_cover_position(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Query the position of a cover device."""
-        device = self.__devices.get(enocean_entity_id.device_address)
-        if not device:
-            return
-        
-        device.handler.query_cover_position(
-            enocean_id=enocean_entity_id.device_address,
-            sender_id=device.sender_id,)
+        if device := self.__devices.get(enocean_entity_id.device_address):
+            device.query_cover_position(entity_uid=enocean_entity_id.unique_id)
 
 
     def stop_cover(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Stop a cover device."""
-        device = self.__devices.get(enocean_entity_id.device_address)
-        if not device:
-            return
-        
-        device.handler.stop_cover(
-            enocean_id=enocean_entity_id.device_address,
-            sender_id=device.sender_id,)
+        if device := self.__devices.get(enocean_entity_id.device_address):
+            device.stop_cover(entity_uid=enocean_entity_id.unique_id)
 
-    # methods for sending commands to devices
-    # note that no such methods exist for sensors, as they do not accept commands
 
-    # Light entities   
+    # light commands
     def light_turn_on(self, enocean_entity_id: EnOceanEntityID, brightness: int | None = None, color_temp_kelvin: int | None = None) -> None:
         """Turn on a light device."""
-        pass
+        if device := self.__devices.get(enocean_entity_id.device_address):
+            device.light_turn_on(entity_uid=enocean_entity_id.unique_id, brightness=brightness, color_temp_kelvin=color_temp_kelvin)
 
     def light_turn_off(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Turn off a light device."""
-        pass
+        if device := self.__devices.get(enocean_entity_id.device_address):
+            device.light_turn_off(entity_uid=enocean_entity_id.unique_id)
 
 
-    # Switch entities
+    # switch commands
     def switch_turn_on(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Turn on a switch device."""
-        pass
+        if device := self.__devices.get(enocean_entity_id.device_address):
+            device.switch_turn_on(entity_uid=enocean_entity_id.unique_id)
 
     def switch_turn_off(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Turn off a switch device."""
-        pass
+        if device := self.__devices.get(enocean_entity_id.device_address):
+            device.switch_turn_off(entity_uid=enocean_entity_id.unique_id)

@@ -1,4 +1,5 @@
 
+from homeassistant_enocean.types import EnOceanEntityUID
 from .device import EnOceanDevice
 
 from ..address import EnOceanAddress, EnOceanDeviceAddress
@@ -29,7 +30,7 @@ class EnOceanD20500Device(EnOceanDevice):
         #self.__send_cover_command(command=EnOceanCoverCommand.QUERY_POSITION, destination=enocean_id, sender=sender_id )
 
 
-    def handle_matching_packet(self, packet: RadioPacket, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
+    def handle_matching_packet(self, packet) -> None:
         """Handle an incoming EnOcean packet."""
 
         # position is inversed in Home Assistant and in EnOcean:
@@ -60,15 +61,15 @@ class EnOceanD20500Device(EnOceanDevice):
         print(f"Sending EnOcean cover command {command.name} with position {position} ")
         self.send_packet(packet)
 
-    def set_cover_position(self, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress, position: int) -> None:
+    def set_cover_position(self, entity_uid: EnOceanEntityUID, position: int) -> None:
         """Set the position of a cover device (0 = closed, 100 = open)."""
         enocean_position = 100 - position  # invert position for EnOcean
-        self.__send_cover_command(command=EnOceanCoverCommand.SET_POSITION, destination=enocean_id, sender=sender_id, position=enocean_position)
+        self.__send_cover_command(command=EnOceanCoverCommand.SET_POSITION, destination=self.enocean_id, sender=self.sender_id, position=enocean_position)
 
-    def query_cover_position(self, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
+    def query_cover_position(self, entity_uid: EnOceanEntityUID) -> None:
         """Query the position of a cover device."""
-        self.__send_cover_command(command=EnOceanCoverCommand.QUERY_POSITION, destination=enocean_id, sender=sender_id)
+        self.__send_cover_command(command=EnOceanCoverCommand.QUERY_POSITION, destination=self.enocean_id, sender=self.sender_id)
         
-    def stop_cover(self, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
+    def stop_cover(self, entity_uid: EnOceanEntityUID) -> None:
         """Stop the movement of a cover device."""
-        self.__send_cover_command(command=EnOceanCoverCommand.STOP, destination=enocean_id, sender=sender_id)
+        self.__send_cover_command(command=EnOceanCoverCommand.STOP, destination=self.enocean_id, sender=self.sender_id)

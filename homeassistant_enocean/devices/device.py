@@ -2,7 +2,7 @@
 import datetime
 from ..entity_properties import HomeAssistantEntityProperties
 from ..device_state import EnOceanDeviceState
-from ..types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanEntityUID, EnOceanLightCallback, EnOceanSendRadioPacket, EnOceanSensorCallback, EnOceanSwitchCallback
+from ..types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanEntityUID, EnOceanEventCallback, EnOceanLightCallback, EnOceanSendRadioPacket, EnOceanSensorCallback, EnOceanSwitchCallback
 from ..device_type import EnOceanDeviceType
 from ..address import EnOceanAddress, EnOceanDeviceAddress
 from abc import abstractmethod, ABC
@@ -26,6 +26,7 @@ class EnOceanDevice(ABC):
         # callbacks
         self._binary_sensor_callbacks: dict[EnOceanEntityUID, EnOceanBinarySensorCallback] = {}
         self._cover_callbacks: dict[EnOceanEntityUID, EnOceanCoverCallback] = {}
+        self._event_callbacks: dict[EnOceanEntityUID, EnOceanEventCallback] = {}
         self._light_callbacks: dict[EnOceanEntityUID, EnOceanLightCallback] = {}
         self._sensor_callbacks: dict[EnOceanEntityUID, EnOceanSensorCallback] = {}
         self._switch_callbacks: dict[EnOceanEntityUID, EnOceanSwitchCallback] = {}
@@ -95,10 +96,10 @@ class EnOceanDevice(ABC):
         return self._switch_entities
 
     
-    def handle_packet(self, packet: RadioPacket, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
+    def handle_packet(self, packet: RadioPacket) -> None:
         """Handle an incoming EnOcean packet."""
         #print(f"EEPHandler.handle_packet: Checking packet from sender {EnOceanAddress.from_number(packet.sender_int)} against device ID {enocean_id.to_string()}")
-        if packet.sender_int == enocean_id.to_number():
+        if packet.sender_int == self.enocean_id.to_number():
             rssi_callback = self._sensor_callbacks.get("rssi")
             if rssi_callback:
                 rssi_callback(packet.dBm)
@@ -112,7 +113,7 @@ class EnOceanDevice(ABC):
             if last_seen_callback:
                 last_seen_callback(datetime.datetime.now().astimezone())
 
-            self.handle_matching_packet(packet, enocean_id, sender_id)
+            self.handle_matching_packet(packet)
 
     def send_packet(self, packet: RadioPacket) -> None:
         """Send an EnOcean packet."""
@@ -125,6 +126,39 @@ class EnOceanDevice(ABC):
         pass
 
     @abstractmethod
-    def handle_matching_packet(self, packet: RadioPacket, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
+    def handle_matching_packet(self, packet: RadioPacket) -> None:
         """Handle an incoming EnOcean packet."""
         pass
+
+    
+    # cover-specific methods
+    def set_cover_position(self, entity_uid: EnOceanEntityUID, position: int) -> None:
+        """Set the position of a cover device (0 = closed, 100 = open)."""
+        pass
+
+    def query_cover_position(self, entity_uid: EnOceanEntityUID) -> None:
+        """Query the position of a cover device."""
+        pass
+
+    def stop_cover(self, entity_uid: EnOceanEntityUID) -> None:
+        """Stop the movement of a cover device."""
+        pass
+    
+    # light-specific methods
+    def light_turn_on(self, entity_uid: EnOceanEntityUID, brightness: int | None = None, color_temp_kelvin: int | None = None) -> None:
+        """Turn on a light device."""
+        pass
+
+    def light_turn_off(self, entity_uid: EnOceanEntityUID) -> None:
+        """Turn off a light device."""
+        pass
+
+    # switch-specific methods
+    def switch_turn_on(self, entity_uid: EnOceanEntityUID) -> None:
+        """Turn on a switch device."""
+        pass
+
+    def switch_turn_off(self, entity_uid: EnOceanEntityUID) -> None:
+        """Turn off a switch device."""
+        pass
+

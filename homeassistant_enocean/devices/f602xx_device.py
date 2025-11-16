@@ -28,7 +28,7 @@ class EnOceanF602XXDevice(EnOceanDevice):
         ]
 
 
-    def handle_matching_packet(self, packet: RadioPacket, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
+    def handle_matching_packet(self, packet: RadioPacket) -> None:
         """Handle an incoming EnOcean packet."""
         action = packet.data[1]
 

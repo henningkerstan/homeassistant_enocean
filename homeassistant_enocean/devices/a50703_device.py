@@ -1,5 +1,4 @@
 from .device import EnOceanDevice
-from ..address import EnOceanAddress, EnOceanDeviceAddress
 from ..entity_properties import HomeAssistantEntityProperties
 
 class EnOceanA50703Device(EnOceanDevice):
@@ -16,7 +15,7 @@ class EnOceanA50703Device(EnOceanDevice):
             HomeAssistantEntityProperties(unique_id="illumination", native_unit_of_measurement="lx", device_class="illuminance"),
         ]
 
-    def handle_matching_packet(self, packet, enocean_id: EnOceanDeviceAddress, sender_id: EnOceanAddress) -> None:
+    def handle_matching_packet(self, packet) -> None:
         """Handle an incoming EnOcean packet."""
         packet.parse_eep(0x07, 0x03)
         motion = packet.parsed["PIR"]["raw_value"]
