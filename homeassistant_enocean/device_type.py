@@ -163,7 +163,7 @@ class EnOceanDeviceType:
             # A5-07 Occupancy Sensors
             "A5-07-03": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x07, 0x03),
-                model="PIR NODON",
+                model="Occupancy with Supply voltage monitor and 10-bit illumination measurement",
             ),
 
             # A5-10 Room Operating Panels
@@ -409,6 +409,12 @@ class EnOceanDeviceType:
                 eep=EEP(0xD2, 0x05, 0x00),
                 manufacturer="NodOn",
                 model="SIN-2-RS-01 Roller Shutter Controller",
+            ),
+            "NodOn_PIR-2-1-01": EnOceanDeviceType(
+                unique_id="NodOn_PIR-2-1-01",
+                eep=EEP(0xA5, 0x07, 0x03),
+                manufacturer="NodOn",
+                model="PIR-2-1-01 Motion Sensor",
             ),
             "Permundo_PSC234": EnOceanDeviceType(
                 unique_id="Permundo_PSC234",
