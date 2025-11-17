@@ -7,6 +7,7 @@ from enocean.protocol.packet import Packet, RadioPacket, UTETeachInPacket
 from enocean.utils import to_hex_string
 
 from homeassistant_enocean.device_factories.a53808_factory import EnOceanA53808DeviceFactory
+from homeassistant_enocean.devices.gateway_device import EnOceanGatewayDevice
 
 from .device_factories.a50703_factory import EnOceanA50703DeviceFactory
 from .device_factories.d201xx_factory import EnOceanD201XXDeviceFactory
@@ -74,10 +75,6 @@ class EnOceanHomeAssistantGateway:
             EEP(0xD2, 0x05, 0x00): EnOceanD20500DeviceFactory(),
         }
 
-        self.__gateway_sensor_entities: list[HomeAssistantEntityProperties] = [
-            HomeAssistantEntityProperties(unique_id="telegrams_received", sensor_state_class="total_increasing", entity_category="diagnostic"),
-        ]
-
        
     async def start(self) -> None:
         """Start the EnOcean gateway."""
@@ -92,6 +89,14 @@ class EnOceanHomeAssistantGateway:
             + " (App), "
             + self.__communicator.version_info.api_version.versionString()
             + " (API)"
+        )
+
+        self.__devices[self.__chip_id] = EnOceanGatewayDevice(
+            enocean_id=self.__chip_id,
+            device_type=EnOceanDeviceType(eep=EEP(0, 0, 0), model="TCM300/310 Transmitter", manufacturer="EnOcean"),
+            device_name="Gateway",
+            send_packet=None,
+            sender_id=self.__base_id,
         )
 
         # callback needs to be set after initialization
@@ -355,7 +360,7 @@ class EnOceanHomeAssistantGateway:
     def query_cover_position(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Query the position of a cover device."""
         if device := self.__devices.get(enocean_entity_id.device_address):
-            device.query_cover_position_and_angle(entity_uid=enocean_entity_id.unique_id)
+            device.query_cover_position(entity_uid=enocean_entity_id.unique_id)
 
 
     def stop_cover(self, enocean_entity_id: EnOceanEntityID) -> None:

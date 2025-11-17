@@ -45,6 +45,9 @@ class EnOceanDevice(ABC):
         self._switch_entities: list[HomeAssistantEntityProperties] = []
         self.initialize_entities()
 
+    def clear_internal_sensor_entities(self) -> None:
+        """Clear internal sensor entities (used for the gateway device)."""
+        self.__internal_sensor_entities = []
 
     @property
     def enocean_id(self) -> EnOceanDeviceAddress:
@@ -146,7 +149,7 @@ class EnOceanDevice(ABC):
         """Set the position of a cover device (0 = closed, 100 = open)."""
         pass
 
-    def query_cover_position_and_angle(self, entity_uid: EnOceanEntityUID) -> None:
+    def query_cover_position(self, entity_uid: EnOceanEntityUID) -> None:
         """Query the position of a cover device."""
         pass
 
