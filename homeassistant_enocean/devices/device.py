@@ -33,6 +33,7 @@ class EnOceanDevice(ABC):
 
         # entities
         self._binary_sensor_entities: list[HomeAssistantEntityProperties] = []
+        self._button_entities: list[HomeAssistantEntityProperties] = []
         self._cover_entities: list[HomeAssistantEntityProperties] = []
         self._light_entities: list[HomeAssistantEntityProperties] = []
         self.__internal_sensor_entities: list[HomeAssistantEntityProperties] = [
@@ -69,6 +70,11 @@ class EnOceanDevice(ABC):
     def binary_sensor_entities(self) -> list[HomeAssistantEntityProperties]:
         """Return the binary sensor entities."""
         return self._binary_sensor_entities
+    
+    @property
+    def button_entities(self) -> list[HomeAssistantEntityProperties]:
+        """Return the button entities."""
+        return self._button_entities
 
     @property
     def cover_entities(self) -> list[HomeAssistantEntityProperties]:
@@ -130,13 +136,17 @@ class EnOceanDevice(ABC):
         """Handle an incoming EnOcean packet."""
         pass
 
+    # button-specific methods
+    def press_button(self, entity_uid: EnOceanEntityUID) -> None:
+        """Simulate a button press."""
+        pass
     
     # cover-specific methods
     def set_cover_position(self, entity_uid: EnOceanEntityUID, position: int) -> None:
         """Set the position of a cover device (0 = closed, 100 = open)."""
         pass
 
-    def query_cover_position(self, entity_uid: EnOceanEntityUID) -> None:
+    def query_cover_position_and_angle(self, entity_uid: EnOceanEntityUID) -> None:
         """Query the position of a cover device."""
         pass
 

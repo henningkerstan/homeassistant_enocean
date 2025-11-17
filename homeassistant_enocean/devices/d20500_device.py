@@ -18,7 +18,7 @@ class EnOceanCoverCommand(Enum):
 
     SET_POSITION = 1
     STOP = 2
-    QUERY_POSITION = 3
+    QUERY_POSITION_AND_ANGLE = 3
 
 
 class EnOceanD20500Device(EnOceanDevice):
@@ -28,6 +28,9 @@ class EnOceanD20500Device(EnOceanDevice):
         """Initialize the entities handled by this EEP handler."""
         self._cover_entities = [HomeAssistantEntityProperties(supported_features=1|2|4|8)]  # open, close, stop, set position
         #self.__send_cover_command(command=EnOceanCoverCommand.QUERY_POSITION, destination=enocean_id, sender=sender_id )
+        self._button_entities = [HomeAssistantEntityProperties(unique_id="query_position_and_angle", entity_category="diagnostic")]
+
+
 
 
     def handle_matching_packet(self, packet) -> None:
@@ -66,10 +69,16 @@ class EnOceanD20500Device(EnOceanDevice):
         enocean_position = 100 - position  # invert position for EnOcean
         self.__send_cover_command(command=EnOceanCoverCommand.SET_POSITION, destination=self.enocean_id, sender=self.sender_id, position=enocean_position)
 
-    def query_cover_position(self, entity_uid: EnOceanEntityUID) -> None:
+    def query_cover_position_and_angle(self, entity_uid: EnOceanEntityUID) -> None:
         """Query the position of a cover device."""
-        self.__send_cover_command(command=EnOceanCoverCommand.QUERY_POSITION, destination=self.enocean_id, sender=self.sender_id)
+        self.__send_cover_command(command=EnOceanCoverCommand.QUERY_POSITION_AND_ANGLE, destination=self.enocean_id, sender=self.sender_id)
         
     def stop_cover(self, entity_uid: EnOceanEntityUID) -> None:
         """Stop the movement of a cover device."""
         self.__send_cover_command(command=EnOceanCoverCommand.STOP, destination=self.enocean_id, sender=self.sender_id)
+
+    def press_button(self, entity_uid: EnOceanEntityUID) -> None:
+        """Simulate a button press."""
+        if entity_uid == "query_position_and_angle":
+            print( "Button press received to query cover position and angle.")
+            self.query_cover_position_and_angle(entity_uid)

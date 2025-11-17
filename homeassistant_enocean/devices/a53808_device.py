@@ -1,4 +1,6 @@
 import math
+
+from homeassistant_enocean.types import EnOceanEntityUID
 from .device import EnOceanDevice
 from ..entity_properties import HomeAssistantEntityProperties
 
@@ -13,9 +15,12 @@ class EnOceanA53808Device(EnOceanDevice):
 
     def handle_matching_packet(self, packet) -> None:
         """Handle an incoming EnOcean packet."""
+
+        # ignore non A5 packets
         if packet.rorg != 0xA5:
             return
         
+        # ignore commands other than 2
         if packet.data[1] != 0x02:
             return
         
@@ -35,6 +40,12 @@ class EnOceanA53808Device(EnOceanDevice):
         light_callback = self._light_callbacks.get(None)
         if light_callback:
             light_callback(brightness>0, brightness, 0)
+
+    def light_turn_off(self, entity_uid: EnOceanEntityUID) -> None:
+        pass
+
+    def light_turn_on(self, entity_uid: EnOceanEntityUID, brightness: int | None = None, color_temp_kelvin: int | None = None) -> None:
+        pass
 
 # class EnOceanLight(EnOceanEntity, LightEntity):
 #     """Representation of an EnOcean light source."""

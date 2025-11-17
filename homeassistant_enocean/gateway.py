@@ -3,7 +3,7 @@ import logging
 from typing import TypedDict
 
 from enocean.communicators import SerialCommunicator
-from enocean.protocol.packet import Packet, RadioPacket
+from enocean.protocol.packet import Packet, RadioPacket, UTETeachInPacket
 from enocean.utils import to_hex_string
 
 from homeassistant_enocean.device_factories.a53808_factory import EnOceanA53808DeviceFactory
@@ -73,6 +73,10 @@ class EnOceanHomeAssistantGateway:
             EEP(0xD2, 0x01, 0x14): EnOceanD201XXDeviceFactory(),
             EEP(0xD2, 0x05, 0x00): EnOceanD20500DeviceFactory(),
         }
+
+        self.__gateway_sensor_entities: list[HomeAssistantEntityProperties] = [
+            HomeAssistantEntityProperties(unique_id="telegrams_received", sensor_state_class="total_increasing", entity_category="diagnostic"),
+        ]
 
        
     async def start(self) -> None:
@@ -214,6 +218,13 @@ class EnOceanHomeAssistantGateway:
         """Handle incoming EnOcean packet."""
         if not isinstance(packet, RadioPacket):
             return
+        
+        if isinstance(packet, UTETeachInPacket):
+            print(f"Ignoring UTE Teach-In packet from {EnOceanAddress(packet.sender_hex).to_string()}.")
+            response = packet.create_response_packet(self.__base_id.to_bytelist())
+            print(f"Responding with UTE Teach-In response packet to {EnOceanAddress(packet.sender_hex).to_string()}.")
+            #self._send_packet(response)
+            return
 
         # find the device corresponding to the sender address
         device = self.__devices.get(EnOceanAddress(packet.sender_hex))
@@ -243,6 +254,23 @@ class EnOceanHomeAssistantGateway:
                 entities[entity_id] = entity
 
         print(f"Binary sensor entities: {[str(e) for e in entities.keys()]}")
+        return entities
+    
+
+    @property
+    def button_entities(self) -> list[EnOceanEntityID, HomeAssistantEntityProperties]:
+        """Return the list of button entities."""
+        entities = {}
+
+        # iterate over all devices and get their button entities
+        for device in self.__devices.values():
+            for entity in device.button_entities:
+                entity_id = EnOceanEntityID(
+                    device_address=device.enocean_id,
+                    unique_id=entity.unique_id,
+                )
+                entities[entity_id] = entity
+
         return entities
 
     @property
@@ -310,7 +338,11 @@ class EnOceanHomeAssistantGateway:
         return entities
 
 
-
+    # button commands
+    def press_button(self, enocean_entity_id: EnOceanEntityID) -> None:
+        """Simulate a button press."""
+        if device := self.__devices.get(enocean_entity_id.device_address):
+            device.press_button(entity_uid=enocean_entity_id.unique_id)
     
     # cover commands
     def set_cover_position(self, enocean_entity_id: EnOceanEntityID, position: int) -> None:
@@ -323,7 +355,7 @@ class EnOceanHomeAssistantGateway:
     def query_cover_position(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Query the position of a cover device."""
         if device := self.__devices.get(enocean_entity_id.device_address):
-            device.query_cover_position(entity_uid=enocean_entity_id.unique_id)
+            device.query_cover_position_and_angle(entity_uid=enocean_entity_id.unique_id)
 
 
     def stop_cover(self, enocean_entity_id: EnOceanEntityID) -> None:
