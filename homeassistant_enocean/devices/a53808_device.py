@@ -42,9 +42,27 @@ class EnOceanA53808Device(EnOceanDevice):
             light_callback(brightness>0, brightness, 0)
 
     def light_turn_off(self, entity_uid: EnOceanEntityUID) -> None:
+
+        
+
         pass
 
     def light_turn_on(self, entity_uid: EnOceanEntityUID, brightness: int | None = None, color_temp_kelvin: int | None = None) -> None:
+        """Turn the light source on or sets a specific dimmer value."""
+        if brightness is not None:
+            self._attr_brightness = brightness
+
+        if self._attr_brightness is None:
+            self._attr_brightness = 255
+
+        bval = math.floor(self._attr_brightness / 256.0 * 100.0)
+        if bval == 0:
+            bval = 1
+        command = [0xA5, 0x02, bval, 0x01, 0x09]
+        command.extend(self.sender_id.to_bytelist())
+        command.extend([0x00])
+        self.send_packet(command)
+        self._attr_is_on = True
         pass
 
 # class EnOceanLight(EnOceanEntity, LightEntity):

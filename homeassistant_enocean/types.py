@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Callable
+from typing import Callable, TypedDict
 from enocean.protocol.packet import RadioPacket
 
 
@@ -32,3 +32,12 @@ type EnOceanSensorCallback = Callable[[float | datetime], None]
 
 type EnOceanSwitchCallback = Callable[[bool], None]
 """Callback type for switch state changes, with a boolean parameter indicating the new is_on state."""
+
+
+class ValueLabelDict(TypedDict):
+    """Representation of a value/label dictionary."""
+
+    def __init__(self, value: str, label: str) -> None:
+        """Construct a value/label dictionary."""
+        self.value = value
+        self.label = label

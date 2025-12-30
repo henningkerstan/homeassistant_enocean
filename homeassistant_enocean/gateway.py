@@ -1,7 +1,6 @@
 """Representation of an EnOcean gateway."""
 import logging
-from typing import TypedDict
-
+from  .types import ValueLabelDict
 from enocean.communicators import SerialCommunicator
 from enocean.protocol.packet import Packet, RadioPacket, UTETeachInPacket
 from enocean.utils import to_hex_string
@@ -25,14 +24,6 @@ from .address import EnOceanAddress, EnOceanDeviceAddress
 
 _LOGGER = logging.getLogger(__name__)
 
-class ValueLabelDict(TypedDict):
-    """Representation of a value/label dictionary."""
-
-    def __init__(self, value: str, label: str) -> None:
-        """Construct a value/label dictionary."""
-        self.value = value
-        self.label = label
-
 
 
 class EnOceanHomeAssistantGateway:
@@ -46,6 +37,7 @@ class EnOceanHomeAssistantGateway:
         self.__chip_version: int = 0
         self.__sw_version: str = "n/a"
         self.__devices: dict[EnOceanDeviceAddress, EnOceanDevice] = {}
+        self.pairing_mode_active: bool = False
 
         self.__device_factories: dict[EEP, EnOceanDeviceFactory] = {
             EEP(0xA5, 0x07, 0x03): EnOceanA50703DeviceFactory(),
@@ -93,10 +85,7 @@ class EnOceanHomeAssistantGateway:
 
         self.__devices[self.__chip_id] = EnOceanGatewayDevice(
             enocean_id=self.__chip_id,
-            device_type=EnOceanDeviceType(eep=EEP(0, 0, 0), model="TCM300/310 Transmitter", manufacturer="EnOcean"),
-            device_name="Gateway",
-            send_packet=None,
-            sender_id=self.__base_id,
+            valid_sender_ids=self.valid_sender_ids,
         )
 
         # callback needs to be set after initialization
@@ -224,12 +213,15 @@ class EnOceanHomeAssistantGateway:
         if not isinstance(packet, RadioPacket):
             return
         
-        if isinstance(packet, UTETeachInPacket):
-            print(f"Ignoring UTE Teach-In packet from {EnOceanAddress(packet.sender_hex).to_string()}.")
-            response = packet.create_response_packet(self.__base_id.to_bytelist())
-            print(f"Responding with UTE Teach-In response packet to {EnOceanAddress(packet.sender_hex).to_string()}.")
-            #self._send_packet(response)
-            return
+        if self.pairing_mode_active:
+            if isinstance(packet, UTETeachInPacket):
+                print(f"Received UTE Teach-In packet from {EnOceanAddress(packet.sender_hex).to_string()}.")
+                response = packet.create_response_packet(self.__base_id.to_bytelist())
+                print(f"Responding with UTE Teach-In response packet to {EnOceanAddress(packet.sender_hex).to_string()}.")
+                self._send_packet(response)
+                self.pairing_mode_active = False
+                return
+        
 
         # find the device corresponding to the sender address
         device = self.__devices.get(EnOceanAddress(packet.sender_hex))
@@ -294,6 +286,20 @@ class EnOceanHomeAssistantGateway:
 
         return entities
     
+    @property
+    def select_entities(self) -> list[EnOceanEntityID, HomeAssistantEntityProperties]:
+        """Return the list of select entities."""
+        entities = {}
+        # iterate over all devices and get their select entities
+        for device in self.__devices.values():
+            for entity in device.select_entities:
+                entity_id = EnOceanEntityID(
+                    device_address=device.enocean_id,
+                    unique_id=entity.unique_id,
+                )
+                entities[entity_id] = entity
+
+        return entities
 
     @property
     def sensor_entities(self) -> list[EnOceanEntityID, HomeAssistantEntityProperties]:

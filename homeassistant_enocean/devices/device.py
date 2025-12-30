@@ -41,6 +41,7 @@ class EnOceanDevice(ABC):
             HomeAssistantEntityProperties(unique_id="telegrams_received", sensor_state_class="total_increasing", entity_category="diagnostic", last_reset=datetime.datetime.now().astimezone()),
             HomeAssistantEntityProperties(unique_id="last_seen", device_class="timestamp", entity_category="diagnostic"),
         ]
+        self._select_entities: list[HomeAssistantEntityProperties] = []
         self._sensor_entitites: list[HomeAssistantEntityProperties] = []
         self._switch_entities: list[HomeAssistantEntityProperties] = []
         self.initialize_entities()
@@ -94,6 +95,11 @@ class EnOceanDevice(ABC):
         """Return the light entities."""
         return self._light_entities
     
+    @property
+    def select_entities(self) -> list[HomeAssistantEntityProperties]:
+        """Return the select entities."""
+        return self._select_entities
+
     @property
     def sensor_entities(self) -> list[HomeAssistantEntityProperties]:
         """Return the sensor entities."""
