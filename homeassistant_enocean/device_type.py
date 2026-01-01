@@ -378,7 +378,7 @@ class EnOceanDeviceType:
                 unique_id="Jung_ENO",
                 eep=EEP(0xF6, 0x02, 0x01),
                 manufacturer="Jung",
-                model="ENO Series",
+                model="ENO wall switch (2/4 channels)",
             ),
             "Omnio_WS-CH-102": EnOceanDeviceType(
                 unique_id="Omnio_WS-CH-102",

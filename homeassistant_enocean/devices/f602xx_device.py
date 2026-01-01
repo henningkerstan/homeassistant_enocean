@@ -1,18 +1,17 @@
-from homeassistant_enocean.address import EnOceanAddress, EnOceanDeviceAddress
 from homeassistant_enocean.devices.device import EnOceanDevice
 from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 from homeassistant_enocean.types import EnOceanBinarySensorCallback
 from enocean.protocol.packet import RadioPacket
 
 BUTTON_ACTION_UID_MAP = {
-    0x70: "a0",
-    0x50: "a1",
-    0x30: "b0",
-    0x10: "b1",
+    0x30: "a0",
+    0x10: "a1",
+    0x70: "b0",
+    0x50: "b1",
     0x37: "ab0",
     0x15: "ab1",
-    0x17: "a0b1",
-    0x35: "a1b0",
+    0x17: "a1b0",
+    0x35: "a0b1",
 }
 """Mapping of button action codes to unique IDs for EnOcean F6-02-XX devices."""
 
