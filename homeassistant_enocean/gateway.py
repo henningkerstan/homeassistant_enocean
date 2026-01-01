@@ -380,20 +380,23 @@ class EnOceanHomeAssistantGateway:
         """Set the position of a cover device (0 = closed, 100 = open)."""
         if device := self.__devices.get(enocean_entity_id.device_address):
             device.set_cover_position(entity_uid=enocean_entity_id.unique_id, position=position)
-        
-
-
+ 
     def query_cover_position(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Query the position of a cover device."""
         if device := self.__devices.get(enocean_entity_id.device_address):
             device.query_cover_position(entity_uid=enocean_entity_id.unique_id)
-
 
     def stop_cover(self, enocean_entity_id: EnOceanEntityID) -> None:
         """Stop a cover device."""
         if device := self.__devices.get(enocean_entity_id.device_address):
             device.stop_cover(entity_uid=enocean_entity_id.unique_id)
 
+
+    # number commands
+    def set_number_value(self, enocean_entity_id: EnOceanEntityID, value: float) -> None:
+        """Set the value of a number entity."""
+        if device := self.__devices.get(enocean_entity_id.device_address):
+            device.set_number_value(entity_uid=enocean_entity_id.unique_id, value=value)
 
     # light commands
     def light_turn_on(self, enocean_entity_id: EnOceanEntityID, brightness: int | None = None, color_temp_kelvin: int | None = None) -> None:

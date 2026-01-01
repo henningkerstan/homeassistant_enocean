@@ -169,6 +169,11 @@ class EnOceanDevice(ABC):
         """Stop the movement of a cover device."""
         pass
     
+    # number-specific methods
+    def set_number_value(self, entity_uid: EnOceanEntityUID, value: float) -> None:
+        """Set the value of a number entity."""
+        pass
+
     # light-specific methods
     def light_turn_on(self, entity_uid: EnOceanEntityUID, brightness: int | None = None, color_temp_kelvin: int | None = None) -> None:
         """Turn on a light device."""

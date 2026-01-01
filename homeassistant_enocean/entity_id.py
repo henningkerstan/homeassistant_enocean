@@ -3,10 +3,10 @@ from homeassistant_enocean.address import EnOceanDeviceAddress
 class EnOceanEntityID:
     """An EnOcean entity is uniquely identified by its device's ID and a unique ID."""
 
-    def __init__(self, device_address: EnOceanDeviceAddress, unique_id: str) -> None:
+    def __init__(self, device_address: EnOceanDeviceAddress, unique_id: str | None = None) -> None:
         """Construct an EnOcean entity ID."""
         self.__device_address = device_address
-        self.__unique_id = unique_id
+        self.__unique_id: str | None = unique_id
 
     @property 
     def device_address(self) -> EnOceanDeviceAddress:
@@ -20,7 +20,10 @@ class EnOceanEntityID:
 
     def to_string(self) -> str:
         """Return a string representation of the entity."""
-        return f"{self.__device_address.to_string()}.{self.__unique_id}"  if self.__unique_id else f"{self.__device_address.to_string()}"
+        if self.__unique_id:
+            return f"{self.__device_address.to_string()}.{self.__unique_id}"
+        else:
+            return f"{self.__device_address.to_string()}"
 
     def __str__(self) -> str:
         """Return a string representation of the entity."""
