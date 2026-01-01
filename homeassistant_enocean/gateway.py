@@ -291,6 +291,22 @@ class EnOceanHomeAssistantGateway:
         return entities
     
     @property
+    def number_entities(self) -> list[EnOceanEntityID, HomeAssistantEntityProperties]:
+        """Return the list of number entities."""
+        entities = {}
+
+        # iterate over all devices and get their number entities
+        for device in self.__devices.values():
+            for entity in device.number_entities:
+                entity_id = EnOceanEntityID(
+                    device_address=device.enocean_id,
+                    unique_id=entity.unique_id,
+                )
+                entities[entity_id] = entity
+        
+        return entities
+
+    @property
     def select_entities(self) -> list[EnOceanEntityID, HomeAssistantEntityProperties]:
         """Return the list of select entities."""
         entities = {}

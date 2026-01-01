@@ -24,31 +24,40 @@ class EnOceanA53808Device(EnOceanDevice):
         # - ramping_time
         #self._number_entitites;
 
-        self._select_entities = [
+        self._number_entities = [
             HomeAssistantEntityProperties(
             unique_id="ramping_time",
-            options=["1s", "2s", "3s", "4s", "5s", "10s"],
-            current_option="1s",
+            native_min_value=0,
+            native_max_value=255,
+            native_step=1,
+            native_value=1,
             entity_category="diagnostic",
+            native_unit_of_measurement="s"
             ),
             HomeAssistantEntityProperties(
             unique_id="min_brightness",
-            options=[str(i) for i in range(256)],
-            current_option="0",
+            native_min_value=0,
+            native_max_value=255,
+            native_step=1,
+            native_value=0,
             entity_category="diagnostic",
+            native_unit_of_measurement=""
             ),
             HomeAssistantEntityProperties(
             unique_id="max_brightness",
-            options=[str(i) for i in range(256)],
-            current_option="255",
+            native_min_value=0,
+            native_max_value=255,
+            native_step=1,
+            native_value=255,
             entity_category="diagnostic",
+            native_unit_of_measurement=""
             ),
         ]
 
 
     def handle_matching_packet(self, packet) -> None:
         """Handle an incoming EnOcean packet."""
-        
+
         # ignore non A5 packets
         if packet.rorg != RORG_4BS:
             return

@@ -36,6 +36,7 @@ class EnOceanDevice(ABC):
         self._button_entities: list[HomeAssistantEntityProperties] = []
         self._cover_entities: list[HomeAssistantEntityProperties] = []
         self._light_entities: list[HomeAssistantEntityProperties] = []
+        self._number_entities: list[HomeAssistantEntityProperties] = []
         self.__internal_sensor_entities: list[HomeAssistantEntityProperties] = [
             HomeAssistantEntityProperties(unique_id="rssi", native_unit_of_measurement="dBm", device_class="signal_strength", entity_category="diagnostic"),
             HomeAssistantEntityProperties(unique_id="telegrams_received", sensor_state_class="total_increasing", entity_category="diagnostic", last_reset=datetime.datetime.now().astimezone()),
@@ -95,6 +96,11 @@ class EnOceanDevice(ABC):
         """Return the light entities."""
         return self._light_entities
     
+    @property
+    def number_entities(self) -> list[HomeAssistantEntityProperties]:
+        """Return the number entities."""
+        return self._number_entities
+
     @property
     def select_entities(self) -> list[HomeAssistantEntityProperties]:
         """Return the select entities."""
