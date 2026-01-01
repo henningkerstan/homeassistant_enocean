@@ -52,17 +52,29 @@ class EnOceanD20500Device(EnOceanDevice):
     def __send_cover_command(self, command: EnOceanCoverCommand, destination: EnOceanAddress, sender: EnOceanAddress, position: int = 0) -> None:
         """Send an EnOcean telegram with the respective command."""
 
-        packet = RadioPacket.create(
-            rorg=RORG.VLD,
-            rorg_func=0x05,
-            rorg_type=0x00,
-            destination=destination.to_bytelist(),
-            sender=sender.to_bytelist(),
-            command=command.value,
-            POS=position,
-        )
-        print(f"Sending EnOcean cover command {command.name} with position {position} ")
-        self.send_packet(packet)
+        if command == EnOceanCoverCommand.SET_POSITION:
+            packet = RadioPacket.create(
+                rorg=RORG.VLD,
+                rorg_func=0x05,
+                rorg_type=0x00,
+                destination=destination.to_bytelist(),
+                sender=sender.to_bytelist(),
+                command=command.value,
+                POS=position,
+            )
+            # print(f"Sending EnOcean cover command {command.name} with position {position} ")
+            self.send_packet(packet)
+        else:
+            packet = RadioPacket.create(
+                rorg=RORG.VLD,
+                rorg_func=0x05,
+                rorg_type=0x00,
+                destination=destination.to_bytelist(),
+                sender=sender.to_bytelist(),
+                command=command.value,
+            )
+            #print(f"Sending EnOcean cover command {command.name}")
+            self.send_packet(packet)
 
     def set_cover_position(self, entity_uid: EnOceanEntityUID, position: int) -> None:
         """Set the position of a cover device (0 = closed, 100 = open)."""
