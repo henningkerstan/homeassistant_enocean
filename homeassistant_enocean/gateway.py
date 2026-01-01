@@ -213,6 +213,7 @@ class EnOceanHomeAssistantGateway:
         if not isinstance(packet, RadioPacket):
             return
         
+        # in pairing mode, only respond to UTE Teach-In packets and ignore all other packets
         if self.pairing_mode_active:
             if isinstance(packet, UTETeachInPacket):
                 print(f"Received UTE Teach-In packet from {EnOceanAddress(packet.sender_hex).to_string()}.")
@@ -221,12 +222,15 @@ class EnOceanHomeAssistantGateway:
                 self._send_packet(response)
                 self.pairing_mode_active = False
                 return
+            else:
+                return
         
 
         # find the device corresponding to the sender address
         device = self.__devices.get(EnOceanAddress(packet.sender_hex))
         if not device:
-            print(f"Ignoring received packet from unknown device {EnOceanAddress(packet.sender_hex).to_string()}.")
+          #  print(f"Ignoring received packet from unknown device {EnOceanAddress(packet.sender_hex).to_string()}.")
+           # print(f"Packet data: RORG=0x{packet.rorg:02X}, DATA=[{', '.join(f'0x{b:02X}' for b in packet.data)}]")
             return
         
         # print(f"Received packet from '{device.device_name}' ({packet.sender_hex}) with EEP {device.device_type.eep.to_string()}")
