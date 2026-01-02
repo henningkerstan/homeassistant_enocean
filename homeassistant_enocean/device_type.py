@@ -151,15 +151,23 @@ class EnOceanDeviceType:
                 eep=EEP(0xA5, 0x02, 0x1B),
                 model="Temperature Sensor Range +50 °C to +130 °C (UNTESTED)",
             ),
-            # # A5-04 Temperature and Humidity sensors (only types 1 and 2)
-            # "A5-04-01": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x04, 0x01),
-            #     model="Temperature and Humidity Sensor, Range 0 °C to +40 °C and 0% to 100%",
-            # ),
-            # "A5-04-02": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x04, 0x02),
-            #     model="Temperature and Humidity Sensor, Range -20 °C to +60 °C and 0% to 100%",
-            # ),
+            # A5-04 Temperature and Humidity sensors (only types 1 and 2)
+            "A5-04-01": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x04, 0x01),
+                model="Temperature and Humidity Sensor, Range 0 °C to +40 °C and 0% to 100%",
+            ),
+            "A5-04-02": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x04, 0x02),
+                model="Temperature and Humidity Sensor, Range -20 °C to +60 °C and 0% to 100%",
+            ),
+            "A5-04-03": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x04, 0x03),
+                model="Temperature and Humidity Sensor, Range -20°C to +60°C 10bit-measurement and 0% to 100%",
+            ),
+            "A5-04-04": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x04, 0x04),
+                model="Temperature and Humidity Sensor, Range -40°C to +120°C 12bit-measurement and 0% to 100%",
+            ),
             # A5-07 Occupancy Sensors
             "A5-07-03": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x07, 0x03),
@@ -356,7 +364,7 @@ class EnOceanDeviceType:
             #     model="Mechanical Handle - Window Handle",
             # ),
 
-            
+
             # Other Devices
             "Eltako_FUD61NPN": EnOceanDeviceType(
                 unique_id="Eltako_FUD61NPN",
