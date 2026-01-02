@@ -11,7 +11,7 @@ class EnOceanGatewayDevice(EnOceanDevice):
     def __init__(self, enocean_id, valid_sender_ids: list[ValueLabelDict] | None = None) -> None:
         """Initialize the EnOcean Gateway Device."""
         self._valid_sender_ids = valid_sender_ids
-        super().__init__(enocean_id=enocean_id, send_packet=None, device_type=EnOceanDeviceType(eep=EEP(0, 0, 0), model="TCM300/310 Transmitter", manufacturer="EnOcean"), device_name="Gateway", sender_id=None)
+        super().__init__(enocean_id=enocean_id, send_packet=None, device_type=EnOceanDeviceType(eep=EEP(0, 0, 0), model="TCM300/310 Transmitter", manufacturer="EnOcean"), device_name="EnOcean Gateway", sender_id=None)
         
 
     def initialize_entities(self) -> None:
