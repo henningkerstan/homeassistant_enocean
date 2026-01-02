@@ -59,98 +59,98 @@ class EnOceanDeviceType:
         """Get a dictionary mapping from EnOcean device type id to EnOceanSupportedDeviceType."""
         return {
             # A5-02 Temperature Sensors
-            # "A5-02-01": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x01),
-            #     model="Temperature Sensor Range -40 °C to 0 °C",
-            # ),
-            # "A5-02-02": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x02),
-            #     model="Temperature Sensor Range -30 °C to +10 °C",
-            # ),
-            # "A5-02-03": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x03),
-            #     model="Temperature Sensor Range -20 °C to +20 °C",
-            # ),
-            # "A5-02-04": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x04),
-            #     model="Temperature Sensor Range -10 °C to +30 °C",
-            # ),
-            # "A5-02-05": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x05),
-            #     model="Temperature Sensor Range 0 °C to +40 °C",
-            # ),
-            # "A5-02-06": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x06),
-            #     model="Temperature Sensor Range +10 °C to +50 °C",
-            # ),
-            # "A5-02-07": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x07),
-            #     model="Temperature Sensor Range +20 °C to +60 °C",
-            # ),
-            # "A5-02-08": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x08),
-            #     model="Temperature Sensor Range +30 °C to +70 °C",
-            # ),
-            # "A5-02-09": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x09),
-            #     model="Temperature Sensor Range +40 °C to +80 °C",
-            # ),
-            # "A5-02-0A": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x0A),
-            #     model="Temperature Sensor Range +50 °C to +90 °C",
-            # ),
-            # "A5-02-0B": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x0B),
-            #     model="Temperature Sensor Range +60 °C to +100 °C",
-            # ),
-            # "A5-02-10": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x10),
-            #     model="Temperature Sensor Range -60 °C to +20 °C",
-            # ),
-            # "A5-02-11": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x11),
-            #     model="Temperature Sensor Range -50 °C to +30 °C",
-            # ),
-            # "A5-02-12": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x12),
-            #     model="Temperature Sensor Range -40 °C to +40 °C",
-            # ),
-            # "A5-02-13": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x13),
-            #     model="Temperature Sensor Range -30 °C to +50 °C",
-            # ),
-            # "A5-02-14": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x14),
-            #     model="Temperature Sensor Range -20 °C to +60 °C",
-            # ),
-            # "A5-02-15": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x15),
-            #     model="Temperature Sensor Range -10 °C to +70 °C",
-            # ),
-            # "A5-02-16": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x16),
-            #     model="Temperature Sensor Range 0 °C to +80 °C",
-            # ),
-            # "A5-02-17": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x17),
-            #     model="Temperature Sensor Range +10 °C to +90 °C",
-            # ),
-            # "A5-02-18": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x18),
-            #     model="Temperature Sensor Range +20 °C to +100 °C",
-            # ),
-            # "A5-02-19": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x19),
-            #     model="Temperature Sensor Range +30 °C to +110 °C",
-            # ),
-            # "A5-02-1A": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x1A),
-            #     model="Temperature Sensor Range +40 °C to +120 °C",
-            # ),
-            # "A5-02-1B": EnOceanDeviceType(
-            #     eep=EEP(0xA5, 0x02, 0x1B),
-            #     model="Temperature Sensor Range +50 °C to +130 °C",
-            # ),
+            "A5-02-01": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x01),
+                model="Temperature Sensor Range -40 °C to 0 °C (UNTESTED)",
+            ),
+            "A5-02-02": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x02),
+                model="Temperature Sensor Range -30 °C to +10 °C (UNTESTED)",
+            ),
+            "A5-02-03": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x03),
+                model="Temperature Sensor Range -20 °C to +20 °C (UNTESTED)",
+            ),
+            "A5-02-04": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x04),
+                model="Temperature Sensor Range -10 °C to +30 °C (UNTESTED)",
+            ),
+            "A5-02-05": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x05),
+                model="Temperature Sensor Range 0 °C to +40 °C (UNTESTED)",
+            ),
+            "A5-02-06": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x06),
+                model="Temperature Sensor Range +10 °C to +50 °C (UNTESTED)",
+            ),
+            "A5-02-07": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x07),
+                model="Temperature Sensor Range +20 °C to +60 °C (UNTESTED)",
+            ),
+            "A5-02-08": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x08),
+                model="Temperature Sensor Range +30 °C to +70 °C (UNTESTED)",
+            ),
+            "A5-02-09": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x09),
+                model="Temperature Sensor Range +40 °C to +80 °C (UNTESTED)",
+            ),
+            "A5-02-0A": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x0A),
+                model="Temperature Sensor Range +50 °C to +90 °C (UNTESTED)",
+            ),
+            "A5-02-0B": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x0B),
+                model="Temperature Sensor Range +60 °C to +100 °C (UNTESTED)",
+            ),
+            "A5-02-10": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x10),
+                model="Temperature Sensor Range -60 °C to +20 °C (UNTESTED)",
+            ),
+            "A5-02-11": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x11),
+                model="Temperature Sensor Range -50 °C to +30 °C (UNTESTED)",
+            ),
+            "A5-02-12": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x12),
+                model="Temperature Sensor Range -40 °C to +40 °C (UNTESTED)",
+            ),
+            "A5-02-13": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x13),
+                model="Temperature Sensor Range -30 °C to +50 °C (UNTESTED)",
+            ),
+            "A5-02-14": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x14),
+                model="Temperature Sensor Range -20 °C to +60 °C (UNTESTED)",
+            ),
+            "A5-02-15": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x15),
+                model="Temperature Sensor Range -10 °C to +70 °C (UNTESTED)",
+            ),
+            "A5-02-16": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x16),
+                model="Temperature Sensor Range 0 °C to +80 °C (UNTESTED)",
+            ),
+            "A5-02-17": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x17),
+                model="Temperature Sensor Range +10 °C to +90 °C (UNTESTED)",
+            ),
+            "A5-02-18": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x18),
+                model="Temperature Sensor Range +20 °C to +100 °C (UNTESTED)",
+            ),
+            "A5-02-19": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x19),
+                model="Temperature Sensor Range +30 °C to +110 °C (UNTESTED)",
+            ),
+            "A5-02-1A": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x1A),
+                model="Temperature Sensor Range +40 °C to +120 °C (UNTESTED)",
+            ),
+            "A5-02-1B": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x02, 0x1B),
+                model="Temperature Sensor Range +50 °C to +130 °C (UNTESTED)",
+            ),
             # # A5-04 Temperature and Humidity sensors (only types 1 and 2)
             # "A5-04-01": EnOceanDeviceType(
             #     eep=EEP(0xA5, 0x04, 0x01),
@@ -355,6 +355,8 @@ class EnOceanDeviceType:
             #     eep=EEP(0xF6, 0x10, 0x00),
             #     model="Mechanical Handle - Window Handle",
             # ),
+
+            
             # Other Devices
             "Eltako_FUD61NPN": EnOceanDeviceType(
                 unique_id="Eltako_FUD61NPN",

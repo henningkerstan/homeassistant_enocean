@@ -8,6 +8,7 @@ from enocean.utils import to_hex_string
 from homeassistant_enocean.device_factories.a53808_factory import EnOceanA53808DeviceFactory
 from homeassistant_enocean.devices.gateway_device import EnOceanGatewayDevice
 
+from .device_factories.a502xx_factory import EnOceanA502XXDeviceFactory
 from .device_factories.a50703_factory import EnOceanA50703DeviceFactory
 from .device_factories.d201xx_factory import EnOceanD201XXDeviceFactory
 from .device_factories.d20500_factory import EnOceanD20500DeviceFactory
@@ -40,6 +41,31 @@ class EnOceanHomeAssistantGateway:
         self.pairing_mode_active: bool = False
 
         self.__device_factories: dict[EEP, EnOceanDeviceFactory] = {
+            EEP(0xA5, 0x02, 0x01): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x02): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x03): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x04): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x05): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x06): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x07): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x08): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x09): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x0A): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x0B): EnOceanA502XXDeviceFactory(),
+    
+            EEP(0xA5, 0x02, 0x10): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x11): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x12): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x13): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x14): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x15): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x16): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x17): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x18): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x19): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x1A): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x1B): EnOceanA502XXDeviceFactory(),
+
             EEP(0xA5, 0x07, 0x03): EnOceanA50703DeviceFactory(),
             EEP(0xA5, 0x38, 0x08): EnOceanA53808DeviceFactory(),
             EEP(0xF6, 0x02, 0x01): EnOceanF602XXDeviceFactory(),
