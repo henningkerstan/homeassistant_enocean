@@ -9,6 +9,7 @@ from homeassistant_enocean.device_factories.a53808_factory import EnOceanA53808D
 from homeassistant_enocean.devices.gateway_device import EnOceanGatewayDevice
 
 from .device_factories.a502xx_factory import EnOceanA502XXDeviceFactory
+from .device_factories.a504xx_factory import EnOceanA504XXDeviceFactory
 from .device_factories.a50703_factory import EnOceanA50703DeviceFactory
 from .device_factories.d201xx_factory import EnOceanD201XXDeviceFactory
 from .device_factories.d20500_factory import EnOceanD20500DeviceFactory
@@ -41,6 +42,7 @@ class EnOceanHomeAssistantGateway:
         self.pairing_mode_active: bool = False
 
         self.__device_factories: dict[EEP, EnOceanDeviceFactory] = {
+            # A5-02 family
             EEP(0xA5, 0x02, 0x01): EnOceanA502XXDeviceFactory(),
             EEP(0xA5, 0x02, 0x02): EnOceanA502XXDeviceFactory(),
             EEP(0xA5, 0x02, 0x03): EnOceanA502XXDeviceFactory(),
@@ -52,7 +54,6 @@ class EnOceanHomeAssistantGateway:
             EEP(0xA5, 0x02, 0x09): EnOceanA502XXDeviceFactory(),
             EEP(0xA5, 0x02, 0x0A): EnOceanA502XXDeviceFactory(),
             EEP(0xA5, 0x02, 0x0B): EnOceanA502XXDeviceFactory(),
-    
             EEP(0xA5, 0x02, 0x10): EnOceanA502XXDeviceFactory(),
             EEP(0xA5, 0x02, 0x11): EnOceanA502XXDeviceFactory(),
             EEP(0xA5, 0x02, 0x12): EnOceanA502XXDeviceFactory(),
@@ -66,10 +67,23 @@ class EnOceanHomeAssistantGateway:
             EEP(0xA5, 0x02, 0x1A): EnOceanA502XXDeviceFactory(),
             EEP(0xA5, 0x02, 0x1B): EnOceanA502XXDeviceFactory(),
 
+             # A5-04 family
+            EEP(0xA5, 0x04, 0x01): EnOceanA504XXDeviceFactory(),
+            EEP(0xA5, 0x04, 0x02): EnOceanA504XXDeviceFactory(),
+            EEP(0xA5, 0x04, 0x03): EnOceanA504XXDeviceFactory(),
+            EEP(0xA5, 0x04, 0x04): EnOceanA504XXDeviceFactory(),
+
+            # A5-07-03
             EEP(0xA5, 0x07, 0x03): EnOceanA50703DeviceFactory(),
+
+            # A5-38-08
             EEP(0xA5, 0x38, 0x08): EnOceanA53808DeviceFactory(),
+
+            # F6-02 family
             EEP(0xF6, 0x02, 0x01): EnOceanF602XXDeviceFactory(),
             EEP(0xF6, 0x02, 0x02): EnOceanF602XXDeviceFactory(),
+
+            # D2-01 family
             EEP(0xD2, 0x01, 0x01): EnOceanD201XXDeviceFactory(),
             EEP(0xD2, 0x01, 0x02): EnOceanD201XXDeviceFactory(),
             EEP(0xD2, 0x01, 0x03): EnOceanD201XXDeviceFactory(),
