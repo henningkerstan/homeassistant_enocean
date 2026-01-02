@@ -66,6 +66,8 @@ class EnOceanHomeAssistantGateway:
             EEP(0xA5, 0x02, 0x19): EnOceanA502XXDeviceFactory(),
             EEP(0xA5, 0x02, 0x1A): EnOceanA502XXDeviceFactory(),
             EEP(0xA5, 0x02, 0x1B): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x20): EnOceanA502XXDeviceFactory(),
+            EEP(0xA5, 0x02, 0x30): EnOceanA502XXDeviceFactory(),
 
              # A5-04 family
             EEP(0xA5, 0x04, 0x01): EnOceanA504XXDeviceFactory(),
