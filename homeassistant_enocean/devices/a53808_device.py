@@ -9,7 +9,6 @@ RORG_4BS = 0xA5
 FUNC = 0x38
 CMD_DIMMING = 0x02
 
-
 EDIMR_ABSOLUTE = 0
 EDIMR_RELATIVE = 1
 
@@ -59,7 +58,7 @@ class EnOceanA53808Device(EnOceanDevice):
         ]
 
         self._sensor_entitites = [
-            HomeAssistantEntityProperties(unique_id="device_brightness", device_class="percentage", native_unit_of_measurement="", entity_category="diagnostic"),
+            HomeAssistantEntityProperties(unique_id="device_brightness", device_class="percentage", native_unit_of_measurement="%", entity_category="diagnostic"),
             HomeAssistantEntityProperties(unique_id="dimming_range", device_class="enum", options=["0 - 255", "0 - 100"], entity_category="diagnostic"),
         ]
 
@@ -76,24 +75,16 @@ class EnOceanA53808Device(EnOceanDevice):
             return
         
         edim = 0
-        rmp = 0
         edimr = 0
-        str = 0
         sw = 0
         
         try:
             packet.parse_eep(rorg_func=FUNC, rorg_type=0x08, command=CMD_DIMMING)
             edim = packet.parsed["EDIM"]["raw_value"]
-            rmp = packet.parsed["RMP"]["raw_value"]
             edimr = packet.parsed["EDIMR"]["raw_value"]
-            str = packet.parsed["STR"]["raw_value"]
             sw = packet.parsed["SW"]["raw_value"]
 
-            print(f"EnOcean A5-38-08 light edim {edim}, command: 0x02 Dimming, ramping time: {rmp}s, dimming range {'absolute' if edimr == 0 else 'relative'}, store final value {str}, switching command {'yes' if sw else 'no'}")
-
-        except Exception as e:
-            print(f"Error parsing A5-38-08 packet: {e}")
-            print(f"Packet: {packet}")
+        except Exception:
             return
 
         dimming_range = "0 - 255" if edimr == EDIMR_ABSOLUTE else "0 - 100"
@@ -101,23 +92,16 @@ class EnOceanA53808Device(EnOceanDevice):
         if dimming_range_callback:
             dimming_range_callback(dimming_range)
 
-        
-
         device_brightness_relative = edim if edimr == EDIMR_RELATIVE else edim * 100 / 255.0
-
         device_brightness_callback = self._sensor_callbacks.get("device_brightness")
         if device_brightness_callback:
             device_brightness_callback(device_brightness_relative)
         
-
         homeassistant_brightness = self.convert_relative_device_brightness_to_absolute_home_assistant_brightness(device_brightness_relative/100.0)
-      
         light_callback = self._light_callbacks.get(None)
         if light_callback:
             light_callback(sw>0, homeassistant_brightness, 0)
 
-
-        
 
     def light_turn_off(self, entity_uid: EnOceanEntityUID) -> None:
         """Turn the light source off."""
@@ -192,7 +176,7 @@ class EnOceanA53808Device(EnOceanDevice):
         if brightness is None:
             brightness = 255
         
-        # 1. set device brightness
+        # 1. set device brightness by sending the respective EnOcean telegram
         packet = RadioPacket.create(
             rorg=RORG_4BS,
             rorg_func=FUNC,
@@ -250,9 +234,9 @@ class EnOceanA53808Device(EnOceanDevice):
 
         return math.floor(ha_brightness)
         
-        
     
     def convert_absolute_home_assistant_brightness_to_relative_device_brightness(self, absolute_homeassistant_brightness: float) -> float:
         """Convert an absolute brightness value in Home Assistant interval [0, 255] to a relative brightness value in [min_brightness..max_brightness]."""
         device_brightness = self._min_brightness / 100.0 + (self._brightness_range / 25000.0) * absolute_homeassistant_brightness
         return device_brightness
+    
