@@ -409,6 +409,11 @@ class EnOceanHomeAssistantGateway:
         if device := self.__devices.get(enocean_entity_id.device_address):
             device.light_turn_off(entity_uid=enocean_entity_id.unique_id)
 
+    # select commands
+    def select_option(self, enocean_entity_id: EnOceanEntityID, option: str) -> None:
+        """Set the option of a select entity."""
+        if device := self.__devices.get(enocean_entity_id.device_address):
+            device.select_option(entity_uid=enocean_entity_id.unique_id, option=option)
 
     # switch commands
     def switch_turn_on(self, enocean_entity_id: EnOceanEntityID) -> None:
