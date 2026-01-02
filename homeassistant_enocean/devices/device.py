@@ -183,6 +183,11 @@ class EnOceanDevice(ABC):
         """Turn off a light device."""
         pass
 
+    # select-specific methods
+    def select_option(self, entity_uid: EnOceanEntityUID, option: str) -> None:
+        """Set the option of a select entity."""
+        pass
+
     # switch-specific methods
     def switch_turn_on(self, entity_uid: EnOceanEntityUID) -> None:
         """Turn on a switch device."""
