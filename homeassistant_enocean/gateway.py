@@ -12,6 +12,7 @@ from .device_factories.a502xx_factory import EnOceanA502XXDeviceFactory
 from .device_factories.a504xx_factory import EnOceanA504XXDeviceFactory
 from .device_factories.a50601_factory import EnOceanA50601DeviceFactory
 from .device_factories.a50703_factory import EnOceanA50703DeviceFactory
+from .device_factories.a50801_factory import EnOceanA50801DeviceFactory
 from .device_factories.d201xx_factory import EnOceanD201XXDeviceFactory
 from .device_factories.d20500_factory import EnOceanD20500DeviceFactory
 from .device_factories.device_factory import EnOceanDeviceFactory
@@ -81,6 +82,9 @@ class EnOceanHomeAssistantGateway:
 
             # A5-07-03
             EEP(0xA5, 0x07, 0x03): EnOceanA50703DeviceFactory(),
+
+            # A5-08-01
+            EEP(0xA5, 0x08, 0x01): EnOceanA50801DeviceFactory(),  
 
             # A5-38-08
             EEP(0xA5, 0x38, 0x08): EnOceanA53808DeviceFactory(),

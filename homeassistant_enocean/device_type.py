@@ -191,6 +191,11 @@ class EnOceanDeviceType:
                 model="Occupancy with Supply voltage monitor and 10-bit illumination measurement",
             ),
 
+            "A5-08-01": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x08, 0x01),
+                model="Light, temperature and occupancy sensor, range 0lx to 510lx, 0°C to 51°C and occupancy button (UNTESTED)",
+            ),
+
             # # A5-10 Room Operating Panels
             # "A5-10-01": EnOceanDeviceType(
             #     eep=EEP(0xA5, 0x10, 0x01),
@@ -388,6 +393,12 @@ class EnOceanDeviceType:
                 eep=EEP(0xA5, 0x06, 0x01, manufacturer_id=0x0D),
                 manufacturer="Eltako",
                 model="FAH65s Wireless outdoor brightness sensor",
+            ),
+            "Eltako_FABH65S": EnOceanDeviceType(
+                unique_id="Eltako_FABH65S",
+                eep=EEP(0xA5, 0x08, 0x01, manufacturer_id=0x0D),
+                manufacturer="Eltako",
+                model="FABH65S Wireless outdoor occupancy and brightness sensor",
             ),
             "Eltako_FUD61NPN": EnOceanDeviceType(
                 unique_id="Eltako_FUD61NPN",
