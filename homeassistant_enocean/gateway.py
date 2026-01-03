@@ -35,7 +35,12 @@ class EnOceanHomeAssistantGateway:
 
     def __init__(self, serial_path: str) -> None:
         """Initialize the EnOcean gateway."""
-        self.__communicator: SerialCommunicator = SerialCommunicator(port=serial_path)
+        self.__communicator: SerialCommunicator | None = None
+        try:
+            self.__communicator: SerialCommunicator = SerialCommunicator(port=serial_path)
+        except Exception as e:
+            _LOGGER.error(f"Failed to initialize EnOcean SerialCommunicator: {e}")
+            raise e
         self.__base_id: EnOceanAddress = EnOceanAddress(0)
         self.__chip_id: EnOceanAddress = EnOceanAddress(0)
         self.__chip_version: int = 0
@@ -120,18 +125,23 @@ class EnOceanHomeAssistantGateway:
        
     async def start(self) -> None:
         """Start the EnOcean gateway."""
-        self.__communicator.start()
-        self.__chip_id = EnOceanAddress(to_hex_string(self.__communicator.chip_id))
-        self.__base_id = EnOceanAddress(to_hex_string(self.__communicator.base_id))
+        try:
+            if not self.__communicator:
+                raise RuntimeError("EnOcean SerialCommunicator is not initialized.")
+            self.__communicator.start()
+            self.__chip_id = EnOceanAddress(to_hex_string(self.__communicator.chip_id))
+            self.__base_id = EnOceanAddress(to_hex_string(self.__communicator.base_id))
+            self.__chip_version = self.__communicator.version_info.chip_version
 
-        self.__chip_version = self.__communicator.version_info.chip_version
-
-        self.__sw_version = (
-            self.__communicator.version_info.app_version.versionString()
-            + " (App), "
-            + self.__communicator.version_info.api_version.versionString()
-            + " (API)"
-        )
+            self.__sw_version = (
+                self.__communicator.version_info.app_version.versionString()
+                + " (App), "
+                + self.__communicator.version_info.api_version.versionString()
+                + " (API)"
+            )
+        except Exception as e:
+            _LOGGER.error(f"Failed to start EnOcean SerialCommunicator: {e}")
+            raise e
 
         self.__devices[self.__chip_id] = EnOceanGatewayDevice(
             enocean_id=self.__chip_id,
