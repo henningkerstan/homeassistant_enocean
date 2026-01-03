@@ -24,8 +24,7 @@ class EnOceanGatewayDevice(EnOceanDevice):
         valid_sender_ids = []
         if self._valid_sender_ids:
             valid_sender_ids = [option["label"] for option in self._valid_sender_ids]
-            
-    
+        
 
         self._binary_sensor_entities = [
             HomeAssistantEntityProperties(unique_id="pairing", entity_category="diagnostic"),
@@ -36,7 +35,6 @@ class EnOceanGatewayDevice(EnOceanDevice):
         ]
 
         self._sensor_entitites = [
-            HomeAssistantEntityProperties(unique_id="base_id", entity_category="diagnostic", native_unit_of_measurement=""),
             HomeAssistantEntityProperties(unique_id="pairing_timeout", entity_category="diagnostic", native_unit_of_measurement="s"),
         ]
 

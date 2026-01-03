@@ -1,12 +1,12 @@
 class EEP:
     """Representation of an EnOcean Equipment Profile (EEP)."""
 
-    def __init__(self, rorg: int, func: int, type_: int) -> None:
+    def __init__(self, rorg: int, func: int, type_: int, manufacturer_id: int | None = None) -> None:
         """Construct an EnOcean Equipment Profile."""
         self.rorg = rorg
         self.func = func
         self.type = type_
-
+        self.manufacturer_id = manufacturer_id # see https://www.enocean.com/wp-content/uploads/application-notes/new_AN514_EnOcean_Link_Profiles.pdf
 
     @classmethod
     def supported_eeps(cls) -> list["EEP"]:

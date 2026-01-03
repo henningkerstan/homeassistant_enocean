@@ -10,6 +10,7 @@ from homeassistant_enocean.devices.gateway_device import EnOceanGatewayDevice
 
 from .device_factories.a502xx_factory import EnOceanA502XXDeviceFactory
 from .device_factories.a504xx_factory import EnOceanA504XXDeviceFactory
+from .device_factories.a50601_factory import EnOceanA50601DeviceFactory
 from .device_factories.a50703_factory import EnOceanA50703DeviceFactory
 from .device_factories.d201xx_factory import EnOceanD201XXDeviceFactory
 from .device_factories.d20500_factory import EnOceanD20500DeviceFactory
@@ -74,6 +75,9 @@ class EnOceanHomeAssistantGateway:
             EEP(0xA5, 0x04, 0x02): EnOceanA504XXDeviceFactory(),
             EEP(0xA5, 0x04, 0x03): EnOceanA504XXDeviceFactory(),
             EEP(0xA5, 0x04, 0x04): EnOceanA504XXDeviceFactory(),
+
+            # A5-06-01
+            EEP(0xA5, 0x06, 0x01): EnOceanA50601DeviceFactory(),
 
             # A5-07-03
             EEP(0xA5, 0x07, 0x03): EnOceanA50703DeviceFactory(),
@@ -271,7 +275,8 @@ class EnOceanHomeAssistantGateway:
         # find the device corresponding to the sender address
         device = self.__devices.get(EnOceanAddress(packet.sender_hex))
         if not device:
-          #  print(f"Ignoring received packet from unknown device {EnOceanAddress(packet.sender_hex).to_string()}.")
+           # print(f"Ignoring received packet from unknown device {EnOceanAddress(packet.sender_hex).to_string()}.")
+           # print(f"packet: {packet}")
            # print(f"Packet data: RORG=0x{packet.rorg:02X}, DATA=[{', '.join(f'0x{b:02X}' for b in packet.data)}]")
             return
         

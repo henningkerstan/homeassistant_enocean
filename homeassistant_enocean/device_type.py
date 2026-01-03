@@ -178,7 +178,13 @@ class EnOceanDeviceType:
                 eep=EEP(0xA5, 0x04, 0x04),
                 model="Temperature and Humidity Sensor, Range -40°C to +120°C 12bit-measurement and 0% to 100% (UNTESTED)",
             ),
-            
+
+            # A5-06 Light Sensor
+            "A5-06-01": EnOceanDeviceType(
+                eep=EEP(0xA5, 0x06, 0x01),
+                model="Light Sensor, Range 300lx to 60.000lx (UNTESTED)",
+            ),
+
             # A5-07 Occupancy Sensors
             "A5-07-03": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x07, 0x03),
@@ -377,6 +383,12 @@ class EnOceanDeviceType:
 
 
             # Other Devices
+            "Eltako_FAH65s": EnOceanDeviceType(
+                unique_id="Eltako_FAH65s",
+                eep=EEP(0xA5, 0x06, 0x01, manufacturer_id=0x0D),
+                manufacturer="Eltako",
+                model="FAH65s Wireless outdoor brightness sensor",
+            ),
             "Eltako_FUD61NPN": EnOceanDeviceType(
                 unique_id="Eltako_FUD61NPN",
                 eep=EEP(0xA5, 0x38, 0x08),
