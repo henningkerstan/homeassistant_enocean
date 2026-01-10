@@ -53,7 +53,7 @@ class EnOceanD201XXDevice(EnOceanDevice):
         channel = packet.parsed["IO"]["raw_value"]
         output = packet.parsed["OV"]["raw_value"]   
 
-        print(f"EnOcean D2-01-{self.device_type.eep.type:02X} switch channel {channel} output {output}")
+        #print(f"EnOcean D2-01-{self.device_type.eep.type:02X} switch channel {channel} output {output}")
 
         callback = None 
         if self.device_type.eep.type in (0x10, 0x11, 0x12, 0x13, 0x14):

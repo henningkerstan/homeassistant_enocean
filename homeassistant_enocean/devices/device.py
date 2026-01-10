@@ -6,7 +6,7 @@ from ..types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanEn
 from ..device_type import EnOceanDeviceType
 from ..address import EnOceanAddress, EnOceanDeviceAddress
 from abc import abstractmethod, ABC
-from enocean.protocol.packet import RadioPacket
+from enocean.protocol.packet import RadioPacket, UTETeachInPacket
 
 
 class EnOceanDevice(ABC):
@@ -118,8 +118,12 @@ class EnOceanDevice(ABC):
 
     
     def handle_packet(self, packet: RadioPacket) -> None:
-        """Handle an incoming EnOcean packet."""
+        """Handle an incoming EnOcean packet; this will ignore UTE packets."""
         #print(f"EEPHandler.handle_packet: Checking packet from sender {EnOceanAddress.from_number(packet.sender_int)} against device ID {enocean_id.to_string()}")
+
+        if isinstance(packet, UTETeachInPacket):
+            return
+
         if packet.sender_int == self.enocean_id.to_number():
             rssi_callback = self._sensor_callbacks.get("rssi")
             if rssi_callback:

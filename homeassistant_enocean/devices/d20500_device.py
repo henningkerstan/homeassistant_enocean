@@ -27,10 +27,7 @@ class EnOceanD20500Device(EnOceanDevice):
     def  initialize_entities(self) -> None:
         """Initialize the entities handled by this EEP handler."""
         self._cover_entities = [HomeAssistantEntityProperties(supported_features=1|2|4|8)]  # open, close, stop, set position
-        #self.__send_cover_command(command=EnOceanCoverCommand.QUERY_POSITION, destination=enocean_id, sender=sender_id )
         self._button_entities = [HomeAssistantEntityProperties(unique_id="query_state", entity_category="diagnostic")]
-
-
 
 
     def handle_matching_packet(self, packet) -> None:

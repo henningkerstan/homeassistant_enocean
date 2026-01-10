@@ -2,6 +2,10 @@
 
 This module provides the EnOceanAddress class for handling EnOcean four byte (32 bit) addresses,
 including parsing, validation, and conversion between integer and string formats.
+
+For more information on EnOcean addressing, see 
+  - https://www.enocean-alliance.org/wp-content/uploads/2021/03/EURID-v1.2.pdf
+  - https://www.enocean.com/de/faq-knowledge-base/what-is-difference-between-base-id-and-chip-id/
 """
 
 
@@ -124,7 +128,7 @@ class EnOceanAddress:
 
 
 class EnOceanDeviceAddress(EnOceanAddress):
-    """Representation of an EnOcean device address.
+    """Representation of an EnOcean device address (EURID).
 
     Device addresses are in the range 00:00:00:00 to FF:7F:FF:FF.
     """

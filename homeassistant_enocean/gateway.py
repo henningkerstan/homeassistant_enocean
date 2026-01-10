@@ -38,15 +38,17 @@ class EnOceanHomeAssistantGateway:
         self.__communicator: SerialCommunicator | None = None
         try:
             self.__communicator: SerialCommunicator = SerialCommunicator(port=serial_path)
+            self.__communicator.teach_in = False
         except Exception as e:
             _LOGGER.error(f"Failed to initialize EnOcean SerialCommunicator: {e}")
             raise e
+        
         self.__base_id: EnOceanAddress = EnOceanAddress(0)
         self.__chip_id: EnOceanAddress = EnOceanAddress(0)
         self.__chip_version: int = 0
         self.__sw_version: str = "n/a"
         self.__devices: dict[EnOceanDeviceAddress, EnOceanDevice] = {}
-        self.pairing_mode_active: bool = False
+        self.__gateway_device: EnOceanGatewayDevice | None = None
 
         self.__device_factories: dict[EEP, EnOceanDeviceFactory] = {
             # A5-02 family
@@ -143,10 +145,13 @@ class EnOceanHomeAssistantGateway:
             _LOGGER.error(f"Failed to start EnOcean SerialCommunicator: {e}")
             raise e
 
-        self.__devices[self.__chip_id] = EnOceanGatewayDevice(
+        # add the gateway device
+        self.__gateway_device = EnOceanGatewayDevice(
             enocean_id=self.__chip_id,
             valid_sender_ids=self.valid_sender_ids,
+            base_id=self.valid_sender_ids[1]
         )
+        self.__devices[self.__chip_id] = self.__gateway_device
 
         # callback needs to be set after initialization
         # in order for chip_id and base_id to be available
@@ -238,7 +243,7 @@ class EnOceanHomeAssistantGateway:
                 ValueLabelDict(
                     value=EnOceanAddress(base_id_int + i).to_string(),
                     label="Base ID + "
-                    + str(i)
+                    + "{:03d}".format(i)
                     + " ("
                     + EnOceanAddress(base_id_int + i).to_string()
                     + ")",
@@ -273,34 +278,20 @@ class EnOceanHomeAssistantGateway:
         if not isinstance(packet, RadioPacket):
             return
         
-        # in pairing mode, only respond to UTE Teach-In packets and ignore all other packets
-        if self.pairing_mode_active:
-            if isinstance(packet, UTETeachInPacket):
-                print(f"Received UTE Teach-In packet from {EnOceanAddress(packet.sender_hex).to_string()}.")
-                response = packet.create_response_packet(self.__base_id.to_bytelist())
-                print(f"Responding with UTE Teach-In response packet to {EnOceanAddress(packet.sender_hex).to_string()}.")
-                self._send_packet(response)
-                self.pairing_mode_active = False
-                return
-            else:
-                return
-        
+        # in learning mode, let the gateway device handle the packet
+        if self.__gateway_device and self.__gateway_device.is_learning:
+            if new_device := self.__gateway_device.teach(packet, self._send_packet):
+                print(f"Learned new device with address {new_device.to_string()}.")
+                #self.add_device()
+                return 
 
-        # find the device corresponding to the sender address
-        device = self.__devices.get(EnOceanAddress(packet.sender_hex))
-        if not device:
-           # print(f"Ignoring received packet from unknown device {EnOceanAddress(packet.sender_hex).to_string()}.")
-           # print(f"packet: {packet}")
-           # print(f"Packet data: RORG=0x{packet.rorg:02X}, DATA=[{', '.join(f'0x{b:02X}' for b in packet.data)}]")
-            return
-        
-        # print(f"Received packet from '{device.device_name}' ({packet.sender_hex}) with EEP {device.device_type.eep.to_string()}")
-        device.handle_packet(packet)
-        
 
+        # else, find the device corresponding to the sender address
+        if device := self.__devices.get(EnOceanAddress(packet.sender_hex)):
+            device.handle_packet(packet)
+    
 
     # Entity listings
-
     @property
     def binary_sensor_entities(self) -> list[EnOceanEntityID, HomeAssistantEntityProperties]:
         """Return the list of binary sensor entities."""
@@ -315,7 +306,6 @@ class EnOceanHomeAssistantGateway:
                 )
                 entities[entity_id] = entity
 
-        print(f"Binary sensor entities: {[str(e) for e in entities.keys()]}")
         return entities
     
 
@@ -432,7 +422,7 @@ class EnOceanHomeAssistantGateway:
 
     # button commands
     def press_button(self, enocean_entity_id: EnOceanEntityID) -> None:
-        """Simulate a button press."""
+        """Press a button entity."""
         if device := self.__devices.get(enocean_entity_id.device_address):
             device.press_button(entity_uid=enocean_entity_id.unique_id)
     
@@ -470,11 +460,13 @@ class EnOceanHomeAssistantGateway:
         if device := self.__devices.get(enocean_entity_id.device_address):
             device.light_turn_off(entity_uid=enocean_entity_id.unique_id)
 
+
     # select commands
     def select_option(self, enocean_entity_id: EnOceanEntityID, option: str) -> None:
         """Set the option of a select entity."""
         if device := self.__devices.get(enocean_entity_id.device_address):
             device.select_option(entity_uid=enocean_entity_id.unique_id, option=option)
+
 
     # switch commands
     def switch_turn_on(self, enocean_entity_id: EnOceanEntityID) -> None:
