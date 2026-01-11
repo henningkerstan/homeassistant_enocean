@@ -107,6 +107,7 @@ class EnOceanGatewayDevice(EnOceanDevice):
 
     
 
+
     @property
     def is_learning(self) -> bool:
         return self.__learning_mode_active

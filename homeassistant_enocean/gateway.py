@@ -1,6 +1,6 @@
 """Representation of an EnOcean gateway."""
 import logging
-from  .types import ValueLabelDict
+from  .types import HomeAssistantTaskCreator, ValueLabelDict
 from .serialcommunicator import EnOceanSerialCommunicator
 from enocean.protocol.packet import Packet, RadioPacket, UTETeachInPacket
 from enocean.utils import to_hex_string
@@ -33,7 +33,7 @@ _LOGGER = logging.getLogger(__name__)
 class EnOceanHomeAssistantGateway:
     """Representation of an EnOcean gateway for Home Assistant."""
 
-    def __init__(self, serial_path: str) -> None:
+    def __init__(self, serial_path: str, create_task: HomeAssistantTaskCreator) -> None:
         """Initialize the EnOcean gateway."""
         self.__communicator: EnOceanSerialCommunicator | None = None
         try:
@@ -49,6 +49,7 @@ class EnOceanHomeAssistantGateway:
         self.__sw_version: str = "n/a"
         self.__devices: dict[EnOceanDeviceAddress, EnOceanDevice] = {}
         self.__gateway_device: EnOceanGatewayDevice | None = None
+        self.__create_task: HomeAssistantTaskCreator = create_task
 
         self.__device_factories: dict[EEP, EnOceanDeviceFactory] = {
             # A5-02 family
@@ -178,7 +179,7 @@ class EnOceanHomeAssistantGateway:
                 return
 
             factory = self.__device_factories[device_type.eep]   
-            device: EnOceanDevice = factory.create_device(enocean_id=enocean_id, device_type=device_type, send_packet=self._send_packet, device_name=device_name, sender_id=sender_id)
+            device: EnOceanDevice = factory.create_device(enocean_id=enocean_id, device_type=device_type, send_packet=self._send_packet, device_name=device_name, sender_id=sender_id, create_task=self.__create_task)
             self.__devices[enocean_id] = device
             
             

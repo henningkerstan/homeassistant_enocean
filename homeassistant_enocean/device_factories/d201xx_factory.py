@@ -7,7 +7,7 @@ from ..eep import EEP
 
 class EnOceanD201XXDeviceFactory(EnOceanDeviceFactory):
     """Factory class to create EnOcean D2-01-XX device handlers based on EEP."""
-    def create_device(self, enocean_id: EnOceanDeviceAddress, device_type: EnOceanDeviceType, send_packet: EnOceanSendRadioPacket | None = None, device_name: str | None = None, sender_id: EnOceanAddress=None) -> EnOceanD201XXDevice:
+    def _create_device(self, enocean_id: EnOceanDeviceAddress, device_type: EnOceanDeviceType, send_packet: EnOceanSendRadioPacket | None = None, device_name: str | None = None, sender_id: EnOceanAddress=None) -> EnOceanD201XXDevice:
         """Create an EnOcean D201XX device handler based on the provided EEP."""
 
         supported_eeps = [

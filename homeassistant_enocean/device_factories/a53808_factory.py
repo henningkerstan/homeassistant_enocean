@@ -8,7 +8,7 @@ from ..types import EnOceanSendRadioPacket
 
 class EnOceanA53808DeviceFactory(EnOceanDeviceFactory):
     """Factory class to create EnOcean A5-38-08 device handlers based on EEP."""
-    def create_device(self, enocean_id: EnOceanDeviceAddress, device_type: EnOceanDeviceType, send_packet: EnOceanSendRadioPacket | None = None, device_name: str | None = None, sender_id: EnOceanAddress=None) -> EnOceanA53808Device:
+    def _create_device(self, enocean_id: EnOceanDeviceAddress, device_type: EnOceanDeviceType, send_packet: EnOceanSendRadioPacket | None = None, device_name: str | None = None, sender_id: EnOceanAddress=None) -> EnOceanA53808Device:
         """Create an EnOcean A53808 device handler based on the provided EEP."""
     
         if device_type.eep == EEP(0xA5, 0x38, 0x08):

@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import IntEnum
-from typing import Callable, TypedDict
+from typing import Any, Callable, Coroutine, TypedDict
 from enocean.protocol.packet import RadioPacket
 
 
@@ -64,3 +64,6 @@ class VersionInfo:
   chip_id: 0
   chip_version = 0
   app_description = ''
+
+
+type HomeAssistantTaskCreator = Callable[[Coroutine[Any, Any, Any], str | None], None] 

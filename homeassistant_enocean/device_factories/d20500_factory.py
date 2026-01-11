@@ -7,7 +7,7 @@ from ..eep import EEP
 
 class EnOceanD20500DeviceFactory(EnOceanDeviceFactory):
     """Factory class to create EnOcean D20500 device handlers based on EEP."""
-    def create_device(self, enocean_id: EnOceanDeviceAddress, device_type: EnOceanDeviceType, send_packet: EnOceanSendRadioPacket | None = None, device_name: str | None = None, sender_id: EnOceanAddress=None) -> EnOceanD20500Device:
+    def _create_device(self, enocean_id: EnOceanDeviceAddress, device_type: EnOceanDeviceType, send_packet: EnOceanSendRadioPacket | None = None, device_name: str | None = None, sender_id: EnOceanAddress=None) -> EnOceanD20500Device:
         """Create an EnOcean D20500 device handler based on the provided EEP."""
 
         if device_type.eep == EEP(0xD2, 0x05, 0x00):
