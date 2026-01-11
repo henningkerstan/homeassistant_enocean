@@ -1,7 +1,7 @@
 """Representation of an EnOcean gateway."""
 import logging
 from  .types import ValueLabelDict
-from enocean.communicators import SerialCommunicator
+from .serialcommunicator import EnOceanSerialCommunicator
 from enocean.protocol.packet import Packet, RadioPacket, UTETeachInPacket
 from enocean.utils import to_hex_string
 
@@ -35,12 +35,12 @@ class EnOceanHomeAssistantGateway:
 
     def __init__(self, serial_path: str) -> None:
         """Initialize the EnOcean gateway."""
-        self.__communicator: SerialCommunicator | None = None
+        self.__communicator: EnOceanSerialCommunicator | None = None
         try:
-            self.__communicator: SerialCommunicator = SerialCommunicator(port=serial_path)
+            self.__communicator: EnOceanSerialCommunicator = EnOceanSerialCommunicator(port=serial_path)
             self.__communicator.teach_in = False
         except Exception as e:
-            _LOGGER.error(f"Failed to initialize EnOcean SerialCommunicator: {e}")
+            _LOGGER.error(f"Failed to initialize EnOceanSerialCommunicator: {e}")
             raise e
         
         self.__base_id: EnOceanAddress = EnOceanAddress(0)

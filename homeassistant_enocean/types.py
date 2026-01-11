@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import IntEnum
 from typing import Callable, TypedDict
 from enocean.protocol.packet import RadioPacket
 
@@ -41,3 +42,25 @@ class ValueLabelDict(TypedDict):
         """Construct a value/label dictionary."""
         self.value = value
         self.label = label
+
+
+class COMMON_COMMAND(IntEnum):
+    CO_RD_VERSION = 0x03
+    CO_RD_IDBASE = 0x08
+
+
+class VersionIdentifier:
+  main: int = 0
+  beta: int = 0
+  alpha: int = 0
+  build: int = 0
+
+  def versionString(self) -> str:
+    return f"{self.main}.{self.beta}.{self.alpha}{f'b{self.build}' if self.build else ''}"
+
+class VersionInfo:
+  app_version: VersionIdentifier = VersionIdentifier()
+  api_version: VersionIdentifier = VersionIdentifier()
+  chip_id: 0
+  chip_version = 0
+  app_description = ''

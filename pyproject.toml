@@ -1,6 +1,6 @@
 [project]
 name = "homeassistant_enocean"
-version = "0.0.2"
+version = "0.0.3"
 authors = [
   { name="Henning Kerstan", email="mail@henningkerstan.de" },
 ]
@@ -14,7 +14,7 @@ classifiers = [
 license = "Apache-2.0"
 license-files = ["LICENSE*"]
 dependencies = [
-  "enocean==0.60.1"
+  "enocean4ha==0.71.0"
 ]
 
 [project.urls]
