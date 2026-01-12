@@ -3,13 +3,21 @@ from .device_factory import EnOceanDeviceFactory
 from ..device_type import EnOceanDeviceType
 from ..devices.a502xx_device import EnOceanA502XXDevice
 from ..eep import EEP
-from ..types import EnOceanSendRadioPacket
+from ..types import EnOceanSendRadioPacket, HomeAssistantTaskCreator
 
 
 class EnOceanA502XXDeviceFactory(EnOceanDeviceFactory):
-    """Factory class to create EnOcean A5-02-XX device handlers based on EEP."""
-    def _create_device(self, enocean_id: EnOceanDeviceAddress, device_type: EnOceanDeviceType, send_packet: EnOceanSendRadioPacket | None = None, device_name: str | None = None, sender_id: EnOceanAddress=None) -> EnOceanA502XXDevice:
-        """Create an EnOcean A502XX device handler based on the provided EEP."""
+    """Factory class to create EnOcean A5-02-XX devices based on EEP."""
+    def create_device(
+            self, 
+            enocean_id: EnOceanDeviceAddress, 
+            device_type: EnOceanDeviceType, 
+            send_packet: EnOceanSendRadioPacket | None = None, 
+            device_name: str | None = None, 
+            sender_id: EnOceanAddress=None,
+            create_task: HomeAssistantTaskCreator | None = None
+        ) -> EnOceanA502XXDevice:
+        """Create an EnOcean A502XX device based on the provided EEP."""
     
         supported_eeps = [
             EEP(0xA5, 0x02, 0x01),
@@ -42,6 +50,13 @@ class EnOceanA502XXDeviceFactory(EnOceanDeviceFactory):
         ]
 
         if device_type.eep in supported_eeps:
-            return EnOceanA502XXDevice(enocean_id=enocean_id, device_type=device_type, send_packet=send_packet, device_name=device_name, sender_id=sender_id)
+            return EnOceanA502XXDevice(
+                enocean_id=enocean_id,
+                device_type=device_type,
+                create_task=create_task,
+                send_packet=send_packet,
+                device_name=device_name,
+                sender_id=sender_id
+            )
         else:
             raise ValueError(f"EEP {device_type.eep} is not supported by EnOceanA502XXDeviceFactory.")

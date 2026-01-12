@@ -4,13 +4,13 @@ from ..device_type import EnOceanDeviceType
 from ..devices.device import EnOceanDevice
 from ..eep import EEP
 from ..entity_properties import HomeAssistantEntityProperties
-from ..types import EnOceanEntityUID, ValueLabelDict
+from ..types import EnOceanEntityUID, HomeAssistantTaskCreator, ValueLabelDict
 from enocean.protocol.packet import RadioPacket, UTETeachInPacket
 
 class EnOceanGatewayDevice(EnOceanDevice):
 
     """Handler for EnOcean Gateway Device"""
-    def __init__(self, enocean_id, valid_sender_ids: list[ValueLabelDict] | None = None, base_id: ValueLabelDict | None = None) -> None:
+    def __init__(self, enocean_id, valid_sender_ids: list[ValueLabelDict] | None = None, base_id: ValueLabelDict | None = None, create_task: HomeAssistantTaskCreator | None = None) -> None:
         """Initialize the EnOcean Gateway Device."""
         self._valid_sender_ids = valid_sender_ids
         self.__learning_mode_active = False
@@ -18,7 +18,7 @@ class EnOceanGatewayDevice(EnOceanDevice):
 
         self.__learning_id: EnOceanAddress | None = None
 
-        super().__init__(enocean_id=enocean_id, send_packet=None, device_type=EnOceanDeviceType(eep=EEP(0, 0, 0), model="TCM300/310 Transmitter", manufacturer="EnOcean"), device_name="EnOcean Gateway", sender_id=None)
+        super().__init__(enocean_id=enocean_id, send_packet=None, device_type=EnOceanDeviceType(eep=EEP(0, 0, 0), model="TCM300/310 Transmitter", manufacturer="EnOcean"), device_name="EnOcean Gateway", sender_id=None, create_task=create_task)
         
 
     def initialize_entities(self) -> None:

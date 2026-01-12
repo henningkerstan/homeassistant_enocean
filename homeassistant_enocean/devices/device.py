@@ -1,5 +1,6 @@
 """Representation of an EnOcean device state."""
 import datetime
+from typing import Any, Callable, Coroutine
 from ..entity_properties import HomeAssistantEntityProperties
 from ..device_state import EnOceanDeviceState
 from ..types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanEntityUID, EnOceanEventCallback, EnOceanLightCallback, EnOceanSendRadioPacket, EnOceanSensorCallback, EnOceanSwitchCallback
@@ -12,11 +13,20 @@ from enocean.protocol.packet import RadioPacket, UTETeachInPacket
 class EnOceanDevice(ABC):
     """Representation of an EnOcean device."""
 
-    def __init__(self, enocean_id: EnOceanDeviceAddress, device_type: EnOceanDeviceType, send_packet: EnOceanSendRadioPacket | None = None, device_name: str | None = None, sender_id: EnOceanAddress | None = None) -> None:
+    def __init__(
+        self,
+        enocean_id: EnOceanDeviceAddress,
+        device_type: EnOceanDeviceType,
+        create_task: Callable[[Coroutine[Any, Any, Any]], None],
+        send_packet: EnOceanSendRadioPacket | None = None,
+        device_name: str | None = None,
+        sender_id: EnOceanAddress | None = None
+    ) -> None:
         """Construct an EnOcean device."""
         self.state: EnOceanDeviceState = EnOceanDeviceState()
         self.__enocean_id = enocean_id
         self.__device_type = device_type
+        self.__ha_create_task = create_task
         self.device_name = device_name
         self.__sender_id = sender_id
 
@@ -115,6 +125,12 @@ class EnOceanDevice(ABC):
     def switch_entities(self) -> list[HomeAssistantEntityProperties]:
         """Return the switch entities."""
         return self._switch_entities
+
+
+    @property
+    def create_task(self, target: Coroutine[Any, Any, Any]) -> None:
+        """Create a Home Assistant task."""
+        self.__ha_create_task(target)
 
     
     def handle_packet(self, packet: RadioPacket) -> None:

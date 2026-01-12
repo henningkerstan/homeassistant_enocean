@@ -1,4 +1,4 @@
-from homeassistant_enocean.types import EnOceanSendRadioPacket
+from ..types import EnOceanSendRadioPacket, HomeAssistantTaskCreator
 from ..address import EnOceanAddress, EnOceanDeviceAddress
 from .device_factory import EnOceanDeviceFactory
 from ..device_type import EnOceanDeviceType
@@ -6,9 +6,17 @@ from ..devices.d201xx_device import EnOceanD201XXDevice
 from ..eep import EEP
 
 class EnOceanD201XXDeviceFactory(EnOceanDeviceFactory):
-    """Factory class to create EnOcean D2-01-XX device handlers based on EEP."""
-    def _create_device(self, enocean_id: EnOceanDeviceAddress, device_type: EnOceanDeviceType, send_packet: EnOceanSendRadioPacket | None = None, device_name: str | None = None, sender_id: EnOceanAddress=None) -> EnOceanD201XXDevice:
-        """Create an EnOcean D201XX device handler based on the provided EEP."""
+    """Factory class to create EnOcean D2-01-XX devices based on EEP."""
+    def create_device(
+            self, 
+            enocean_id: EnOceanDeviceAddress, 
+            device_type: EnOceanDeviceType, 
+            send_packet: EnOceanSendRadioPacket | None = None, 
+            device_name: str | None = None, 
+            sender_id: EnOceanAddress=None,
+            create_task: HomeAssistantTaskCreator | None = None
+        ) -> EnOceanD201XXDevice:
+        """Create an EnOcean D201XX device based on the provided EEP."""
 
         supported_eeps = [
             EEP(0xD2, 0x01, 0x01),
@@ -34,6 +42,13 @@ class EnOceanD201XXDeviceFactory(EnOceanDeviceFactory):
         ]
 
         if device_type.eep in supported_eeps:
-            return EnOceanD201XXDevice(enocean_id=enocean_id, device_type=device_type, send_packet=send_packet, device_name=device_name, sender_id=sender_id)
+            return EnOceanD201XXDevice(
+                enocean_id=enocean_id,
+                device_type=device_type,
+                create_task=create_task,
+                send_packet=send_packet,
+                device_name=device_name,
+                sender_id=sender_id
+            )
         else:
             raise ValueError(f"EEP {device_type.eep} is not supported by EnOceanD201XXDeviceFactory.")

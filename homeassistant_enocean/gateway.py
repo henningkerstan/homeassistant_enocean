@@ -150,7 +150,8 @@ class EnOceanHomeAssistantGateway:
         self.__gateway_device = EnOceanGatewayDevice(
             enocean_id=self.__chip_id,
             valid_sender_ids=self.valid_sender_ids,
-            base_id=self.valid_sender_ids[1]
+            base_id=self.valid_sender_ids[1],
+            create_task=self.__create_task,
         )
         self.__devices[self.__chip_id] = self.__gateway_device
 
