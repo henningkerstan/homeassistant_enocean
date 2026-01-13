@@ -8,17 +8,18 @@ from ..types import EnOceanSendRadioPacket, HomeAssistantTaskCreator
 
 class EnOceanA502XXDeviceFactory(EnOceanDeviceFactory):
     """Factory class to create EnOcean A5-02-XX devices based on EEP."""
+
     def create_device(
-            self, 
-            enocean_id: EnOceanDeviceAddress, 
-            device_type: EnOceanDeviceType, 
-            send_packet: EnOceanSendRadioPacket | None = None, 
-            device_name: str | None = None, 
-            sender_id: EnOceanAddress=None,
-            create_task: HomeAssistantTaskCreator | None = None
-        ) -> EnOceanA502XXDevice:
+        self,
+        enocean_id: EnOceanDeviceAddress,
+        device_type: EnOceanDeviceType,
+        send_packet: EnOceanSendRadioPacket | None = None,
+        device_name: str | None = None,
+        sender_id: EnOceanAddress = None,
+        create_task: HomeAssistantTaskCreator | None = None,
+    ) -> EnOceanA502XXDevice:
         """Create an EnOcean A502XX device based on the provided EEP."""
-    
+
         supported_eeps = [
             EEP(0xA5, 0x02, 0x01),
             EEP(0xA5, 0x02, 0x02),
@@ -31,7 +32,6 @@ class EnOceanA502XXDeviceFactory(EnOceanDeviceFactory):
             EEP(0xA5, 0x02, 0x09),
             EEP(0xA5, 0x02, 0x0A),
             EEP(0xA5, 0x02, 0x0B),
-    
             EEP(0xA5, 0x02, 0x10),
             EEP(0xA5, 0x02, 0x11),
             EEP(0xA5, 0x02, 0x12),
@@ -44,7 +44,6 @@ class EnOceanA502XXDeviceFactory(EnOceanDeviceFactory):
             EEP(0xA5, 0x02, 0x19),
             EEP(0xA5, 0x02, 0x1A),
             EEP(0xA5, 0x02, 0x1B),
-
             EEP(0xA5, 0x02, 0x20),
             EEP(0xA5, 0x02, 0x30),
         ]
@@ -56,7 +55,9 @@ class EnOceanA502XXDeviceFactory(EnOceanDeviceFactory):
                 create_task=create_task,
                 send_packet=send_packet,
                 device_name=device_name,
-                sender_id=sender_id
+                sender_id=sender_id,
             )
         else:
-            raise ValueError(f"EEP {device_type.eep} is not supported by EnOceanA502XXDeviceFactory.")
+            raise ValueError(
+                f"EEP {device_type.eep} is not supported by EnOceanA502XXDeviceFactory."
+            )
