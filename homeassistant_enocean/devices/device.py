@@ -3,7 +3,6 @@
 import datetime
 from typing import Any, Coroutine
 from ..entity_properties import HomeAssistantEntityProperties
-from ..device_state import EnOceanDeviceState
 from ..types import (
     EnOceanBinarySensorCallback,
     EnOceanCoverCallback,
@@ -34,7 +33,6 @@ class EnOceanDevice(ABC):
         sender_id: EnOceanAddress | None = None,
     ) -> None:
         """Construct an EnOcean device."""
-        self.state: EnOceanDeviceState = EnOceanDeviceState()
         self.__enocean_id = enocean_id
         self.__device_type = device_type
         self.__ha_create_task = create_task
