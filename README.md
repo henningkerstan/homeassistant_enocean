@@ -1,5 +1,5 @@
 # homeassistant_enocean
-This is a wrapper module to integrate the [EnOcean](https://www.enocean.com/) protocol into [Home Assistant](https://www.home-assistant.io).
+This is a wrapper library to integrate the [EnOcean](https://www.enocean.com/) protocol into [Home Assistant](https://www.home-assistant.io).
 
 
 ## Usage
