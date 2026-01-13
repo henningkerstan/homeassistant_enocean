@@ -14,11 +14,11 @@ class EnOceanDeviceType:
         manufacturer: str = "Generic",
     ) -> None:
         """Construct an EnOcean device type."""
-        
+
         if unique_id is None:
             unique_id = eep.to_string()
         self.__unique_id: str = unique_id
-        self.__eep : EEP = eep
+        self.__eep: EEP = eep
         self.__model: str = model
         self.__manufacturer: str = manufacturer
 
@@ -26,22 +26,22 @@ class EnOceanDeviceType:
     def unique_id(self) -> str:
         """Return the unique id of this device type."""
         return self.__unique_id
-    
+
     @property
     def eep(self) -> EEP:
         """Return the EEP of this device type."""
         return self.__eep
-    
+
     @property
     def manufacturer(self) -> str:
         """Return the manufacturer of this device type."""
-        return self.__manufacturer  
-    
+        return self.__manufacturer
+
     @property
     def model(self) -> str:
         """Return the model of this device type."""
         return self.__model
-    
+
     @property
     def is_generic_eep(self) -> bool:
         """Return true if this device type is a generic EEP."""
@@ -52,7 +52,9 @@ class EnOceanDeviceType:
         """Return a label for this device type."""
         if self.is_generic_eep:
             return "EEP " + self.eep.to_string() + " (" + self.model + ")"
-        return self.manufacturer + " " + self.model + " (EEP " + self.eep.to_string() + ")"
+        return (
+            self.manufacturer + " " + self.model + " (EEP " + self.eep.to_string() + ")"
+        )
 
     @classmethod
     def get_supported_device_types(cls) -> dict[str, "EnOceanDeviceType"]:
@@ -151,7 +153,7 @@ class EnOceanDeviceType:
                 eep=EEP(0xA5, 0x02, 0x1B),
                 model="Temperature Sensor Range +50 °C to +130 °C (UNTESTED)",
             ),
-             "A5-02-20": EnOceanDeviceType(
+            "A5-02-20": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x20),
                 model="10 Bit Temperature Sensor Range -10°C to +41.2°C (UNTESTED)",
             ),
@@ -159,8 +161,6 @@ class EnOceanDeviceType:
                 eep=EEP(0xA5, 0x02, 0x30),
                 model="T10 Bit Temperature Sensor Range -40°C to +62.3°C (UNTESTED)",
             ),
-
-
             # A5-04 Temperature and Humidity sensors
             "A5-04-01": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x04, 0x01),
@@ -178,24 +178,20 @@ class EnOceanDeviceType:
                 eep=EEP(0xA5, 0x04, 0x04),
                 model="Temperature and Humidity Sensor, Range -40°C to +120°C 12bit-measurement and 0% to 100% (UNTESTED)",
             ),
-
             # A5-06 Light Sensor
             "A5-06-01": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x06, 0x01),
                 model="Light Sensor, Range 300lx to 60.000lx (UNTESTED)",
             ),
-
             # A5-07 Occupancy Sensors
             "A5-07-03": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x07, 0x03),
                 model="Occupancy with Supply voltage monitor and 10-bit illumination measurement",
             ),
-
             "A5-08-01": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x08, 0x01),
                 model="Light, temperature and occupancy sensor, range 0lx to 510lx, 0°C to 51°C and occupancy button (UNTESTED)",
             ),
-
             # # A5-10 Room Operating Panels
             # "A5-10-01": EnOceanDeviceType(
             #     eep=EEP(0xA5, 0x10, 0x01),
@@ -279,7 +275,6 @@ class EnOceanDeviceType:
             #     eep=EEP(0xA5, 0x20, 0x01),
             #     model="HVAC Components - Battery Powered Actuator BI-DIR",
             # ),
-
             # A5-38-08 Gateway
             "A5-38-08": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x38, 0x08),
@@ -385,8 +380,6 @@ class EnOceanDeviceType:
             #     eep=EEP(0xF6, 0x10, 0x00),
             #     model="Mechanical Handle - Window Handle",
             # ),
-
-
             # Other Devices
             "Eltako_FAH65s": EnOceanDeviceType(
                 unique_id="Eltako_FAH65s",

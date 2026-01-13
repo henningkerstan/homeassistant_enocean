@@ -18,14 +18,15 @@ BUTTON_ACTION_UID_MAP = {
 
 class EnOceanF602XXDevice(EnOceanDevice):
     """Handler for EnOcean Equipment Profiles F6-02-01/02"""
-    
+
     def initialize_entities(self) -> None:
         """Initialize the entities handled by this EEP handler."""
         self._binary_sensor_entities = [
-            HomeAssistantEntityProperties(unique_id=name,)
+            HomeAssistantEntityProperties(
+                unique_id=name,
+            )
             for name in BUTTON_ACTION_UID_MAP.values()
         ]
-
 
     def handle_matching_packet(self, packet: RadioPacket) -> None:
         """Handle an incoming EnOcean packet."""
@@ -36,10 +37,10 @@ class EnOceanF602XXDevice(EnOceanDevice):
             for callback in self._binary_sensor_callbacks.values():
                 callback(False)
             return
-        
-        # handle button press      
-        callback : EnOceanBinarySensorCallback | None = None
+
+        # handle button press
+        callback: EnOceanBinarySensorCallback | None = None
         callback = self._binary_sensor_callbacks.get(BUTTON_ACTION_UID_MAP.get(action))
-      
+
         if callback:
             callback(True)

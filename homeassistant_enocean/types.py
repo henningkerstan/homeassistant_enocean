@@ -50,20 +50,21 @@ class COMMON_COMMAND(IntEnum):
 
 
 class VersionIdentifier:
-  main: int = 0
-  beta: int = 0
-  alpha: int = 0
-  build: int = 0
+    main: int = 0
+    beta: int = 0
+    alpha: int = 0
+    build: int = 0
 
-  def versionString(self) -> str:
-    return f"{self.main}.{self.beta}.{self.alpha}{f'b{self.build}' if self.build else ''}"
+    def versionString(self) -> str:
+        return f"{self.main}.{self.beta}.{self.alpha}{f'b{self.build}' if self.build else ''}"
+
 
 class VersionInfo:
-  app_version: VersionIdentifier = VersionIdentifier()
-  api_version: VersionIdentifier = VersionIdentifier()
-  chip_id: 0
-  chip_version = 0
-  app_description = ''
+    app_version: VersionIdentifier = VersionIdentifier()
+    api_version: VersionIdentifier = VersionIdentifier()
+    chip_id: 0
+    chip_version = 0
+    app_description = ""
 
 
-type HomeAssistantTaskCreator = Callable[[Coroutine[Any, Any, Any], str | None], None] 
+type HomeAssistantTaskCreator = Callable[[Coroutine[Any, Any, Any], str | None], None]

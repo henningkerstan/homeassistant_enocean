@@ -3,7 +3,7 @@
 This module provides the EnOceanAddress class for handling EnOcean four byte (32 bit) addresses,
 including parsing, validation, and conversion between integer and string formats.
 
-For more information on EnOcean addressing, see 
+For more information on EnOcean addressing, see
   - https://www.enocean-alliance.org/wp-content/uploads/2021/03/EURID-v1.2.pdf
   - https://www.enocean.com/de/faq-knowledge-base/what-is-difference-between-base-id-and-chip-id/
 """
@@ -126,7 +126,6 @@ class EnOceanAddress:
         return self.__address == other.__address
 
 
-
 class EnOceanDeviceAddress(EnOceanAddress):
     """Representation of an EnOcean device address (EURID).
 
@@ -145,7 +144,9 @@ class EnOceanDeviceAddress(EnOceanAddress):
                 "Address must be an integer or a hex string that can be converted to an integer."
             )
         if not (0x00000000 <= numeric_address <= 0xFF7FFFFF):
-            raise ValueError(f"Device address must be in the range 00:00:00:00 to FF:7F:FF:FF, but is {numeric_address:08X}.")
+            raise ValueError(
+                f"Device address must be in the range 00:00:00:00 to FF:7F:FF:FF, but is {numeric_address:08X}."
+            )
         super().__init__(numeric_address)
 
 
@@ -167,5 +168,7 @@ class EnOceanBaseAddress(EnOceanAddress):
                 "Address must be an integer or a hex string that can be converted to an integer."
             )
         if not (0xFF800000 <= numeric_address <= 0xFFFFFF80):
-            raise ValueError("Base address must be in the range FF:80:00:00 to FF:FF:FF:80.")
+            raise ValueError(
+                "Base address must be in the range FF:80:00:00 to FF:FF:FF:80."
+            )
         super().__init__(numeric_address)

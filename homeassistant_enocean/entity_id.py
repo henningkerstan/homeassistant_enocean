@@ -1,18 +1,21 @@
 from homeassistant_enocean.address import EnOceanDeviceAddress
 
+
 class EnOceanEntityID:
     """An EnOcean entity is uniquely identified by its device's ID and a unique ID."""
 
-    def __init__(self, device_address: EnOceanDeviceAddress, unique_id: str | None = None) -> None:
+    def __init__(
+        self, device_address: EnOceanDeviceAddress, unique_id: str | None = None
+    ) -> None:
         """Construct an EnOcean entity ID."""
         self.__device_address = device_address
         self.__unique_id: str | None = unique_id
 
-    @property 
+    @property
     def device_address(self) -> EnOceanDeviceAddress:
         """Return the device address part of the entity ID."""
         return self.__device_address
-    
+
     @property
     def unique_id(self) -> str:
         """Return the unique ID part of the entity ID."""
@@ -35,4 +38,7 @@ class EnOceanEntityID:
 
     def __eq__(self, other) -> bool:
         """Check equality with another entity ID."""
-        return (self.__device_address.to_number(), self.unique_id) == (other.device_address.to_number(), other.unique_id)
+        return (self.__device_address.to_number(), self.unique_id) == (
+            other.device_address.to_number(),
+            other.unique_id,
+        )
