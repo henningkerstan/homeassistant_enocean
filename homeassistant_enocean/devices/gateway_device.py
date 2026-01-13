@@ -12,7 +12,7 @@ from enocean.protocol.packet import RadioPacket, UTETeachInPacket
 class EnOceanGatewayDevice(EnOceanDevice):
     LEARNING_TIMEOUT: int = 60
 
-    """Handler for EnOcean Gateway Device"""
+    """EnOcean Gateway Device"""
 
     def __init__(
         self,

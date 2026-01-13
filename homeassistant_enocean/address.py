@@ -1,4 +1,4 @@
-"""EnOcean address utilities for Home Assistant integration.
+"""EnOcean address classes for Home Assistant integration.
 
 This module provides the EnOceanAddress class for handling EnOcean four byte (32 bit) addresses,
 including parsing, validation, and conversion between integer and string formats.
@@ -127,7 +127,7 @@ class EnOceanAddress:
 
 
 class EnOceanDeviceAddress(EnOceanAddress):
-    """Representation of an EnOcean device address (EURID).
+    """Representation of an EnOcean device address (EnOcean Unique Radio Identifier / EURID).
 
     Device addresses are in the range 00:00:00:00 to FF:7F:FF:FF.
     """

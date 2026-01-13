@@ -2,7 +2,7 @@ from homeassistant_enocean.address import EnOceanDeviceAddress
 
 
 class EnOceanEntityID:
-    """An EnOcean entity is uniquely identified by its device's ID and a unique ID."""
+    """An EnOcean entity is uniquely identified by its device's EnOcean Unique Radio Identifier (EURID) and a unique ID string for the entity."""
 
     def __init__(
         self, device_address: EnOceanDeviceAddress, unique_id: str | None = None
