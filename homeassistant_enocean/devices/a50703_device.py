@@ -10,7 +10,7 @@ class EnOceanA50703Device(EnOceanDevice):
             HomeAssistantEntityProperties(unique_id="motion_detected", device_class="motion"),
         ]
 
-        self._sensor_entitites = [
+        self._sensor_entities = [
             HomeAssistantEntityProperties(unique_id="supply_voltage", device_class="voltage", native_unit_of_measurement="V", entity_category="diagnostic"),
             HomeAssistantEntityProperties(unique_id="illumination", native_unit_of_measurement="lx", device_class="illuminance"),
         ]

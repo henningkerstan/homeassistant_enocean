@@ -57,7 +57,7 @@ class EnOceanA53808Device(EnOceanDevice):
             ),
         ]
 
-        self._sensor_entitites = [
+        self._sensor_entities = [
             HomeAssistantEntityProperties(unique_id="device_brightness", device_class="percentage", native_unit_of_measurement="%", entity_category="diagnostic"),
             HomeAssistantEntityProperties(unique_id="dimming_range", device_class="enum", options=["0 - 255", "0 - 100"], entity_category="diagnostic"),
         ]

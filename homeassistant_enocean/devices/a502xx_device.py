@@ -9,7 +9,7 @@ class EnOceanA502XXDevice(EnOceanDevice):
 
     def initialize_entities(self) -> None:
         """Initialize the entities handled by this EEP handler."""
-        self._sensor_entitites = [
+        self._sensor_entities = [
             HomeAssistantEntityProperties(unique_id=None, device_class="temperature", native_unit_of_measurement="°C"),
         ]
 

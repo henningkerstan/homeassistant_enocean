@@ -3,7 +3,7 @@ import datetime
 from typing import Any, Callable, Coroutine
 from ..entity_properties import HomeAssistantEntityProperties
 from ..device_state import EnOceanDeviceState
-from ..types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanEntityUID, EnOceanEventCallback, EnOceanLightCallback, EnOceanSendRadioPacket, EnOceanSensorCallback, EnOceanSwitchCallback
+from ..types import EnOceanBinarySensorCallback, EnOceanCoverCallback, EnOceanEntityUID, EnOceanEventCallback, EnOceanLightCallback, EnOceanSendRadioPacket, EnOceanSensorCallback, EnOceanSwitchCallback, HomeAssistantTaskCreator
 from ..device_type import EnOceanDeviceType
 from ..address import EnOceanAddress, EnOceanDeviceAddress
 from abc import abstractmethod, ABC
@@ -17,7 +17,7 @@ class EnOceanDevice(ABC):
         self,
         enocean_id: EnOceanDeviceAddress,
         device_type: EnOceanDeviceType,
-        create_task: Callable[[Coroutine[Any, Any, Any]], None],
+        create_task: HomeAssistantTaskCreator | None = None,
         send_packet: EnOceanSendRadioPacket | None = None,
         device_name: str | None = None,
         sender_id: EnOceanAddress | None = None
@@ -53,13 +53,13 @@ class EnOceanDevice(ABC):
             HomeAssistantEntityProperties(unique_id="last_seen", device_class="timestamp", entity_category="diagnostic"),
         ]
         self._select_entities: list[HomeAssistantEntityProperties] = []
-        self._sensor_entitites: list[HomeAssistantEntityProperties] = []
+        self._sensor_entities: list[HomeAssistantEntityProperties] = []
         self._switch_entities: list[HomeAssistantEntityProperties] = []
         self.initialize_entities()
 
     def clear_internal_sensor_entities(self) -> None:
         """Clear internal sensor entities (used for the gateway device)."""
-        self.__internal_sensor_entities = []
+        self.__internal_sensor_entities.clear()
 
     @property
     def enocean_id(self) -> EnOceanDeviceAddress:
@@ -119,7 +119,7 @@ class EnOceanDevice(ABC):
     @property
     def sensor_entities(self) -> list[HomeAssistantEntityProperties]:
         """Return the sensor entities."""
-        return self.__internal_sensor_entities + self._sensor_entitites
+        return self._sensor_entities + self.__internal_sensor_entities
 
     @property
     def switch_entities(self) -> list[HomeAssistantEntityProperties]:
@@ -127,10 +127,9 @@ class EnOceanDevice(ABC):
         return self._switch_entities
 
 
-    @property
     def create_task(self, target: Coroutine[Any, Any, Any]) -> None:
         """Create a Home Assistant task."""
-        self.__ha_create_task(target)
+        self.__ha_create_task(target=target)
 
     
     def handle_packet(self, packet: RadioPacket) -> None:

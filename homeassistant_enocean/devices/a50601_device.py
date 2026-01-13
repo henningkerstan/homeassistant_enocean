@@ -6,13 +6,13 @@ class EnOceanA50601Device(EnOceanDevice):
 
     def initialize_entities(self) -> None:
         """Initialize the entities handled by this EEP handler."""
-        self._sensor_entitites = [
+        self._sensor_entities = [
             HomeAssistantEntityProperties(unique_id=None, device_class="illuminance", native_unit_of_measurement="lx"),
         ]
 
         if not self._is_eltako_variant():
             # Eltako variant does not have SVC (supply voltage) measurement, as it uses that databit for illuminance measurement 0-100
-            self._sensor_entitites.append(
+            self._sensor_entities.append(
                 HomeAssistantEntityProperties(unique_id="supply_voltage", device_class="voltage", native_unit_of_measurement="V", entity_category="diagnostic"),
             )
 

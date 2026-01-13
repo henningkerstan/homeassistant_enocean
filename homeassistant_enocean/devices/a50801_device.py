@@ -10,7 +10,7 @@ class EnOceanA50801Device(EnOceanDevice):
             HomeAssistantEntityProperties(unique_id=None, device_class="occupancy"),
         ]
         
-        self._sensor_entitites = [
+        self._sensor_entities = [
             HomeAssistantEntityProperties(unique_id="illumination", device_class="illuminance", native_unit_of_measurement="lx"),
             HomeAssistantEntityProperties(unique_id="supply_voltage", device_class="voltage", native_unit_of_measurement="V", entity_category="diagnostic"),
         ]
@@ -21,7 +21,7 @@ class EnOceanA50801Device(EnOceanDevice):
                 HomeAssistantEntityProperties(unique_id="occupancy_button", device_class="button"),
             )
 
-            self._sensor_entitites.append(
+            self._sensor_entities.append(
                 HomeAssistantEntityProperties(unique_id="temperature", device_class="temperature", native_unit_of_measurement="°C"),
             )
 
