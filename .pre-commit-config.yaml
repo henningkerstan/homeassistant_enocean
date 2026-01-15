@@ -7,3 +7,11 @@ repos:
           - --fix
       - id: ruff-format
         files: ^((homeassistant_enocean)/.+)?[^/]+\.(py|pyi)$
+
+  # TODO: Enable this once initial release is done 
+  # - repo: https://github.com/pre-commit/pre-commit-hooks
+  #   rev: v6.0.0  
+  #   hooks:
+  #     - id: no-commit-to-branch
+  #       args:
+  #         - --branch=main
