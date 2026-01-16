@@ -3,7 +3,7 @@ This is a wrapper library to integrate the [EnOcean](https://www.enocean.com/) p
 
 
 ## Usage
-This library is specifically written for Home Assistant's [EnOcean integration](https://www.home-assistant.io/integrations/enocean/). You can therefore best see how to use it by viewing its [source code on GitHub](https://github.com/home-assistant/core/tree/dev/homeassistant/components/enocean). The library follows these [rules](https://developers.home-assistant.io/docs/api_lib_index).
+This library is specifically written for Home Assistant's [EnOcean integration](https://www.home-assistant.io/integrations/enocean/). You can therefore best see how to use it by viewing its [source code on GitHub](https://github.com/henningkerstan/home-assistant-core/tree/enocean-options-flow). The library follows these [rules](https://developers.home-assistant.io/docs/api_lib_index).
 
 ## Development
 After cloning this repository, execute the provided [scripts/setup.sh](scripts/setup.sh) to set up the development environment.
