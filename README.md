@@ -13,7 +13,7 @@ This library only has one dependency, namely
 
 - [enocean4ha](https://github.com/topic2k/enocean4ha/tree) in version 0.71.0, which is MIT-licensed.
 
-Note that the reason for using this library instead of the previously used [enocean](https://github.com/kipe/enocean) library is a more extended set of supported EnOcean Equipment Profiles (EEP).
+The reason for using this library instead of the previously used [enocean](https://github.com/kipe/enocean) library is a more extended set of supported EnOcean Equipment Profiles (EEP).
 
 ## Copyright & license
 Copyright 2026 Henning Kerstan
