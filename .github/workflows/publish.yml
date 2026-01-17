@@ -29,11 +29,14 @@ jobs:
 
   create-release:
     name: Create GitHub Release
+    permissions:
+      contents: write
+      
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
-        
+
       - name: Create release
         uses: softprops/action-gh-release@v2
 
