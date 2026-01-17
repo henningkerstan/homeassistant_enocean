@@ -27,18 +27,18 @@ jobs:
           name: python-package-distributions
           path: dist/
 
-  create-release:
-    name: Create GitHub Release
-    permissions:
-      contents: write
-      
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
+  # create-release:
+  #   name: Create GitHub Release
+  #   permissions:
+  #     contents: write
 
-      - name: Create release
-        uses: softprops/action-gh-release@v2
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v6
+
+  #     - name: Create release
+  #       uses: softprops/action-gh-release@v2
 
   publish-to-pypi:
     runs-on: ubuntu-latest
