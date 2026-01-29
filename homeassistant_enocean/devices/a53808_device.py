@@ -14,7 +14,10 @@ EDIMR_RELATIVE = 1
 
 
 class EnOceanA53808Device(EnOceanDevice):
-    """Handler for EnOcean Equipment Profile A5-38-08 (Gateway)"""
+    """Handler for EnOcean Equipment Profile A5-38-08 (Gateway).
+
+    Note that, as this is 4BS communication, there is no destination address in the telegrams. Therefore, the sender ID must be unique within a setup.
+    """
 
     def initialize_entities(self) -> None:
         """Initialize the entities handled by this EEP handler."""
