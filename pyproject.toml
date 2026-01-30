@@ -48,11 +48,15 @@ warn_unused_configs = true
 target-version="py313"
 required-version = ">=0.13.0"
 
+[tool.ruff.lint]
+select = ["I"]
+
 [tool.ruff.lint.isort]
 force-sort-within-sections = true
 known-first-party = ["homeassistant_enocean"]
 combine-as-imports = true
 split-on-trailing-comma = false
+case-sensitive = true
 
 [tool.bumpversion]
 current_version = "0.0.9"
