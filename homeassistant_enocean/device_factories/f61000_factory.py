@@ -1,13 +1,13 @@
 from ..address import EnOceanAddress, EnOceanDeviceAddress
 from ..device_factories.device_factory import EnOceanDeviceFactory
 from ..device_type import EnOceanDeviceType
-from ..devices.f602xx_device import EnOceanF602XXDevice
+from ..devices.f61000_device import EnOceanF61000Device
 from ..eep import EEP
 from ..types import EnOceanSendRadioPacket, HomeAssistantTaskCreator
 
 
-class EnOceanF602XXDeviceFactory(EnOceanDeviceFactory):
-    """Factory class to create EnOcean F602XX devices based on EEP."""
+class EnOceanF61000DeviceFactory(EnOceanDeviceFactory):
+    """Factory class to create EnOcean F61000 devices based on EEP."""
 
     def create_device(
         self,
@@ -17,13 +17,11 @@ class EnOceanF602XXDeviceFactory(EnOceanDeviceFactory):
         device_name: str | None = None,
         sender_id: EnOceanAddress | None = None,
         create_task: HomeAssistantTaskCreator | None = None,
-    ) -> EnOceanF602XXDevice:
-        """Create an EnOcean F602XX device based on the provided EEP."""
+    ) -> EnOceanF61000Device:
+        """Create an EnOcean F61000 device based on the provided EEP."""
 
-        if device_type.eep == EEP(0xF6, 0x02, 0x01) or device_type.eep == EEP(
-            0xF6, 0x02, 0x02
-        ):
-            return EnOceanF602XXDevice(
+        if device_type.eep == EEP(0xF6, 0x10, 0x00):
+            return EnOceanF61000Device(
                 enocean_id=enocean_id,
                 device_type=device_type,
                 create_task=create_task,
@@ -33,5 +31,5 @@ class EnOceanF602XXDeviceFactory(EnOceanDeviceFactory):
             )
         else:
             raise ValueError(
-                f"EEP {device_type.eep} is not supported by EnOceanF602XXDeviceFactory."
+                f"EEP {device_type.eep} is not supported by EnOceanF61000DeviceFactory."
             )

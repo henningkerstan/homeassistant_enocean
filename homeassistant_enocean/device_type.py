@@ -283,83 +283,83 @@ class EnOceanDeviceType:
             # D2-01 Electronic Switches and Dimmers with Energy Measurement and Local Control
             "D2-01-00": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x00),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 00",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 00 (UNTESTED)",
             ),
             "D2-01-01": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x01),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 01",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 01 (UNTESTED)",
             ),
             "D2-01-03": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x03),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 03",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 03 (UNTESTED)",
             ),
             "D2-01-04": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x04),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 04",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 04 (UNTESTED)",
             ),
             "D2-01-05": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x05),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 05",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 05 (UNTESTED)",
             ),
             "D2-01-06": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x06),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 06",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 06 (UNTESTED)",
             ),
             "D2-01-07": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x07),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 07",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 07 (UNTESTED)",
             ),
             "D2-01-08": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x08),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 08",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 08 (UNTESTED)",
             ),
             "D2-01-09": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x09),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 09",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 09 (UNTESTED)",
             ),
             "D2-01-0A": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x0A),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0A",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0A (UNTESTED)",
             ),
             "D2-01-0B": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x0B),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0B",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0B (UNTESTED)",
             ),
             "D2-01-0C": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x0C),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0C",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0C (UNTESTED)",
             ),
             "D2-01-0D": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x0D),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0D",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0D (UNTESTED)",
             ),
             "D2-01-0E": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x0E),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0E",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0E (UNTESTED)",
             ),
             "D2-01-0F": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x0F),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0F",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0F (UNTESTED)",
             ),
             "D2-01-10": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x10),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 10",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 10 (UNTESTED)",
             ),
             "D2-01-11": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x11),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 11",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 11 (UNTESTED)",
             ),
             "D2-01-12": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x12),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 12",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 12 (UNTESTED)",
             ),
             "D2-01-13": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x13),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 13",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 13 (UNTESTED)",
             ),
             "D2-01-14": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x14),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 14",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 14 (UNTESTED)",
             ),
             # D2-05-00 Blinds Control for Position and Angle
             "D2-05-00": EnOceanDeviceType(
@@ -375,11 +375,11 @@ class EnOceanDeviceType:
                 eep=EEP(0xF6, 0x02, 0x02),
                 model="Light and Blind Control - Application Style 1",
             ),
-            # # F6-10-00 Window Handle
-            # "F6-10-00": EnOceanDeviceType(
-            #     eep=EEP(0xF6, 0x10, 0x00),
-            #     model="Mechanical Handle - Window Handle",
-            # ),
+            # F6-10-00 Window Handle
+            "F6-10-00": EnOceanDeviceType(
+                eep=EEP(0xF6, 0x10, 0x00),
+                model="Mechanical Handle - Window Handle (UNTESTED)",
+            ),
             # Other Devices
             "Eltako_FAH65s": EnOceanDeviceType(
                 unique_id="Eltako_FAH65s",

@@ -1,15 +1,17 @@
 """Representation of an EnOcean gateway."""
 
 import logging
+
+from .device_factories.f61000_factory import EnOceanF61000DeviceFactory
 from .types import HomeAssistantTaskCreator, ValueLabelDict
 from .serialcommunicator import EnOceanSerialCommunicator
 from enocean.protocol.packet import Packet, RadioPacket
 from enocean.utils import to_hex_string
 
-from homeassistant_enocean.device_factories.a53808_factory import (
+from .device_factories.a53808_factory import (
     EnOceanA53808DeviceFactory,
 )
-from homeassistant_enocean.devices.gateway_device import EnOceanGatewayDevice
+from .devices.gateway_device import EnOceanGatewayDevice
 
 from .device_factories.a502xx_factory import EnOceanA502XXDeviceFactory
 from .device_factories.a504xx_factory import EnOceanA504XXDeviceFactory
@@ -21,11 +23,11 @@ from .device_factories.d20500_factory import EnOceanD20500DeviceFactory
 from .device_factories.device_factory import EnOceanDeviceFactory
 from .device_factories.f602xx_factory import EnOceanF602XXDeviceFactory
 
-from homeassistant_enocean.eep import EEP
-from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
-from homeassistant_enocean.device_type import EnOceanDeviceType
-from homeassistant_enocean.entity_id import EnOceanEntityID
-from homeassistant_enocean.types import (
+from .eep import EEP
+from .entity_properties import HomeAssistantEntityProperties
+from .device_type import EnOceanDeviceType
+from .entity_id import EnOceanEntityID
+from .types import (
     EnOceanBinarySensorCallback,
     EnOceanCoverCallback,
     EnOceanEventCallback,
@@ -105,6 +107,8 @@ class EnOceanHomeAssistantGateway:
             # F6-02 family
             EEP(0xF6, 0x02, 0x01): EnOceanF602XXDeviceFactory(),
             EEP(0xF6, 0x02, 0x02): EnOceanF602XXDeviceFactory(),
+            # F6-10-00
+            EEP(0xF6, 0x10, 0x00): EnOceanF61000DeviceFactory(),
             # D2-01 family
             EEP(0xD2, 0x01, 0x01): EnOceanD201XXDeviceFactory(),
             EEP(0xD2, 0x01, 0x02): EnOceanD201XXDeviceFactory(),

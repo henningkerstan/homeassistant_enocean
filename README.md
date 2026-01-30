@@ -66,6 +66,7 @@ This library is specifically written for Home Assistant's [EnOcean integration](
 | D2-05-00 | Blinds Control for Position and Angle | one cover | NodOn SIN-2-RS-01 |
 | F6-02-01 | Light and Blind Control - Application Style 2 | eight binary sensors (`a0`, `a1`, `b0`, `b1`, `ab0`, `ab1`, `a0b1`, `a1b0`) | Jung ENO wall switch (2 channels) |
 | F6-02-02 | Light and Blind Control - Application Style 1 | eight binary sensors (`a0`, `a1`, `b0`, `b1`, `ab0`, `ab1`, `a0b1`, `a1b0`) | Jung ENO wall switch (2 channels) |
+| F6-10-00 | Mechanical Handle - Window Handle | one sensor (`up2vertical`, `vertical2up`, `down2vertical`, `vertical2down`) | none (untested) |
 
 Each supported device has three additional diagnostic sensors:
  - `rssi`: the received signal strength (in dBm) of the last received telegram
