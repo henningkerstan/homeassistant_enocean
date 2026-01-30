@@ -2,11 +2,11 @@
 # https://www.enocean-alliance.org/wp-content/uploads/2017/10/NodOn-SIN-2-2-0x-UserGuide-170731-DE-interactive.pdf
 
 
+from enocean.protocol.packet import RadioPacket
+
 from homeassistant_enocean.devices.device import EnOceanDevice
 from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 from homeassistant_enocean.types import EnOceanEntityUID
-
-from enocean.protocol.packet import RadioPacket
 
 
 class EnOceanD201XXDevice(EnOceanDevice):

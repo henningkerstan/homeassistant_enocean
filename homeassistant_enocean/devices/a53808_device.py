@@ -1,9 +1,11 @@
 import math
 
-from homeassistant_enocean.types import EnOceanEntityUID
-from .device import EnOceanDevice
-from ..entity_properties import HomeAssistantEntityProperties
 from enocean.protocol.packet import RadioPacket
+
+from homeassistant_enocean.types import EnOceanEntityUID
+
+from ..entity_properties import HomeAssistantEntityProperties
+from .device import EnOceanDevice
 
 RORG_4BS = 0xA5
 FUNC = 0x38

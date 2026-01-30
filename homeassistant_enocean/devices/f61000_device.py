@@ -1,7 +1,8 @@
-from .device import EnOceanDevice
+from enocean.protocol.packet import RadioPacket
+
 from ..entity_properties import HomeAssistantEntityProperties
 from ..types import EnOceanSensorCallback
-from enocean.protocol.packet import RadioPacket
+from .device import EnOceanDevice
 
 
 class EnOceanF61000Device(EnOceanDevice):

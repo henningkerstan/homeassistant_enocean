@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 
-from ..types import EnOceanSendRadioPacket, HomeAssistantTaskCreator
-from ..device_type import EnOceanDeviceType
 from ..address import EnOceanAddress, EnOceanDeviceAddress
+from ..device_type import EnOceanDeviceType
 from ..devices.device import EnOceanDevice
+from ..types import EnOceanSendRadioPacket, HomeAssistantTaskCreator
 
 
 class EnOceanDeviceFactory(ABC):

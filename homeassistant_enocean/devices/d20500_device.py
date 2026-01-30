@@ -1,12 +1,13 @@
+from enum import Enum
+
+from enocean.protocol.constants import RORG
+from enocean.protocol.packet import RadioPacket
+
 from homeassistant_enocean.types import EnOceanEntityUID
-from .device import EnOceanDevice
 
 from ..address import EnOceanAddress
 from ..entity_properties import HomeAssistantEntityProperties
-
-from enocean.protocol.packet import RadioPacket
-from enocean.protocol.constants import RORG
-from enum import Enum
+from .device import EnOceanDevice
 
 WATCHDOG_TIMEOUT = 1
 WATCHDOG_INTERVAL = 0.2

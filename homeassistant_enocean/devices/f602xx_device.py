@@ -1,7 +1,8 @@
+from enocean.protocol.packet import RadioPacket
+
 from homeassistant_enocean.devices.device import EnOceanDevice
 from homeassistant_enocean.entity_properties import HomeAssistantEntityProperties
 from homeassistant_enocean.types import EnOceanBinarySensorCallback
-from enocean.protocol.packet import RadioPacket
 
 BUTTON_ACTION_UID_MAP = {
     0x30: "a0",

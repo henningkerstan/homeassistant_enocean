@@ -1,7 +1,13 @@
 """Representation of an EnOcean device state."""
 
+from abc import ABC, abstractmethod
 import datetime
 from typing import Any, Coroutine
+
+from enocean.protocol.packet import RadioPacket, UTETeachInPacket
+
+from ..address import EnOceanAddress, EnOceanDeviceAddress
+from ..device_type import EnOceanDeviceType
 from ..entity_properties import HomeAssistantEntityProperties
 from ..types import (
     EnOceanBinarySensorCallback,
@@ -14,10 +20,6 @@ from ..types import (
     EnOceanSwitchCallback,
     HomeAssistantTaskCreator,
 )
-from ..device_type import EnOceanDeviceType
-from ..address import EnOceanAddress, EnOceanDeviceAddress
-from abc import abstractmethod, ABC
-from enocean.protocol.packet import RadioPacket, UTETeachInPacket
 
 
 class EnOceanDevice(ABC):

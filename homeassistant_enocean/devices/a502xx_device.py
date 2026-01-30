@@ -1,5 +1,5 @@
-from .device import EnOceanDevice
 from ..entity_properties import HomeAssistantEntityProperties
+from .device import EnOceanDevice
 
 
 class EnOceanA502XXDevice(EnOceanDevice):

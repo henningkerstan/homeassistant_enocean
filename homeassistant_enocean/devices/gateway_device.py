@@ -1,12 +1,14 @@
 import asyncio
 from typing import Callable
+
+from enocean.protocol.packet import RadioPacket, UTETeachInPacket
+
 from ..address import EnOceanAddress
 from ..device_type import EnOceanDeviceType
 from ..devices.device import EnOceanDevice
 from ..eep import EEP
 from ..entity_properties import HomeAssistantEntityProperties
 from ..types import EnOceanEntityUID, HomeAssistantTaskCreator, ValueLabelDict
-from enocean.protocol.packet import RadioPacket, UTETeachInPacket
 
 
 class EnOceanGatewayDevice(EnOceanDevice):

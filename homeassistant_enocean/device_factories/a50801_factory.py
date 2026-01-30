@@ -1,9 +1,9 @@
 from ..address import EnOceanAddress, EnOceanDeviceAddress
-from .device_factory import EnOceanDeviceFactory
 from ..device_type import EnOceanDeviceType
 from ..devices.a50801_device import EnOceanA50801Device
 from ..eep import EEP
 from ..types import EnOceanSendRadioPacket, HomeAssistantTaskCreator
+from .device_factory import EnOceanDeviceFactory
 
 
 class EnOceanA50801DeviceFactory(EnOceanDeviceFactory):

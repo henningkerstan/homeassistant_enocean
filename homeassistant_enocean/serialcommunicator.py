@@ -1,10 +1,12 @@
-from enocean.communicators.serialcommunicator import SerialCommunicator
 import datetime
 import logging
 import queue
+
+from enocean.communicators.serialcommunicator import SerialCommunicator
 from enocean.protocol.constants import PACKET, RETURN_CODE
 from enocean.protocol.packet import Packet
-from .types import VersionInfo, COMMON_COMMAND
+
+from .types import COMMON_COMMAND, VersionInfo
 
 LOGGER = logging.getLogger("enocean.communicators.SerialCommunicator")
 

@@ -7,9 +7,9 @@ It will be removed in future versions, as soon as the Home Assistant integration
 code has been migrated to use the 'homeassistant_enocean' library instead.
 """
 
-from enocean.utils import combine_hex
 from enocean.communicators import SerialCommunicator
 from enocean.protocol.packet import Packet, RadioPacket
+from enocean.utils import combine_hex
 
 from .eep import EEP
 

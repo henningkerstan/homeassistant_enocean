@@ -1,8 +1,8 @@
 from datetime import datetime
 from enum import IntEnum
 from typing import Any, Callable, Coroutine, TypedDict
-from enocean.protocol.packet import RadioPacket
 
+from enocean.protocol.packet import RadioPacket
 
 type EnOceanEntityUID = str | None
 """A string identifiying the entity uniquely within the context of an EnOcean device's platform.
