@@ -11,7 +11,16 @@ from enocean.communicators import SerialCommunicator
 from enocean.protocol.packet import Packet, RadioPacket
 from enocean.utils import combine_hex
 
+from homeassistant_enocean.device_type import EnOceanDeviceType
+
 from .eep import EEP
+
+BINARY_SENSOR_DEVICE_TYPE = (
+    EnOceanDeviceType(
+        eep=EEP(0xF6, 0x02, 0x01),
+        model="Light and Blind Control - Application Style 2",
+    ),
+)
 
 __all__ = [
     "combine_hex",
@@ -22,8 +31,6 @@ __all__ = [
 
 
 # need to supply a list of entries per device id (b/c multiple instances are allowed in old configuration.yaml)
-
-
 class EnOceanDeviceConfigYAML:
     """Configuration for an EnOcean device from legacy configuration.yaml."""
 
@@ -45,10 +52,10 @@ class EnOceanDeviceConfigYAML:
         self.range_to = range_to
 
 
-def determine_eep_from_configurations_for_device(
+def infer_eep_from_configurations_for_device(
     configs: list[EnOceanDeviceConfigYAML],
 ) -> EEP | None:
-    """Determine the EEP based on the legacy configuration."""
+    """infer the EEP based on the legacy configuration."""
 
     if configs is None or len(configs) == 0:
         return None
