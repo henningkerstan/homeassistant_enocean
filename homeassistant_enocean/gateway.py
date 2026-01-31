@@ -1,6 +1,7 @@
 """Representation of an EnOcean gateway."""
 
 import logging
+from typing import Callable
 
 from enocean.protocol.packet import Packet, RadioPacket
 from enocean.utils import to_hex_string
@@ -129,6 +130,8 @@ class EnOceanHomeAssistantGateway:
             EEP(0xD2, 0x01, 0x14): EnOceanD201XXDeviceFactory(),
             EEP(0xD2, 0x05, 0x00): EnOceanD20500DeviceFactory(),
         }
+
+        self.legacy_callback: Callable[[Packet], None] | None = None
 
     async def start(self) -> None:
         """Start the EnOcean gateway."""
@@ -325,6 +328,10 @@ class EnOceanHomeAssistantGateway:
         # else, find the device corresponding to the sender address
         if device := self.__devices.get(EnOceanAddress(packet.sender_hex)):
             device.handle_packet(packet)
+
+        # additionally, if a legacy callback is set, call it
+        if self.legacy_callback:
+            self.legacy_callback(packet)
 
     # Entity listings
     @property
