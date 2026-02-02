@@ -131,7 +131,7 @@ class EnOceanHomeAssistantGateway:
             EEP(0xD2, 0x05, 0x00): EnOceanD20500DeviceFactory(),
         }
 
-        self.legacy_callback: Callable[[Packet], None] | None = None
+        self.legacy_handle_packet_callback: Callable[[Packet], None] | None = None
         """Callback for legacy packet handling in Home Assistant. 
         
         When set, this is called at the end of this gatweway's packet handling. It is intended
@@ -340,8 +340,8 @@ class EnOceanHomeAssistantGateway:
             device.handle_packet(packet)
 
         # additionally, if a legacy callback is set, call it
-        if self.legacy_callback:
-            self.legacy_callback(packet)
+        if self.legacy_handle_packet_callback:
+            self.legacy_handle_packet_callback(packet)
 
     # Entity listings
     @property
