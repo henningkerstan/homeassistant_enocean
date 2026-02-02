@@ -132,6 +132,10 @@ class EnOceanHomeAssistantGateway:
         }
 
         self.legacy_callback: Callable[[Packet], None] | None = None
+        """Callback for legacy packet handling in Home Assistant. 
+        
+        When set, this is called at the end of this gatweway's packet handling. It is intended
+        to provide compatibility with legacy Home Assistant EnOcean integration code and will be removed in the future."""
 
     async def start(self) -> None:
         """Start the EnOcean gateway."""
@@ -308,6 +312,12 @@ class EnOceanHomeAssistantGateway:
     def get_device_properties(self, enocean_id: EnOceanAddress) -> EnOceanDevice | None:
         """Return the device properties for a given EnOcean ID."""
         return self.__devices.get(enocean_id)
+
+    def legacy_send_packet(self, packet: Packet) -> None:
+        """Send a packet through the EnOcean gateway (legacy method).
+
+        This method is intended to provide compatibility with legacy Home Assistant EnOcean integration code and will be removed in the future."""
+        self._send_packet(packet)
 
     def _send_packet(self, packet: Packet) -> None:
         """Send a packet through the EnOcean gateway."""
