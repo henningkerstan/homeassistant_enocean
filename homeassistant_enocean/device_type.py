@@ -63,125 +63,125 @@ class EnOceanDeviceType:
             # A5-02 Temperature Sensors
             "A5-02-01": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x01),
-                model="Temperature Sensor Range -40 °C to 0 °C (UNTESTED)",
+                model="Temperature Sensor Range -40 °C to 0 °C",
             ),
             "A5-02-02": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x02),
-                model="Temperature Sensor Range -30 °C to +10 °C (UNTESTED)",
+                model="Temperature Sensor Range -30 °C to +10 °C",
             ),
             "A5-02-03": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x03),
-                model="Temperature Sensor Range -20 °C to +20 °C (UNTESTED)",
+                model="Temperature Sensor Range -20 °C to +20 °C",
             ),
             "A5-02-04": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x04),
-                model="Temperature Sensor Range -10 °C to +30 °C (UNTESTED)",
+                model="Temperature Sensor Range -10 °C to +30 °C",
             ),
             "A5-02-05": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x05),
-                model="Temperature Sensor Range 0 °C to +40 °C (UNTESTED)",
+                model="Temperature Sensor Range 0 °C to +40 °C",
             ),
             "A5-02-06": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x06),
-                model="Temperature Sensor Range +10 °C to +50 °C (UNTESTED)",
+                model="Temperature Sensor Range +10 °C to +50 °C",
             ),
             "A5-02-07": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x07),
-                model="Temperature Sensor Range +20 °C to +60 °C (UNTESTED)",
+                model="Temperature Sensor Range +20 °C to +60 °C",
             ),
             "A5-02-08": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x08),
-                model="Temperature Sensor Range +30 °C to +70 °C (UNTESTED)",
+                model="Temperature Sensor Range +30 °C to +70 °C",
             ),
             "A5-02-09": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x09),
-                model="Temperature Sensor Range +40 °C to +80 °C (UNTESTED)",
+                model="Temperature Sensor Range +40 °C to +80 °C",
             ),
             "A5-02-0A": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x0A),
-                model="Temperature Sensor Range +50 °C to +90 °C (UNTESTED)",
+                model="Temperature Sensor Range +50 °C to +90 °C",
             ),
             "A5-02-0B": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x0B),
-                model="Temperature Sensor Range +60 °C to +100 °C (UNTESTED)",
+                model="Temperature Sensor Range +60 °C to +100 °C",
             ),
             "A5-02-10": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x10),
-                model="Temperature Sensor Range -60 °C to +20 °C (UNTESTED)",
+                model="Temperature Sensor Range -60 °C to +20 °C",
             ),
             "A5-02-11": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x11),
-                model="Temperature Sensor Range -50 °C to +30 °C (UNTESTED)",
+                model="Temperature Sensor Range -50 °C to +30 °C",
             ),
             "A5-02-12": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x12),
-                model="Temperature Sensor Range -40 °C to +40 °C (UNTESTED)",
+                model="Temperature Sensor Range -40 °C to +40 °C",
             ),
             "A5-02-13": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x13),
-                model="Temperature Sensor Range -30 °C to +50 °C (UNTESTED)",
+                model="Temperature Sensor Range -30 °C to +50 °C",
             ),
             "A5-02-14": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x14),
-                model="Temperature Sensor Range -20 °C to +60 °C (UNTESTED)",
+                model="Temperature Sensor Range -20 °C to +60 °C",
             ),
             "A5-02-15": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x15),
-                model="Temperature Sensor Range -10 °C to +70 °C (UNTESTED)",
+                model="Temperature Sensor Range -10 °C to +70 °C",
             ),
             "A5-02-16": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x16),
-                model="Temperature Sensor Range 0 °C to +80 °C (UNTESTED)",
+                model="Temperature Sensor Range 0 °C to +80 °C",
             ),
             "A5-02-17": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x17),
-                model="Temperature Sensor Range +10 °C to +90 °C (UNTESTED)",
+                model="Temperature Sensor Range +10 °C to +90 °C",
             ),
             "A5-02-18": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x18),
-                model="Temperature Sensor Range +20 °C to +100 °C (UNTESTED)",
+                model="Temperature Sensor Range +20 °C to +100 °C",
             ),
             "A5-02-19": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x19),
-                model="Temperature Sensor Range +30 °C to +110 °C (UNTESTED)",
+                model="Temperature Sensor Range +30 °C to +110 °C",
             ),
             "A5-02-1A": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x1A),
-                model="Temperature Sensor Range +40 °C to +120 °C (UNTESTED)",
+                model="Temperature Sensor Range +40 °C to +120 °C",
             ),
             "A5-02-1B": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x1B),
-                model="Temperature Sensor Range +50 °C to +130 °C (UNTESTED)",
+                model="Temperature Sensor Range +50 °C to +130 °C",
             ),
             "A5-02-20": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x20),
-                model="10 Bit Temperature Sensor Range -10°C to +41.2°C (UNTESTED)",
+                model="10 Bit Temperature Sensor Range -10°C to +41.2°C",
             ),
             "A5-02-30": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x02, 0x30),
-                model="T10 Bit Temperature Sensor Range -40°C to +62.3°C (UNTESTED)",
+                model="T10 Bit Temperature Sensor Range -40°C to +62.3°C",
             ),
             # A5-04 Temperature and Humidity sensors
             "A5-04-01": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x04, 0x01),
-                model="Temperature and Humidity Sensor, Range 0 °C to +40 °C and 0% to 100% (UNTESTED)",
+                model="Temperature and Humidity Sensor, Range 0 °C to +40 °C and 0% to 100%",
             ),
             "A5-04-02": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x04, 0x02),
-                model="Temperature and Humidity Sensor, Range -20 °C to +60 °C and 0% to 100% (UNTESTED)",
+                model="Temperature and Humidity Sensor, Range -20 °C to +60 °C and 0% to 100%",
             ),
             "A5-04-03": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x04, 0x03),
-                model="Temperature and Humidity Sensor, Range -20°C to +60°C 10bit-measurement and 0% to 100% (UNTESTED)",
+                model="Temperature and Humidity Sensor, Range -20°C to +60°C 10bit-measurement and 0% to 100%",
             ),
             "A5-04-04": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x04, 0x04),
-                model="Temperature and Humidity Sensor, Range -40°C to +120°C 12bit-measurement and 0% to 100% (UNTESTED)",
+                model="Temperature and Humidity Sensor, Range -40°C to +120°C 12bit-measurement and 0% to 100%",
             ),
             # A5-06 Light Sensor
             "A5-06-01": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x06, 0x01),
-                model="Light Sensor, Range 300lx to 60.000lx (UNTESTED)",
+                model="Light Sensor, Range 300lx to 60.000lx",
             ),
             # A5-07 Occupancy Sensors
             "A5-07-03": EnOceanDeviceType(
@@ -190,7 +190,7 @@ class EnOceanDeviceType:
             ),
             "A5-08-01": EnOceanDeviceType(
                 eep=EEP(0xA5, 0x08, 0x01),
-                model="Light, temperature and occupancy sensor, range 0lx to 510lx, 0°C to 51°C and occupancy button (UNTESTED)",
+                model="Light, temperature and occupancy sensor, range 0lx to 510lx, 0°C to 51°C and occupancy button",
             ),
             # # A5-10 Room Operating Panels
             # "A5-10-01": EnOceanDeviceType(
@@ -283,83 +283,83 @@ class EnOceanDeviceType:
             # D2-01 Electronic Switches and Dimmers with Energy Measurement and Local Control
             "D2-01-00": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x00),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 00 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 00",
             ),
             "D2-01-01": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x01),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 01 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 01",
             ),
             "D2-01-03": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x03),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 03 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 03",
             ),
             "D2-01-04": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x04),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 04 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 04",
             ),
             "D2-01-05": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x05),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 05 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 05",
             ),
             "D2-01-06": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x06),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 06 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 06",
             ),
             "D2-01-07": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x07),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 07 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 07",
             ),
             "D2-01-08": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x08),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 08 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 08",
             ),
             "D2-01-09": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x09),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 09 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 09",
             ),
             "D2-01-0A": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x0A),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0A (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0A",
             ),
             "D2-01-0B": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x0B),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0B (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0B",
             ),
             "D2-01-0C": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x0C),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0C (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0C",
             ),
             "D2-01-0D": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x0D),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0D (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0D",
             ),
             "D2-01-0E": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x0E),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0E (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0E",
             ),
             "D2-01-0F": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x0F),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0F (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 0F",
             ),
             "D2-01-10": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x10),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 10 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 10",
             ),
             "D2-01-11": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x11),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 11 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 11",
             ),
             "D2-01-12": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x12),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 12 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 12",
             ),
             "D2-01-13": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x13),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 13 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 13",
             ),
             "D2-01-14": EnOceanDeviceType(
                 eep=EEP(0xD2, 0x01, 0x14),
-                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 14 (UNTESTED)",
+                model="Electronic Switches and Dimmers with Energy Measurement and Local Control, Type 14",
             ),
             # D2-05-00 Blinds Control for Position and Angle
             "D2-05-00": EnOceanDeviceType(
@@ -378,7 +378,7 @@ class EnOceanDeviceType:
             # F6-10-00 Window Handle
             "F6-10-00": EnOceanDeviceType(
                 eep=EEP(0xF6, 0x10, 0x00),
-                model="Mechanical Handle - Window Handle (UNTESTED)",
+                model="Mechanical Handle - Window Handle",
             ),
             # Other Devices
             "Eltako_FAH65s": EnOceanDeviceType(
@@ -423,12 +423,12 @@ class EnOceanDeviceType:
                 manufacturer="Omnio",
                 model="WS-CH-102",
             ),
-            # "Hoppe_SecuSignal": EnOceanDeviceType(
-            #     unique_id="Hoppe_SecuSignal",
-            #     eep=EEP(0xF6, 0x10, 0x00),
-            #     manufacturer="Hoppe",
-            #     model="SecuSignal window handle from Somfy",
-            # ),
+            "Hoppe_SecuSignal": EnOceanDeviceType(
+                unique_id="Hoppe_SecuSignal",
+                eep=EEP(0xF6, 0x10, 0x00),
+                manufacturer="Hoppe",
+                model="SecuSignal window handle from Somfy",
+            ),
             "TRIO2SYS_WallSwitches": EnOceanDeviceType(
                 unique_id="TRIO2SYS_WallSwitches",
                 eep=EEP(0xF6, 0x02, 0x01),
