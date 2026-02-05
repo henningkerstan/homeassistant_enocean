@@ -6,7 +6,7 @@ from typing import Any, Coroutine
 
 from enocean.protocol.packet import RadioPacket, UTETeachInPacket
 
-from ..address import EURID, EnOceanAddress
+from ..core.address import EURID, EnOceanAddress
 from ..device_type import EnOceanDeviceType
 from ..entity_properties import HomeAssistantEntityProperties
 from ..types import (

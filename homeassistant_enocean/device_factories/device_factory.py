@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from ..address import EURID, EnOceanAddress
+from ..core.address import EURID, EnOceanAddress
 from ..device_type import EnOceanDeviceType
 from ..devices.device import EnOceanDevice
 from ..types import EnOceanSendRadioPacket, HomeAssistantTaskCreator

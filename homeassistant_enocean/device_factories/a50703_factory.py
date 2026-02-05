@@ -1,4 +1,4 @@
-from ..address import EURID, EnOceanAddress
+from ..core.address import EURID, EnOceanAddress
 from ..device_type import EnOceanDeviceType
 from ..devices.a50703_device import EnOceanA50703Device
 from ..eep import EEP

@@ -6,7 +6,7 @@ from typing import Callable
 from enocean.protocol.packet import Packet, RadioPacket
 from enocean.utils import to_hex_string
 
-from .address import EURID, EnOceanAddress
+from .core.address import EURID, EnOceanAddress
 from .device_factories.a502xx_factory import EnOceanA502XXDeviceFactory
 from .device_factories.a504xx_factory import EnOceanA504XXDeviceFactory
 from .device_factories.a50601_factory import EnOceanA50601DeviceFactory

@@ -3,7 +3,7 @@ from typing import Callable
 
 from enocean.protocol.packet import RadioPacket, UTETeachInPacket
 
-from ..address import EnOceanAddress
+from ..core.address import EnOceanAddress
 from ..device_type import EnOceanDeviceType
 from ..devices.device import EnOceanDevice
 from ..eep import EEP

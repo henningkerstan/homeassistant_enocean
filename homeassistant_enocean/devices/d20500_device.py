@@ -5,7 +5,7 @@ from enocean.protocol.packet import RadioPacket
 
 from homeassistant_enocean.types import EnOceanEntityUID
 
-from ..address import EnOceanAddress
+from ..core.address import EnOceanAddress
 from ..entity_properties import HomeAssistantEntityProperties
 from .device import EnOceanDevice
 
