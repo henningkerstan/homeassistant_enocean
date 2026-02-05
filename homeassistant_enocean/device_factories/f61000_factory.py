@@ -1,4 +1,4 @@
-from ..address import EnOceanAddress, EnOceanDeviceAddress
+from ..address import EURID, EnOceanAddress
 from ..device_type import EnOceanDeviceType
 from ..devices.f61000_device import EnOceanF61000Device
 from ..eep import EEP
@@ -11,7 +11,7 @@ class EnOceanF61000DeviceFactory(EnOceanDeviceFactory):
 
     def create_device(
         self,
-        enocean_id: EnOceanDeviceAddress,
+        enocean_id: EURID,
         device_type: EnOceanDeviceType,
         send_packet: EnOceanSendRadioPacket | None = None,
         device_name: str | None = None,

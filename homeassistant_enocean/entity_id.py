@@ -1,18 +1,16 @@
-from homeassistant_enocean.address import EnOceanDeviceAddress
+from homeassistant_enocean.address import EURID
 
 
 class EnOceanEntityID:
     """An EnOcean entity is uniquely identified by its device's EnOcean Unique Radio Identifier (EURID) and a unique ID string for the entity."""
 
-    def __init__(
-        self, device_address: EnOceanDeviceAddress, unique_id: str | None = None
-    ) -> None:
+    def __init__(self, device_address: EURID, unique_id: str | None = None) -> None:
         """Construct an EnOcean entity ID."""
         self.__device_address = device_address
         self.__unique_id: str | None = unique_id
 
     @property
-    def device_address(self) -> EnOceanDeviceAddress:
+    def device_address(self) -> EURID:
         """Return the device address part of the entity ID."""
         return self.__device_address
 

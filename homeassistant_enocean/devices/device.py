@@ -6,7 +6,7 @@ from typing import Any, Coroutine
 
 from enocean.protocol.packet import RadioPacket, UTETeachInPacket
 
-from ..address import EnOceanAddress, EnOceanDeviceAddress
+from ..address import EURID, EnOceanAddress
 from ..device_type import EnOceanDeviceType
 from ..entity_properties import HomeAssistantEntityProperties
 from ..types import (
@@ -27,7 +27,7 @@ class EnOceanDevice(ABC):
 
     def __init__(
         self,
-        enocean_id: EnOceanDeviceAddress,
+        enocean_id: EURID,
         device_type: EnOceanDeviceType,
         create_task: HomeAssistantTaskCreator | None = None,
         send_packet: EnOceanSendRadioPacket | None = None,
@@ -89,7 +89,7 @@ class EnOceanDevice(ABC):
         self.__internal_sensor_entities.clear()
 
     @property
-    def enocean_id(self) -> EnOceanDeviceAddress:
+    def enocean_id(self) -> EURID:
         """Return the device ID."""
         return self.__enocean_id
 

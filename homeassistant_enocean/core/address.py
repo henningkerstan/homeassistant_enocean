@@ -73,6 +73,19 @@ class EnOceanAddress:
         return cls(int(hex_string, 16))
 
     @classmethod
+    def from_bytelist(cls, byte_list: list[int]) -> "EnOceanAddress":
+        """Create an EnOceanID instance from a list of 4 bytes."""
+        if len(byte_list) != 4:
+            raise ValueError("Byte list must have exactly 4 elements.")
+        numeric_id = (
+            (byte_list[0] << 24)
+            | (byte_list[1] << 16)
+            | (byte_list[2] << 8)
+            | byte_list[3]
+        )
+        return cls(numeric_id)
+
+    @classmethod
     def broadcast(cls) -> "EnOceanAddress":
         """Return the broadcast ID (FF:FF:FF:FF)."""
         return cls(0xFFFFFFFF)
@@ -126,7 +139,7 @@ class EnOceanAddress:
         return self.__address == other.__address
 
 
-class EnOceanDeviceAddress(EnOceanAddress):
+class EURID(EnOceanAddress):
     """Representation of an EnOcean device address (EnOcean Unique Radio Identifier / EURID).
 
     Device addresses are in the range 00:00:00:00 to FF:7F:FF:FF.
@@ -172,3 +185,11 @@ class EnOceanBaseAddress(EnOceanAddress):
                 "Base address must be in the range FF:80:00:00 to FF:FF:FF:80."
             )
         super().__init__(numeric_address)
+
+
+class EnOceanBroadcastAddress(EnOceanAddress):
+    """Representation of the EnOcean broadcast address (FF:FF:FF:FF)."""
+
+    def __init__(self) -> None:
+        """Initialize the EnOcean broadcast address."""
+        super().__init__(0xFFFFFFFF)

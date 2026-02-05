@@ -1,7 +1,7 @@
 from enum import IntEnum
 
 
-class PacketType(IntEnum):
+class ESP3PacketType(IntEnum):
     RADIO_ERP1 = 0x01
     RESPONSE = 0x02
     RADIO_SUB_TEL = 0x03

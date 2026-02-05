@@ -6,7 +6,7 @@ from typing import Callable
 from enocean.protocol.packet import Packet, RadioPacket
 from enocean.utils import to_hex_string
 
-from .address import EnOceanAddress, EnOceanDeviceAddress
+from .address import EURID, EnOceanAddress
 from .device_factories.a502xx_factory import EnOceanA502XXDeviceFactory
 from .device_factories.a504xx_factory import EnOceanA504XXDeviceFactory
 from .device_factories.a50601_factory import EnOceanA50601DeviceFactory
@@ -58,7 +58,7 @@ class EnOceanHomeAssistantGateway:
         self.__chip_id: EnOceanAddress = EnOceanAddress(0)
         self.__chip_version: int = 0
         self.__sw_version: str = "n/a"
-        self.__devices: dict[EnOceanDeviceAddress, EnOceanDevice] = {}
+        self.__devices: dict[EURID, EnOceanDevice] = {}
         self.__gateway_device: EnOceanGatewayDevice | None = None
         self.__create_task: HomeAssistantTaskCreator = create_task
 
@@ -183,7 +183,7 @@ class EnOceanHomeAssistantGateway:
 
     def add_device(
         self,
-        enocean_id: EnOceanDeviceAddress,
+        enocean_id: EURID,
         device_type: EnOceanDeviceType,
         device_name: str | None = None,
         sender_id: EnOceanAddress | None = None,
