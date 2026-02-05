@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from enum import IntEnum
 
+SYNC_BYTE = 0x55
+
 
 class ESP3PacketType(IntEnum):
     RADIO_ERP1 = 0x01
@@ -42,17 +44,12 @@ CRC8TABLE = [
 # fmt: on
 
 
-class CommonCommandCode(IntEnum):
-    """Common command codes for ESP3 packets."""
-
-    CO_RD_VERSION = 3
-    """Read the device version information"""
-
-    CO_WR_IDBASE = 7
-    """Write ID range base address"""
-
-    CO_RD_IDBASE = 8
-    """ Read ID range base address"""
+def crc8(data: bytes) -> int:
+    """Calculate CRC8 checksum for the given data."""
+    crc = 0
+    for byte in data:
+        crc = CRC8TABLE[crc ^ byte]
+    return crc
 
 
 @dataclass
@@ -73,36 +70,7 @@ class ESP3Packet:
 
     def __repr__(self) -> str:
         return (
-            f"ESP3Packet(type=0x{self.packet_type.name}, "
-            f"data={self.data.hex()}, "
-            f"optional={self.optional.hex()})"
-        )
-
-
-@dataclass
-class CommonCommandTelegram:
-    """Common Command Telegram for ESP3 packets."""
-
-    common_command_code: int
-    common_command_data: bytes | None = None
-    optional_data: bytes = None
-
-    def __post_init__(self):
-        if self.optional_data is None:
-            self.optional_data = b""
-
-    def to_esp3_packet(self) -> ESP3Packet:
-        data_size = (
-            1 if self.common_command_data is None else len(self.common_command_data) + 1
-        )
-        data = bytearray(data_size)
-        data[0] = self.common_command_code
-
-        if self.common_command_data is not None:
-            data[1:] = self.common_command_data
-
-        return ESP3Packet(
-            packet_type=ESP3PacketType.COMMON_COMMAND,
-            data=bytes(data),
-            optional=self.optional_data,
+            f"ESP3Packet(type={self.packet_type.name}, "
+            f"data={self.data.hex().upper()}, "
+            f"optional={self.optional.hex().upper()})"
         )

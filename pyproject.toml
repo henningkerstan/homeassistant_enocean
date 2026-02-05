@@ -16,7 +16,8 @@ classifiers = [
 license = "Apache-2.0"
 license-files = ["LICENSE*"]
 dependencies = [
-  "enocean4ha==0.71.0"
+  "enocean4ha==0.71.0",
+  "pyserial-asyncio-fast==0.16"
 ]
 
 [project.urls]

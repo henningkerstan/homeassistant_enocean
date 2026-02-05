@@ -138,6 +138,9 @@ class EnOceanAddress:
     def __eq__(self, other):
         return self.__address == other.__address
 
+    def __repr__(self) -> str:
+        return f"EnOceanAddress({self.to_string()})"
+
 
 class EURID(EnOceanAddress):
     """Representation of an EnOcean device address (EnOcean Unique Radio Identifier / EURID).
@@ -161,6 +164,9 @@ class EURID(EnOceanAddress):
                 f"Device address must be in the range 00:00:00:00 to FF:7F:FF:FF, but is {numeric_address:08X}."
             )
         super().__init__(numeric_address)
+
+    def __repr__(self) -> str:
+        return f"EURID({self.to_string()})"
 
 
 class EnOceanBaseAddress(EnOceanAddress):
@@ -186,6 +192,9 @@ class EnOceanBaseAddress(EnOceanAddress):
             )
         super().__init__(numeric_address)
 
+    def __repr__(self) -> str:
+        return f"EnOceanBaseAddress({self.to_string()})"
+
 
 class EnOceanBroadcastAddress(EnOceanAddress):
     """Representation of the EnOcean broadcast address (FF:FF:FF:FF)."""
@@ -193,3 +202,6 @@ class EnOceanBroadcastAddress(EnOceanAddress):
     def __init__(self) -> None:
         """Initialize the EnOcean broadcast address."""
         super().__init__(0xFFFFFFFF)
+
+    def __repr__(self) -> str:
+        return "EnOceanBroadcastAddress(FF:FF:FF:FF)"

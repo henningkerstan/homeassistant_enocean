@@ -31,6 +31,18 @@ class ERP1Telegram:
 
     destination: EURID | EnOceanBroadcastAddress | None = None
 
+    def __repr__(self) -> str:
+        return (
+            f"ERP1Telegram(rorg={self.rorg.name}, "
+            f"payload={self.payload.hex().upper()}, "
+            f"sender={self.sender.to_string()}, "
+            f"status=0x{self.status:02X}, "
+            f"sub_tel_num={self.sub_tel_num}, "
+            f"dBm={self.dBm}, "
+            f"sec_level={self.sec_level}, "
+            f"destination={self.destination.to_string() if self.destination else None})"
+        )
+
     @classmethod
     def from_esp3(cls, pkt: ESP3Packet):
         if pkt.packet_type != ESP3PacketType.RADIO_ERP1:
@@ -58,6 +70,11 @@ class ERP1Telegram:
         dBm = opt[1] if len(opt) > 1 else None
         sec_level = opt[2] if len(opt) > 2 else None
         destination_bytes = opt[3:8] if len(opt) > 7 else None
+        destination = (
+            EURID.from_bytelist(destination_bytes)
+            if destination_bytes is not None
+            else None
+        )
 
         return cls(
             rorg=rorg,
@@ -67,51 +84,5 @@ class ERP1Telegram:
             sub_tel_num=sub_tel_num,
             dBm=dBm,
             sec_level=sec_level,
+            destination=destination,
         )
-
-
-@dataclass
-class CommonCommandTelegram:
-    """Common Command Telegram for ESP3 packets."""
-
-    common_command_code: int
-    common_command_data: bytes | None = None
-    optional_data: bytes = None
-
-    def __post_init__(self):
-        if self.optional_data is None:
-            self.optional_data = b""
-
-    def to_esp3_packet(self) -> ESP3Packet:
-        data_size = (
-            1 if self.common_command_data is None else len(self.common_command_data) + 1
-        )
-        data = bytearray(data_size)
-        data[0] = self.common_command_code
-
-        if self.common_command_data is not None:
-            data[1:] = self.common_command_data
-
-        return ESP3Packet(
-            packet_type=ESP3PacketType.COMMON_COMMAND,
-            data=bytes(data),
-            optional=self.optional_data,
-        )
-
-    @classmethod
-    def from_esp3_packet(cls, packet: ESP3Packet) -> "CommonCommandTelegram":
-        if packet.packet_type != ESP3PacketType.COMMON_COMMAND:
-            raise ERP1ParseError("ESP3Packet is not a common command telegram")
-
-        if len(packet.optional) > 0:
-            raise ERP1ParseError(
-                "ESP3Packet is not a valid common command; optional data is present"
-            )
-
-        if len(packet.data) < 1:
-            raise ERP1ParseError("ESP3Packet is not a valid common command; no data")
-
-        common_command_code = packet.data[0]
-        common_command_data = packet.data[1:] if len(packet.data) > 1 else None
-
-        return cls(common_command_code, common_command_data)

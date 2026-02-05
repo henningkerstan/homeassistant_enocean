@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import IntEnum
 
 from .address import EnOceanBaseAddress
-from .esp3 import ESP3Packet
+from .esp3 import ESP3Packet, ESP3PacketType
 
 
 class CommonCommandCode(IntEnum):
