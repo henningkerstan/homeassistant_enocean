@@ -45,23 +45,8 @@ CRC8TABLE = [
 class CommonCommandCode(IntEnum):
     """Common command codes for ESP3 packets."""
 
-    CO_WR_SLEEP = 1
-    """Put the device to sleep"""
-
-    CO_WR_RESET = 2
-    """Reset the device"""
-
     CO_RD_VERSION = 3
-    """read the version information of the device"""
-
-    CO_RD_SYS_LOG = 4
-    """Read system log """
-
-    CO_WR_SYS_LOG = 5
-    """Reset system log"""
-
-    CO_WR_BIST = 6
-    """Start built-in self test"""
+    """Read the device version information"""
 
     CO_WR_IDBASE = 7
     """Write ID range base address"""
@@ -86,17 +71,38 @@ class ESP3Packet:
     data: bytes
     optional: bytes
 
-    @property
-    def data_length(self) -> int:
-        return len(self.data)
-
-    @property
-    def optional_length(self) -> int:
-        return len(self.optional)
-
     def __repr__(self) -> str:
         return (
             f"ESP3Packet(type=0x{self.packet_type.name}, "
             f"data={self.data.hex()}, "
             f"optional={self.optional.hex()})"
+        )
+
+
+@dataclass
+class CommonCommandTelegram:
+    """Common Command Telegram for ESP3 packets."""
+
+    common_command_code: int
+    common_command_data: bytes | None = None
+    optional_data: bytes = None
+
+    def __post_init__(self):
+        if self.optional_data is None:
+            self.optional_data = b""
+
+    def to_esp3_packet(self) -> ESP3Packet:
+        data_size = (
+            1 if self.common_command_data is None else len(self.common_command_data) + 1
+        )
+        data = bytearray(data_size)
+        data[0] = self.common_command_code
+
+        if self.common_command_data is not None:
+            data[1:] = self.common_command_data
+
+        return ESP3Packet(
+            packet_type=ESP3PacketType.COMMON_COMMAND,
+            data=bytes(data),
+            optional=self.optional_data,
         )

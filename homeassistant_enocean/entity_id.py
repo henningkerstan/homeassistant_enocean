@@ -1,4 +1,4 @@
-from homeassistant_enocean.address import EURID
+from homeassistant_enocean.core.address import EURID
 
 
 class EnOceanEntityID:
